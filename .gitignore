@@ -1,0 +1,6 @@
+# Local deployment files
+.netlify
+.DS_Store
+assets/Main Motion Poster_Story Upload.mp4
+assets/Graduates/
+assets/students/

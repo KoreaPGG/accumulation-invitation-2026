@@ -1,0 +1,3123 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ACCUMULATION — 2026 계명대학교 시각디자인 졸업전시</title>
+  <meta name="description" content="축적. 2026 계명대학교 시각디자인학과 졸업전시. 12월 11–16일, 대구경북디자인진흥원 4F.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%230061FE' d='M0 0h32v32H0z'/%3E%3Cpath d='M5 8h14v5H5zm0 6h19v5H5zm0 6h22v5H5z' fill='%23FFFFFF'/%3E%3C/svg%3E">
+  <style>
+    /* =========================================================
+       A2 포스터 디자인 시스템 -> 웹 반응형 변환
+       Dropbox Brand Style (Brutalism 1px Grid & Pop Colors)
+       ========================================================= */
+    :root {
+      --red: #FF5349;
+      --ink: #000000;      /* 드롭박스 스타일 완전한 검은색 */
+      --paper: #F7F5F2;    /* 웜 톤 오프화이트 */
+      --white: #FFFFFF;
+      --db-blue: #0061FE;  /* 드롭박스 포인트 블루 */
+
+      /* 규격 변환 변수 */
+      --type-unit: 1.8px;
+      --basic-margin: clamp(16px, 0.79vw, 32px);   /* 베이식 여백 3.32mm -> 0.79vw */
+      --quote-gap: clamp(4px, 0.42vw, 12px);       /* 따옴표 간격 1.764mm -> 0.42vw */
+      --title-en-size: clamp(32px, 5.96vw, 100px); /* 영어 타이틀 71pt -> 5.96vw */
+
+      --tracking-en: -0.08em;
+      --tracking-ko: -0.1em;
+    }
+
+    @font-face {
+      font-family: 'SohneBreitBuch';
+      src: url("assets/fonts/SohneBreit-Buch.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'SM3태고딕';
+      src: local('SM3태고딕'), local('SM3 태고딕'), local('SM3SPgoT');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Doltop";
+      src: url("assets/fonts/Doltop.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--paper);
+    }
+
+    body {
+      opacity: 0;
+      transition: transform .6s cubic-bezier(.22, 1, .36, 1), opacity .6s, visibility .6s;
+      font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      letter-spacing: var(--tracking-ko);
+      line-height: 1;
+      opacity: 1;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 영문 타이틀 스타일 시스템 적용 */
+    .title-en {
+      font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif;
+      letter-spacing: var(--tracking-en);
+    }
+
+    .font-sohne {
+      font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif;
+      letter-spacing: normal;
+    }
+
+    .hero-title, .portal-title {
+      font-size: var(--title-en-size) !important;
+      line-height: 0.82;
+    }
+
+    button, input, a {
+      font: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+      background: none;
+    }
+
+    button:focus-visible, a:focus-visible, input:focus-visible {
+      outline: 2px solid var(--db-blue);
+      outline-offset: 2px;
+    }
+
+    ::selection {
+      background: var(--db-blue);
+      color: var(--white);
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    /* =========================================================
+       MAIN STAGE (100vw, 100vh 꽉 채운 1px 그리드 구조)
+       ========================================================= */
+    .journey {
+      height: 460vh;
+    }
+    
+    .stage {
+      height: 100svh;
+      position: sticky;
+      top: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ink); /* 그리드 라인 색상 역할 */
+    }
+
+    .entry {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      text-align: center;
+      transition: opacity .3s;
+      pointer-events: none;
+      padding: 0 var(--basic-margin);
+      z-index: 1;
+    }
+    
+    .entry h1 {
+      font-weight: 400;
+      margin: 0;
+      word-break: keep-all;
+      color: var(--white);
+    }
+
+    .logo-stack {
+      width: 100vw;
+      height: min(100svh, calc(100vw * 799 / 3558));
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: var(--type-unit);
+      padding: 0;
+    }
+
+    .glyph {
+      font-family: "Doltop", sans-serif;
+      font-synthesis: none;
+      position: relative;
+      background: transparent;
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: min(25.3vw, 113.5svh);
+      font-weight: 400;
+      line-height: .72;
+      letter-spacing: -.1em;
+      padding: 0;
+      transform-origin: center;
+      will-change: transform, opacity;
+      overflow: hidden;
+      isolation: isolate;
+      border-radius: 0;
+    }
+
+    .glyph-letter {
+      position: relative;
+      display: block;
+      font: inherit;
+      letter-spacing: inherit;
+      line-height: inherit;
+      pointer-events: none;
+      position: relative;
+      z-index: 2;
+      transform-origin: center;
+      transform: none;
+      transition: transform .52s cubic-bezier(.22, 1, .36, 1), color .24s;
+    }
+
+    .glyph-letter { display: block; width: 100%; height: 100%; flex-shrink: 0; }
+    .glyph.is-active, .glyph:focus-visible { z-index: 10; overflow: visible; }
+    .glyph-letter svg { display: block; width: 100%; height: 100%; overflow: visible; fill: currentColor; }
+
+    .glyph-caption {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 3px;
+      color: var(--red);
+      font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif;
+      font-size: clamp(18px, calc(1vw + 2px), 22px);
+      font-weight: 400;
+      letter-spacing: 0;
+      line-height: 1.1;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      overflow-wrap: anywhere;
+      word-break: keep-all;
+      transition: opacity .2s, transform .38s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .glyph-caption-en { font-size: clamp(8px, 1.4vw, 22px); line-height: 1.1; letter-spacing: 0; }
+    .glyph-caption-ko { font-size: clamp(9px, 1vw, 16px); line-height: 1.35; letter-spacing: 0; word-break: normal; }
+    @media (max-width: 640px) { .glyph-caption { gap: 3px; } }
+
+    .glyph.is-active .glyph-letter,
+    .glyph:focus-visible .glyph-letter {
+      color: var(--red);
+      transform: translateY(-100%);
+    }
+
+    .glyph.is-lifted { z-index: 9; overflow: visible; }
+    .glyph.is-lifted .glyph-letter { transform: translateY(-100%); }
+
+    .glyph.is-active .glyph-caption,
+    .glyph:focus-visible .glyph-caption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================================================
+       PORTAL (모달 및 상세 페이지 구조)
+       ========================================================= */
+    .portal {
+      --paper: var(--red);
+      --white: var(--red);
+      --db-blue: var(--ink);
+      --rail-width: 18px;
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      overflow: auto;
+      background: var(--red);
+      color: var(--ink);
+      visibility: hidden;
+      transform: translateY(105%);
+      opacity: 0;
+      transition: transform .6s cubic-bezier(.22, 1, .36, 1), opacity .6s, visibility .6s;
+    }
+
+    .portal::before, .portal::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      z-index: 6;
+      width: var(--rail-width);
+      display: grid;
+      place-items: center;
+      padding: 10px 3px;
+      border-color: var(--ink);
+      border-style: solid;
+      background: var(--red);
+      font-size: 8px;
+      line-height: 1;
+      letter-spacing: .04em;
+      text-align: center;
+      writing-mode: vertical-rl;
+      pointer-events: none;
+    }
+
+    .portal::before {
+      content: "KMU · VISUAL DESIGN · 2026";
+      left: 0;
+      border-width: 0 1px 0 0;
+    }
+
+    .portal::after {
+      content: "ACCUMULATION · 12.11 — 12.16";
+      right: 0;
+      border-width: 0 0 0 1px;
+    }
+
+    .portal.open {
+      visibility: visible;
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .portal.student-page { --paper: #FF4349; --white: #FF4349; background: var(--paper); }
+    .portal.student-page::before, .portal.student-page::after { display: none; }
+    .portal.color-open { --paper: #F0EEE9; --white: #FFFFFF; display: flex; flex-direction: column; overflow: hidden; background: #FF5349; }
+    .portal.color-open .portal-header { position: relative; top: auto; flex: 0 0 auto; }
+    .portal.color-open .portal-content { box-sizing: border-box; display: flex; flex: 1 1 auto; width: 100%; height: 0; min-height: 0; max-width: none; margin: 0; overflow: hidden; padding: clamp(8px, 1.2vw, 18px) calc(var(--rail-width) + var(--basic-margin)); }
+    .portal.logo-open { display: flex; flex-direction: column; overflow: hidden; }
+    .portal.logo-open .portal-header { position: relative; top: auto; flex: 0 0 auto; }
+    .portal.logo-open .portal-content { box-sizing: border-box; display: flex; flex: 1 1 auto; flex-direction: column; gap: clamp(6px, 1.2vh, 12px); height: 0; min-height: 0; overflow: hidden; padding: clamp(8px, 1.6vh, 16px) calc(var(--rail-width) + var(--basic-margin)); }
+    .portal.logo-open .portal-content > .layer { opacity: 1; transform: none; transition: none; will-change: auto; }
+    .portal.logo-open .subline { flex: 0 0 auto; padding: 8px 0; font-size: 12px; }
+    .portal.logo-open .logo-lab { flex: 1 1 auto; width: 100%; height: auto; min-height: 0; }
+    .portal.logo-open .lab-layout { width: min(100%, 1600px); }
+    .portal.logo-open .controls { flex: 0 0 auto; justify-content: center; margin: 0; }
+
+    .portal.catalogue-open { display: flex; flex-direction: column; overflow: hidden; }
+    .portal.catalogue-open .portal-header { position: relative; top: auto; flex: 0 0 auto; }
+    .portal.catalogue-open .portal-content { box-sizing: border-box; display: flex; flex: 1 1 auto; height: 0; min-height: 0; overflow: hidden; padding: 4px calc(var(--rail-width) + 2px) 6px; }
+    .portal.quiz-open { display: flex; flex-direction: column; overflow: hidden; }
+    .portal.quiz-open .portal-header { position: relative; top: auto; flex: 0 0 auto; }
+    .portal.quiz-open .portal-content { box-sizing: border-box; display: flex; flex: 1 1 auto; align-items: stretch; justify-content: flex-start; height: 0; min-height: 0; overflow-x: hidden; overflow-y: auto; padding: 8px calc(var(--rail-width) + var(--basic-margin)); }
+    .portal.quiz-open .portal-content > .layer { flex: 1 1 auto; min-width: 0; min-height: 0; opacity: 1; transform: none; transition: none; will-change: auto; }
+    .portal.committee-open { --committee-space-sm: 16px; --committee-space-md: 24px; --committee-space-lg: 32px; display: block; overflow: auto; }
+    .portal.committee-open::before, .portal.committee-open::after { position: absolute; }
+    .portal.committee-open .portal-header { position: sticky; top: 0; border-bottom: 1px solid var(--ink); }
+    .portal.committee-open .portal-content { display: block; height: auto; min-height: calc(100svh - 56px); overflow: visible; padding: var(--committee-space-sm) calc(var(--rail-width) + var(--basic-margin)) 40px; }
+    .portal.collaboration-open { display: block; overflow: auto; }
+    .portal.collaboration-open::before, .portal.collaboration-open::after { position: absolute; }
+    .portal.collaboration-open .portal-header { position: sticky; top: 0; border-bottom: 1px solid var(--ink); }
+    .portal.collaboration-open .portal-content { display: block; height: auto; min-height: calc(100svh - 56px); overflow: visible; padding: 16px calc(var(--rail-width) + var(--basic-margin)) 40px; }
+
+    .portal-header {
+      position: sticky;
+      top: 0;
+      padding: 12px calc(var(--rail-width) + var(--basic-margin));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--ink);
+      background: inherit;
+      z-index: 4;
+    }
+
+    .portal-header strong {
+      display: flex;
+      align-items: baseline;
+      gap: .45em;
+      flex-wrap: wrap;
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+
+    .close {
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--red);
+      padding: 10px 18px;
+      font-size: 13px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .close:hover {
+      background: var(--red);
+      color: var(--ink);
+    }
+
+    .portal-content { 
+      padding: clamp(28px, 5vw, 64px) calc(var(--rail-width) + var(--basic-margin)) 60px;
+      min-height: calc(100svh - 82px); 
+    }
+
+    .portal-title {
+      max-width: 100%;
+      margin: 0 0 clamp(18px, 3vw, 36px);
+      font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif;
+      font-size: clamp(44px, 8vw, 122px) !important;
+      line-height: .82;
+      letter-spacing: -.08em;
+      overflow-wrap: anywhere;
+    }
+
+    .subline {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 13px;
+      line-height: 1.1;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      padding: 14px 0;
+    }
+
+    .quote-spacing {
+      display: inline-flex;
+      max-width: 100%;
+      gap: var(--quote-gap);
+    }
+
+    .quote-text { min-width: 0; overflow-wrap: anywhere; }
+
+    .control {
+      background: var(--ink);
+      border: 1px solid var(--ink);
+      padding: 12px 18px;
+      font-size: 14px;
+      color: var(--red);
+      transition: background 0.2s, color 0.2s;
+    }
+    .control:hover:not(:disabled) { background: var(--red); color: var(--ink); }
+    .control:disabled { opacity: .4; cursor: default; }
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 24px; }
+
+    /* 레이어 모션 */
+    .portal-content { perspective: 1200px; }
+    .portal-content > .layer {
+      opacity: 0;
+      transform: translate3d(0, -140px, 0) rotateX(-7deg) scale(.985);
+      transform-origin: center top;
+      backface-visibility: hidden;
+      transition: opacity .42s ease-out, transform .88s cubic-bezier(.18, 1.12, .28, 1);
+      will-change: opacity, transform;
+    }
+    .portal-content > .layer.arrived { opacity: 1; transform: translate3d(0, 0, 0) rotateX(0) scale(1); }
+    .portal-content { overflow: hidden; }
+    
+    /* ----------------------------------------------------
+       각 포털 섹션별 세부 스타일 모음 (1px Grid Brutalism 적용)
+       ---------------------------------------------------- */
+    .stack-panel { margin: 35px 0; background: var(--ink); color: var(--paper); padding: 25px; min-height: 330px; display: flex; flex-direction: column; justify-content: flex-end; }
+    .stack-rows { display: flex; flex-direction: column-reverse; gap: 1px; }
+    .stack-row { border: 1px solid var(--ink); padding: 22px; font-size: clamp(20px, 3vw, 44px); letter-spacing: -.045em; animation: rise-in .6s cubic-bezier(.2, .8, .2, 1) both; }
+    .stack-row:nth-child(2n) { background: var(--db-blue); color: var(--white); margin-left: 8%; }
+    .stack-row:nth-child(3n) { margin-left: 16%; background: var(--paper); color: var(--ink); }
+    @keyframes rise-in { from { opacity: 0; transform: translateY(70px); } to { opacity: 1; transform: none; } }
+    
+    .regular-copy { font-size: 17px; line-height: 1.2; max-width: 650px; }
+
+    .work-list { border-top: 1px solid var(--ink); }
+    .work-item { display: grid; grid-template-columns: 56px minmax(0, 1fr) max-content; align-items: center; gap: 16px; width: 100%; padding: 22px 0; border-bottom: 1px solid var(--ink); text-align: left; }
+    .work-item strong { font-size: clamp(28px, 5vw, 76px); font-weight: 400; line-height: .9; }
+    .work-item:nth-child(2n) { padding-inline: 16px; background: var(--ink); color: var(--red); }
+    .work-detail { display: none; margin-top: 20px; padding: clamp(22px, 4vw, 48px); background: var(--ink); color: var(--red); }
+    .work-detail.show { display: block; }
+    .work-detail h3 { margin: 16px 0; font-size: clamp(42px, 8vw, 112px); font-weight: 400; line-height: .85; }
+    .work-detail p { max-width: 680px; line-height: 1.25; }
+    
+    .role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ink); border: 1px solid var(--ink); margin: 30px 0; }
+    .role-card { padding: 25px; background: var(--paper); color: var(--ink); min-height: 180px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; transition: background 0.2s, color 0.2s; }
+    .role-card strong { font-size: 28px; font-weight: 400; }
+    .role-card:hover { background: var(--db-blue); color: var(--white); }
+    .role-card.selected { background: var(--ink); color: var(--red); }
+    .role-info { border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); background: var(--ink); color: var(--red); padding: 25px; font-size: 17px; line-height: 1.2; min-height: 100px; }
+    
+    .color-studio { display: flex; flex: 1 1 auto; width: 100%; min-width: 0; min-height: 0; }
+    .color-options { display: flex; flex: 1 1 auto; min-width: 0; min-height: 0; gap: clamp(3px, .55vw, 8px); }
+    .color-option { flex: 1 1 0; min-width: 0; min-height: 0; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; padding: clamp(14px, 2vw, 30px); border-radius: 0; background: var(--option-color); color: var(--option-ink); text-align: left; transition: flex .65s cubic-bezier(.16, 1, .3, 1), box-shadow .3s, filter .3s; }
+    .color-option-meta { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; }
+    .color-option-name { font-size: clamp(22px, 2.8vw, 42px); font-weight: 400; transition: font-size .45s cubic-bezier(.16, 1, .3, 1); }
+    .color-option-value { font-size: clamp(18px, 2vw, 30px); font-weight: 400; }
+    .color-option[aria-pressed="true"] { flex-grow: 3.2; box-shadow: inset 0 0 0 2px var(--option-ink); }
+    .color-option[aria-pressed="true"] .color-option-name { font-size: clamp(38px, 7vw, 112px); }
+    .color-option:hover:not([aria-pressed="true"]) { flex-grow: 1.2; }
+    .color-option:focus-visible { outline: 3px solid var(--db-blue); outline-offset: -5px; }
+    
+    .logo-lab { height: clamp(340px, 40vw, 560px); position: relative; background: var(--ink); overflow: hidden; user-select: none; -webkit-user-select: none; }
+    .logo-lab * { user-select: none; -webkit-user-select: none; }
+    .lab-layout { position: absolute; top: 50%; left: 50%; display: grid; width: 100%; aspect-ratio: 3558 / 799; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: var(--type-unit); transform: translate(-50%, -50%); }
+    .logo-lab .lab-letter { position: relative; display: grid; place-items: center; width: 100%; height: 100%; overflow: hidden; color: var(--red); transform-origin: center; transition: transform .9s cubic-bezier(.2,.8,.2,1); -webkit-user-drag: none; touch-action: none; cursor: grab; }
+    .logo-lab .lab-letter svg { display: block; width: 100%; height: 100%; fill: currentColor; overflow: visible; }
+    .logo-lab.is-floating .lab-letter { transition: none; will-change: transform; }
+    .logo-lab.is-floating .lab-letter:active { cursor: grabbing; }
+    .portal .logo-lab .lab-letter, .portal .logo-lab .lab-letter text { font-family: "Doltop", sans-serif !important; font-weight: 400; }
+    .student-dialog { position: relative; width: min(940px, calc(100vw - 32px)); max-height: 90svh; padding: 0; border: 0; background: var(--paper); color: var(--ink); overflow: hidden; }
+    .student-dialog::backdrop { background: rgba(0,0,0,.55); }
+    .student-dialog, .student-dialog * { font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif !important; }
+    .student-dialog .book-shell { height: auto; overflow: hidden; }
+    .student-work-image { display: block; width: 100%; height: 100%; min-height: 0; object-fit: cover; background: transparent; }
+    .student-work-placeholder { display: grid; width: 100%; height: 100%; margin: 0; place-items: center; color: #777; font-size: 14px; text-align: center; }
+    .type-canvas { min-height: 340px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--db-blue); color: var(--white); padding: 30px; font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; font-size: clamp(56px, 12vw, 200px); line-height: .82; letter-spacing: var(--tracking-en); white-space: nowrap; word-break: normal; overflow-wrap: anywhere; text-align: center; border: 1px solid var(--ink); }
+    .type-input { background: none; border: 0; border-bottom: 2px solid var(--ink); padding: 12px 0; min-width: 200px; width: 100%; font-size: 20px; }
+    .range-wrap { display: flex; gap: 12px; align-items: center; font-size: 14px; }
+    .range-wrap input { accent-color: var(--db-blue); max-width: 180px; }
+    .type-layers { display: flex; flex-direction: column; margin-top: 20px; gap: 1px; background: var(--ink); border: 1px solid var(--ink); }
+    .type-layer { display: block; flex: 0 0 auto; width: 100%; padding: 12px 16px; border: 0; background: var(--paper); color: var(--ink); font: inherit; font-size: clamp(24px, 4vw, 64px); line-height: .95; text-align: left; word-break: break-word; cursor: pointer; animation: rise-in .5s both; }
+    .type-layer:hover, .type-layer[aria-pressed="true"] { background: var(--db-blue); color: var(--white); }
+    .type-layer-readable { font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; font-size: 14px; line-height: 1.3; }
+
+    .portal.type-open { display: flex; flex-direction: column; overflow: hidden; }
+    .portal.type-open .portal-header { position: relative; top: auto; flex: 0 0 auto; }
+    .portal.type-open .portal-content {
+      box-sizing: border-box;
+      flex: 1 1 auto;
+      height: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 1.1vh, 10px);
+      overflow: hidden;
+      padding: clamp(10px, 1.8vh, 18px) calc(var(--rail-width) + var(--basic-margin)) 10px;
+    }
+    .portal.type-open .portal-content > .layer { opacity: 1; transform: none; transition: none; will-change: auto; }
+    .portal.type-open .portal-title { flex: 0 0 auto; margin: 0; font-size: clamp(34px, 5vh, 56px) !important; line-height: .88; }
+    .portal.type-open .subline { padding: 8px 0; font-size: 12px; }
+    .portal.type-open .type-input {
+      flex: 0 0 auto;
+      width: 100%;
+      min-width: 0;
+      min-height: 58px;
+      padding: 12px 16px;
+      border: 2px solid var(--ink);
+      background: var(--white);
+      color: var(--ink);
+      font-size: 24px;
+    }
+    .portal.type-open .type-input::placeholder { color: #777; }
+    .portal.type-open .type-input:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
+    .portal.type-open .type-canvas { flex: 1 1 0; min-height: 120px; padding: clamp(10px, 2vh, 20px); font-size: clamp(44px, 12vh, 132px); }
+    .portal.type-open .controls { flex: 0 0 auto; min-height: 36px; margin: 0; gap: 12px; }
+    .portal.type-open .type-layers { flex: 0 1 auto; min-height: 0; max-height: min(22vh, 180px); margin: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; }
+    .portal.type-open .type-layers:empty { display: none; }
+    
+    .poster-experience { display: grid; grid-template-columns: 1fr 1fr; gap: 45px; margin-top: 30px; align-items: center; }
+    .motion-sheet { aspect-ratio: 6088/8612; width: min(100%, 420px); margin: auto; background: var(--ink); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--ink); }
+    .poster-video { object-fit: contain; color: var(--white); }
+    .poster-slice { flex: 1; background-size: 100% 600%; background-repeat: no-repeat; opacity: 0; transform: translateY(300px); transition: transform .75s cubic-bezier(.18, .8, .18, 1), opacity .4s; }
+    .poster-slice.landed { opacity: 1; transform: none; }
+    .motion-copy h3 { font-size: clamp(30px, 4vw, 60px); font-weight: 400; line-height: .9; }
+    .portal.video-open { display: flex; flex-direction: column; overflow: hidden; background: #000007; color: #F0EEE9; }
+    .portal.video-open::before, .portal.video-open::after { background: #000007; color: #FF5349; border-color: rgba(240,238,233,.2); }
+    .portal.video-open .portal-header { position: relative; top: auto; flex: 0 0 auto; background: #000007; border-color: rgba(240,238,233,.2); }
+    .portal.video-open .portal-header button { background: transparent; color: #F0EEE9; border-color: rgba(240,238,233,.3); }
+    .portal.video-open .portal-header button:hover { background: #FF5349; color: #000007; border-color: #FF5349; }
+    .portal.video-open .portal-content { display: flex; flex: 1 1 auto; width: 100%; max-width: none; height: 0; min-height: 0; margin: 0; padding: 0 var(--rail-width); overflow: hidden; }
+    .portal.video-open .portal-content > .layer { flex: 1; min-width: 0; min-height: 0; opacity: 1; transform: none; transition: none; }
+    .film-experience { position: relative; isolation: isolate; width: 100%; height: 100%; min-height: 0; overflow: hidden; background: #000007; }
+    .film-art { position: absolute; z-index: -1; width: 64%; height: 140%; top: -17%; right: -2%; pointer-events: none; transform: translate3d(var(--film-x,0px),var(--film-y,0px),0); transition: transform .9s cubic-bezier(.2,.7,.2,1), opacity .6s; }
+    .film-art img { display: block; width: 100%; height: 100%; object-fit: contain; animation: film-rise 1.4s cubic-bezier(.16,1,.3,1) both; }
+    .film-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg,#000007 0%,transparent 28%), linear-gradient(0deg,#000007 0%,transparent 18%); }
+    .film-intro { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; height: 100%; padding: 36px clamp(22px,4.2vw,80px) 100px; transition: opacity .35s, transform .6s; }
+    .film-eyebrow { margin: 0 0 clamp(24px,4vh,48px); font-size: 10px; line-height: 1.4; letter-spacing: .12em; }
+    .film-title { margin: 0; color: #FF5349; font-size: clamp(64px,12.4vw,220px); font-weight: 400; letter-spacing: -.045em; line-height: .84; }
+    .film-title span { display: block; width: max-content; max-width: 100%; animation: film-type-rise .95s cubic-bezier(.16,1,.3,1) both; }
+    .film-title span:last-child { margin-top: .07em; font-size: .57em; animation-delay: .12s; }
+    .film-caption { margin: 28px 0 0; color: #F0EEE9; font-size: clamp(12px,1vw,15px); letter-spacing: -.02em; line-height: 1.6; animation: film-type-rise .95s .2s both; }
+    .film-launch { display: inline-flex; align-items: center; gap: 18px; margin-top: clamp(25px,5vh,60px); padding: 0; border: 0; background: transparent; color: #F0EEE9; text-align: left; cursor: pointer; animation: film-type-rise .95s .3s both; }
+    .film-play-disc { display: grid; place-items: center; width: clamp(60px,6vw,86px); aspect-ratio: 1; border: 1px solid #FF5349; border-radius: 50%; color: #FF5349; transition: background .25s, color .25s, transform .35s; }
+    .film-play-disc svg { width: 18px; height: 18px; margin-left: 3px; fill: currentColor; }
+    .film-launch:hover .film-play-disc { background: #FF5349; color: #000007; transform: scale(1.08); }
+    .film-launch:focus-visible, .film-return:focus-visible { outline: 2px solid #FF5349; outline-offset: 8px; }
+    .film-launch-label { display: grid; gap: 7px; }
+    .film-launch-label strong { font-size: 13px; font-weight: 400; letter-spacing: .07em; }
+    .film-launch-label small { font-size: 10px; letter-spacing: .02em; opacity: .65; }
+    .film-colophon { display: flex; justify-content: space-between; gap: 16px; position: absolute; right: clamp(22px,4.2vw,80px); left: clamp(22px,4.2vw,80px); bottom: 24px; padding-top: 14px; border-top: 1px solid rgba(240,238,233,.25); color: rgba(240,238,233,.6); font-size: 9px; letter-spacing: .06em; line-height: 1.4; transition: opacity .35s; }
+    .film-screen { position: absolute; z-index: 3; inset: 0; display: flex; align-items: center; justify-content: center; padding: 50px 24px 18px; background: rgba(0,0,7,.88); opacity: 0; visibility: hidden; transform: translateY(8%); transition: opacity .5s, transform .7s cubic-bezier(.16,1,.3,1), visibility .5s; }
+    .film-screen[hidden] { display: none; }
+    .film-screen video { display: block; width: 100%; height: 100%; max-width: 1200px; min-height: 0; object-fit: contain; background: transparent; }
+    .film-return { position: absolute; top: 16px; right: 24px; z-index: 1; padding: 7px 0; border: 0; background: none; color: #F0EEE9; font-size: 12px; letter-spacing: 0; cursor: pointer; }
+    .film-return:hover { color: #FF5349; }
+    .film-experience.is-watching .film-screen { opacity: 1; visibility: visible; transform: none; }
+    .film-experience.is-watching .film-intro { opacity: 0; transform: translateY(-24px); pointer-events: none; }
+    .film-experience.is-watching .film-colophon { opacity: 0; }
+    .film-experience.is-watching .film-art { opacity: .25; transform: scale(1.06); }
+    .film-notice { position: absolute; z-index: 5; left: 24px; right: 24px; bottom: 20px; margin: 0; color: #F0EEE9; font-size: 13px; text-align: center; }
+    .film-notice:empty { display: none; }
+    @keyframes film-rise { from { opacity: 0; transform: translateY(18%) rotate(-5deg); } to { opacity: 1; transform: none; } }
+    @keyframes film-type-rise { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: none; } }
+    @media (max-width: 640px) {
+      .film-art { width: 116%; height: 110%; right: -33%; top: -4%; opacity: .8; }
+      .film-art::after { background: linear-gradient(90deg,#000007 0%,transparent 45%),linear-gradient(0deg,#000007 0%,transparent 48%); }
+      .film-intro { justify-content: flex-end; padding: 24px 18px 100px; }
+      .film-eyebrow { margin-bottom: 22px; font-size: 8px; }
+      .film-title { font-size: clamp(42px,17vw,122px); }
+      .film-title span:last-child { font-size: .52em; }
+      .film-caption { max-width: 230px; margin-top: 18px; font-size: 11px; }
+      .film-launch { margin-top: 24px; gap: 12px; }
+      .film-play-disc { width: 52px; }
+      .film-launch-label strong { font-size: 11px; }
+      .film-colophon { left: 18px; right: 18px; bottom: 18px; font-size: 7px; }
+      .film-colophon span:last-child { max-width: 130px; text-align: right; }
+      .film-screen { padding: 56px 10px 12px; }
+    }
+    @media (max-height: 570px) and (min-width: 641px) {
+      .film-intro { padding-block: 20px 65px; }
+      .film-eyebrow { margin-bottom: 14px; }
+      .film-title { font-size: 18vh; }
+      .film-caption { margin-top: 14px; }
+      .film-launch { margin-top: 18px; }
+      .film-play-disc { width: 48px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .film-art, .film-art img, .film-title span, .film-caption, .film-launch, .film-intro, .film-screen { animation: none; transition: none; }
+    }
+
+    .portal.poster-open { display: flex; flex-direction: column; overflow: hidden; }
+    .portal.poster-open .portal-header { position: relative; top: auto; flex: 0 0 auto; padding-block: 5px; }
+    .portal.poster-open .portal-content { box-sizing: border-box; display: flex; flex: 1 1 auto; flex-direction: column; gap: clamp(6px, 1vh, 12px); height: 0; min-height: 0; overflow: hidden; padding: 6px calc(var(--rail-width) + var(--basic-margin)); }
+    .portal.poster-open .portal-content > .layer { opacity: 1; transform: none; transition: none; will-change: auto; }
+    .portal.poster-open .portal-title { flex: 0 0 auto; margin: 0; font-size: clamp(26px, 4.8vh, 56px) !important; line-height: .86; }
+    .portal.poster-open .subline { flex: 0 0 auto; padding: 0; font-size: clamp(10px, 1.4vh, 14px); }
+    .motion-range { display: block; width: 100%; accent-color: var(--db-blue); margin: 20px 0; }
+    .portal.poster-open .poster-deck { display: grid; flex: 1 1 0; min-height: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-items: center; align-items: center; gap: clamp(8px, 2vw, 24px); width: min(100%, 1100px); margin: 0 auto; }
+    .portal.poster-open .poster-deck button { display: grid; place-items: center; width: 100%; height: 100%; min-height: 0; padding: 0; overflow: hidden; background: transparent; border: 1px solid var(--ink); box-shadow: none; }
+    .portal.poster-open .poster-deck img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; }
+    @media (hover: hover) and (pointer: fine) {
+      .portal.poster-open .poster-deck img { cursor: none; }
+    }
+    .poster-lens { position: fixed; z-index: 30; width: 190px; height: 190px; border: 3px solid var(--red); border-radius: 50%; outline: 2px solid var(--ink); background-repeat: no-repeat; box-shadow: 0 8px 18px rgba(0, 0, 0, .35); opacity: 0; visibility: hidden; pointer-events: none; transform: translate(-50%, -50%); transition: opacity .12s, visibility .12s; }
+    .poster-lens.visible { opacity: 1; visibility: visible; }
+    .poster-lens::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(ellipse at 32% 24%, rgba(255,255,255,.55), transparent 34%), radial-gradient(ellipse at 70% 78%, rgba(255,255,255,.12), transparent 56%); }
+    .poster-lens::after { content: ""; position: absolute; z-index: -1; right: -44px; bottom: -25px; width: 64px; height: 14px; border: 2px solid var(--ink); border-radius: 8px; background: var(--red); box-shadow: 0 4px 7px rgba(0,0,0,.28); transform: rotate(45deg); }
+
+    .portal.archive-open { display: flex; flex-direction: column; overflow: hidden; }
+    .portal.archive-open .portal-header { position: relative; top: auto; flex: 0 0 auto; }
+    .portal.archive-open .portal-content { box-sizing: border-box; display: flex; flex: 1 1 auto; height: 0; min-height: 0; overflow: hidden; padding: 10px calc(var(--rail-width) + var(--basic-margin)); }
+    .poster-archive { position: relative; display: flex; flex: 1 1 auto; min-height: 0; flex-direction: column; }
+    .archive-heading { display: flex; flex: 0 0 auto; align-items: baseline; min-height: 30px; }
+    .archive-heading p { margin: 0; font-size: 11px; }
+    .archive-caption { position: absolute; top: 0; left: 0; right: 0; padding: 2px 12px 8px; text-align: center; }
+    .archive-caption-year { margin: 0 0 3px; font-size: 11px; line-height: 1.1; }
+    .archive-caption-title { margin: 0; font-size: clamp(17px, 2vw, 22px); font-weight: 400; line-height: 1.05; }
+    .archive-caption-description { margin: 5px 0 0; font-size: 12px; line-height: 1.25; }
+    .archive-count { min-width: 42px; font-size: 11px; text-align: right; }
+    .archive-stage { position: relative; display: grid; flex: 1 1 auto; min-height: 0; place-items: center; overflow: hidden; touch-action: pan-y; user-select: none; }
+    .archive-card { --archive-card-width: min(42vw, 460px, 44vh); position: absolute; top: calc(50% - 40px); left: 50%; display: block; width: var(--archive-card-width); height: auto; aspect-ratio: 11584 / 16384; padding: 0; overflow: hidden; border: 1px solid var(--ink); background: transparent; box-shadow: none; transform: translate(calc(-50% + var(--drag-offset, 0px)), -50%); transition: transform .72s cubic-bezier(.22, 1, .36, 1); cursor: grab; }
+    .archive-card img { display: block; width: 100%; height: 100%; background: var(--paper); object-fit: contain; pointer-events: none; -webkit-user-drag: none; }
+    .archive-card-video { display: block; width: 100%; height: 100%; background: var(--ink); object-fit: contain; pointer-events: none; }
+    .archive-card-pair { width: min(84vw, 920px, 88vh); aspect-ratio: 1.414 / 1; }
+    .archive-poster-pair { display: grid; width: 100%; height: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .archive-poster-pair img { min-width: 0; }
+    .archive-card-previous { z-index: 1; opacity: 1; filter: none; left: 0; transform: translate(calc(-66.666% + var(--drag-offset, 0px)), -50%); }
+    .archive-card-next { z-index: 1; opacity: 1; filter: none; left: auto; right: 0; transform: translate(calc(66.666% + var(--drag-offset, 0px)), -50%); }
+    .archive-card-current { z-index: 2; cursor: zoom-in; }
+    .archive-stage[data-motion="next"] .archive-card-current { animation: archive-slide-from-right .82s cubic-bezier(.22, 1, .36, 1) both; }
+    .archive-stage[data-motion="previous"] .archive-card-current { animation: archive-slide-from-left .82s cubic-bezier(.22, 1, .36, 1) both; }
+    @keyframes archive-slide-from-right { from { transform: translate(calc(-50% + 56vw), -50%); } 78% { transform: translate(calc(-50% - 10px), -50%); } to { transform: translate(-50%, -50%); } }
+    @keyframes archive-slide-from-left { from { transform: translate(calc(-50% - 56vw), -50%); } 78% { transform: translate(calc(-50% + 10px), -50%); } to { transform: translate(-50%, -50%); } }
+    .archive-stage.is-dragging { cursor: grabbing; }
+    .archive-stage.is-dragging .archive-card { transition: none; }
+    .archive-controls { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; min-height: 46px; }
+    .archive-nav { display: grid; width: 40px; height: 40px; place-items: center; border: 1px solid var(--ink); background: transparent; font-size: 22px; line-height: 1; }
+    .archive-nav:hover:not(:disabled) { background: var(--ink); color: var(--red); }
+    .archive-nav:disabled { opacity: .3; cursor: default; }
+    .archive-controls .archive-count { font-size: 11px; }
+    @media(max-width: 700px) {
+      .portal.archive-open .portal-content { padding: 8px calc(var(--rail-width) + 10px); }
+      .archive-heading { min-height: 26px; }
+      .archive-caption { padding: 2px 8px 6px; }
+      .archive-caption-year { font-size: 10px; }
+      .archive-caption-title { font-size: 16px; }
+      .archive-caption-description { margin-top: 3px; font-size: 10px; }
+      .archive-card { --archive-card-width: min(62vw, 360px, 44vh); }
+      .archive-card-pair { width: min(86vw, 680px, 88vh); }
+    }
+    @media(prefers-reduced-motion: reduce) {
+      .archive-card { transition: none; animation: none !important; }
+    }
+    
+    .film-stage { min-height: clamp(300px, 45vw, 560px); position: relative; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--ink); background: var(--ink); color: var(--red); }
+    .film-lines { position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, transparent 0 calc(12.5% - 1px), var(--red) calc(12.5% - 1px) 12.5%); opacity: .55; pointer-events: none; }
+    .film-word { position: relative; z-index: 1; color: var(--red); font-size: clamp(64px, 14vw, 200px); line-height: .8; }
+    .film-placeholder { min-height: 400px; border: 1px solid var(--ink); display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; background: var(--ink); color: var(--red); position: relative; overflow: hidden; }
+    .film-placeholder strong { font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; font-size: clamp(50px, 10vw, 140px); font-weight: 400; letter-spacing: var(--tracking-en); line-height: .9; color: var(--red); }
+    .film-placeholder span { font-size: 14px; margin-top: 20px; }
+    .film-player { width: 100%; max-height: 70vh; border: 1px solid var(--ink); }
+    
+    .portal.student-page .portal-title { display: none; }
+    .student-heading { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 28px; }
+    .student-heading h2 { margin: 0; font-size: 28px; font-weight: 400; }
+    .student-heading p { margin: 0; font-size: 14px; }
+    .student-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 28px 20px; margin-top: 0; }
+    .student-tile { min-width: 0; padding: 0; color: inherit; text-align: center; }
+    .portal.student-page .student-tile { opacity: 0; transform: translate3d(0, -72px, 0); transition: opacity .45s ease, transform .75s cubic-bezier(.18, 1.12, .28, 1); transition-delay: calc(var(--student-order, 0) * 24ms); }
+    .portal.student-page .student-grid.stacked .student-tile { opacity: 1; transform: translate3d(0, 0, 0); }
+    .student-thumb { width: min(100%, 220px); aspect-ratio: 3 / 4; overflow: hidden; position: relative; margin: 0 auto; background: #E9E9E9; }
+    .student-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .student-placeholder { display: grid; width: 100%; height: 100%; place-items: center; color: #666; font-size: 13px; }
+    .student-meta { padding: 12px 0 0; font-size: 15px; line-height: 1.4; }
+    .committee-page { display: grid; width: 100%; height: auto; min-height: 0; gap: clamp(20px, 3vw, 32px); }
+    .committee-page-heading { display: flex; align-items: end; justify-content: space-between; gap: var(--committee-space-sm); margin: 0; padding: 0 0 14px; border-bottom: 1px solid var(--ink); }
+    .committee-page-heading h1 { margin: 0; font-size: clamp(30px, 3.6vw, 44px); font-weight: 400; line-height: .95; letter-spacing: 0; }
+    .committee-page-heading p { margin: 0; padding-left: 12px; border-left: 1px solid var(--ink); font-size: 12px; line-height: 1.3; white-space: nowrap; }
+    .committee-leadership { display: grid; gap: 10px; }
+    .committee-greeting { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(20px, 4vw, 56px); row-gap: 10px; max-width: none; margin: 0; padding: 16px 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); font-size: 14px; line-height: 1.5; letter-spacing: 0; }
+    .committee-greeting p { max-width: 65ch; margin: 0; }
+    .committee-greeting .committee-greeting-signoff { grid-column: 1 / -1; justify-self: end; margin: 2px 0 0; font-size: 11px; text-align: right; }
+    .committee-pyramid { display: flex; flex-direction: column; gap: clamp(24px, 3vw, 36px); }
+    .committee-people { display: grid; width: min(100%, 960px); grid-template-columns: repeat(5, minmax(0, 1fr)); justify-items: center; gap: var(--committee-space-md); }
+    .committee-people-executives { grid-template-columns: repeat(auto-fill, 160px); justify-items: start; width: 100%; gap: var(--committee-space-md); }
+    .committee-department { border-top: 1px solid var(--ink); padding-top: var(--committee-space-sm); }
+    .committee-single-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--committee-space-md); }
+    .committee-single-row .committee-department { min-width: 0; }
+    .committee-single-row .committee-people-department { grid-template-columns: minmax(0, 1fr); justify-items: start; }
+    .committee-department-heading { display: flex; align-items: baseline; justify-content: space-between; gap: var(--committee-space-sm); margin-bottom: var(--committee-space-sm); }
+    .committee-department-heading h2 { margin: 0; font-size: 20px; font-weight: 400; }
+    .committee-department-heading span { font-size: 11px; }
+    .committee-people-department { width: 100%; grid-template-columns: repeat(auto-fill, 160px); justify-items: start; gap: var(--committee-space-md); }
+    .committee-person { display: flex; min-width: 0; flex-direction: column; align-items: center; text-align: center; }
+    .portal.committee-open .committee-person { opacity: 0; transform: translate3d(0, -64px, 0) rotateX(-5deg); transform-origin: center top; transition: opacity .42s ease-out, transform .78s cubic-bezier(.18, 1.12, .28, 1); transition-delay: calc(var(--committee-order, 0) * 20ms); }
+    .portal.committee-open .committee-pyramid.stacked .committee-person { opacity: 1; transform: translate3d(0, 0, 0) rotateX(0); }
+    .committee-photo, .committee-photo-placeholder { display: grid; width: clamp(108px, 14vw, 160px); aspect-ratio: 3 / 4; place-items: center; object-fit: cover; background: #E9E9E9; }
+    .committee-photo-placeholder { color: #666; font-size: 11px; }
+    .committee-person h2 { margin: var(--committee-space-sm) 0 2px; font-size: 13px; font-weight: 600; line-height: 1.2; }
+    .committee-person p { max-width: 100%; margin: 0; font-size: 10px; line-height: 1.25; opacity: .8; overflow-wrap: anywhere; }
+    .committee-person-chair .committee-photo, .committee-person-vice .committee-photo, .committee-person-head .committee-photo { outline: 2px solid var(--red); outline-offset: 3px; }
+    .committee-person-chair h2, .committee-person-vice h2 { min-height: 18px; font-size: 15px; }
+    .committee-person-chair h2, .committee-person-vice h2 { font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; font-weight: 600; }
+    .committee-person-head h2, .committee-person-head p { font-family: inherit; }
+    .committee-person-chair p, .committee-person-vice p { font-weight: 400; opacity: .8; }
+    @media(min-width: 701px) and (max-height: 800px) {
+      .portal.committee-open .portal-content { padding-top: var(--committee-space-sm); padding-bottom: 40px; }
+      .committee-page-heading { margin-bottom: var(--committee-space-md); }
+      .committee-pyramid { gap: var(--committee-space-lg); }
+      .committee-tier { gap: 2px; }
+      .committee-people { gap: var(--committee-space-md); }
+      .committee-person p { font-size: 9px; line-height: 1.1; }
+    }
+    .student-detail { display: none; margin-top: 30px; border-top: 1px solid var(--ink); padding: 30px 0; }
+    .student-detail.show { display: block; }
+    .student-detail h3 { font-size: 50px; font-weight: 400; margin: 0 0 20px; }
+    .student-detail img { max-width: 100%; max-height: 65vh; object-fit: contain; border: 1px solid var(--ink); }
+    
+    .book-shell { width: 100%; height: min(74vh, 860px); min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto; overflow: hidden; }
+    .portal.catalogue-open .book-shell { height: 100%; }
+    .book-stage { width: min(960px, calc(100vw - 180px)); max-width: 960px; height: auto; max-height: calc(100% - 44px); flex-shrink: 0; aspect-ratio: 4960 / 3508; position: relative; margin: 0 auto; overflow: hidden; }
+    .portal.catalogue-open .book-stage { width: min(100%, 960px, calc(141.4svh - 166px)); max-width: none; }
+    .book { width: 100%; height: 100%; }
+    .page { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; padding: 0; border: 0; background: #ffffff !important; color: #000000; }
+    #catalogue-book .page-cover { box-sizing: border-box; padding: clamp(24px, 5%, 72px); }
+    #student-book { width: 100%; height: 100%; cursor: pointer; }
+    #student-book:focus-visible { outline: 2px solid var(--db-blue); outline-offset: -2px; }
+    #student-book .page { padding: 0; }
+    .student-work-image { width: 100%; height: 100%; object-fit: contain; }
+    #student-book .student-work-image { object-fit: cover; }
+    .student-book-stage { position: relative; }
+    .student-page-count { position: absolute; z-index: 5; bottom: clamp(8px, 2%, 18px); left: 50%; box-sizing: border-box; width: 68px; transform: translateX(-50%); padding: 6px 10px; border: 1px solid rgba(255, 255, 255, .28); background: rgba(0, 0, 0, .52); color: rgba(255, 255, 255, .88); font-size: clamp(10px, 1vw, 12px); font-variant-numeric: tabular-nums; line-height: 1; text-align: center; white-space: nowrap; backdrop-filter: blur(2px); pointer-events: none; }
+    .page-meta, .page-footer { display: flex; justify-content: space-between; gap: 16px; align-items: center; font-size: clamp(8px, .8vw, 12px); }
+    .page-meta { padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
+    .page-footer { padding-top: 12px; border-top: 1px solid var(--ink); }
+    .page-main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: clamp(16px, 3vw, 40px) 0; }
+    .page-eyebrow { margin: 0 0 12px; color: var(--red); font-size: clamp(10px, 1vw, 14px); }
+    .page h3 { margin: 0; font-size: clamp(28px, 4.8vw, 66px); font-weight: 400; line-height: .9; }
+    .page-main > h3:not(.page-title) { font-size: clamp(32px, 5vw, 68px); }
+    .page-copy { max-width: 100%; margin: 16px 0 0; font-size: clamp(12px, 1.25vw, 18px); line-height: 1.35; }
+    .page-title { font-size: clamp(36px, 5.2vw, 68px) !important; line-height: .82 !important; }
+    .page-cover-title { max-width: 100%; overflow-wrap: anywhere; }
+    .page-cover-title .page-korean { margin: 14px 0 0; font-size: clamp(20px, 3vw, 42px); }
+    .catalogue-cover-footer { display: flex; align-items: center; gap: 10px; }
+    .catalogue-cover-profile { display: block; width: 32px; height: 42px; object-fit: cover; border: 1px solid var(--ink); }
+    .page-number { color: var(--red); font-size: clamp(11px, 1.2vw, 16px); }
+    .page-statement { max-width: 90%; font-size: clamp(26px, 4.4vw, 64px); line-height: .95; }
+    .page-columns { display: flex; flex-direction: column; justify-content: center; align-items: stretch; gap: clamp(14px, 2.4vw, 28px); }
+    .page-columns > div, .page-columns > ul { width: 100%; margin: 0; }
+    .page-columns h3 { color: var(--red); }
+    .page-list { display: grid; gap: 10px; margin: 24px 0 0; padding: 0; list-style: none; }
+    .page-list li { display: grid; grid-template-columns: 48px 1fr; gap: 12px; padding-top: 10px; border-top: 1px solid var(--ink); font-size: clamp(11px, 1.2vw, 16px); }
+    .page-photo { width: 100%; height: 100%; object-fit: contain; }
+    .book-controls { display: flex; justify-content: center; gap: 15px; align-items: center; flex: 0 0 auto; margin-top: 10px; }
+
+    @media(max-width: 700px) {
+      .portal.catalogue-open .portal-content { padding: 4px calc(var(--rail-width) + 2px) 6px; }
+      .book-stage { width: min(100%, 420px); max-height: calc(100% - 44px); aspect-ratio: 2480 / 3508; }
+      .page { padding: clamp(14px, 5vw, 24px); }
+      .page-copy { max-width: 100%; }
+      .page-columns { gap: 14px; }
+      .page-list li { grid-template-columns: 28px 1fr; gap: 8px; }
+    }
+    
+    .collab-category { margin: 0 0 clamp(32px, 5vw, 64px); }
+    .collab-category-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid var(--ink); }
+    .collab-category-head h3 { margin: 0; font-size: clamp(22px, 3vw, 36px); font-weight: 400; }
+    .collab-category-head span { font-size: 11px; }
+    .collab-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.5vw, 22px); margin: 0; padding: 0; list-style: none; }
+    .collab-card { min-width: 0; }
+    .collab-photo { position: relative; display: grid; aspect-ratio: 4 / 3; place-items: center; overflow: hidden; border: 1px solid var(--ink); background-color: var(--paper); background-image: linear-gradient(135deg, transparent 49.8%, rgba(0, 0, 0, .08) 50%, transparent 50.2%), linear-gradient(45deg, transparent 49.8%, rgba(0, 0, 0, .08) 50%, transparent 50.2%); background-size: 100% 100%; }
+    .collab-photo-label { display: grid; gap: 8px; justify-items: center; color: rgba(0, 0, 0, .62); font-size: 11px; text-align: center; }
+    .collab-photo-label strong { color: var(--ink); font-size: clamp(28px, 4vw, 48px); font-weight: 400; }
+    .collab-photo img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+    .collab-card-info { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 12px; padding: 12px 0 0; }
+    .collab-card h4 { margin: 0; font-size: clamp(18px, 2vw, 26px); font-weight: 400; overflow-wrap: anywhere; }
+    .collab-card-type { margin: 6px 0 0; font-size: 12px; }
+    .collab-location { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 10px; min-height: 30px; padding: 8px 0; border-top: 1px solid rgba(0, 0, 0, .28); font-size: 12px; line-height: 1.3; }
+    .collab-location-label { flex: 0 0 auto; font-size: 10px; }
+    .collab-location a { text-decoration: underline; text-underline-offset: 3px; }
+    .collab-location a:hover { color: var(--db-blue); }
+    
+    .portal.venue-open { display: flex; flex-direction: column; overflow: hidden; }
+    .portal.venue-open .portal-header { position: relative; top: auto; flex: 0 0 auto; padding-block: 6px; }
+    .portal.venue-open .portal-content { box-sizing: border-box; display: flex; flex: 1 1 auto; height: 0; min-height: 0; overflow: hidden; padding: 6px calc(var(--rail-width) + var(--basic-margin)); }
+    .portal.venue-open .portal-content > .layer { flex: 1 1 auto; min-height: 0; opacity: 1; transform: none; transition: none; will-change: auto; }
+    .venue-explorer { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(360px, .95fr); gap: clamp(14px, 2vw, 28px); align-items: stretch; height: 100%; min-height: 0; }
+    .venue-map-column { display: flex; min-width: 0; min-height: 0; flex-direction: column; }
+    .venue-map-tools { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex: 0 0 auto; margin-bottom: 6px; font-size: 12px; }
+    .venue-map-tools p { margin: 0; }
+    .venue-map-viewport { display: grid; container-type: size; flex: 1 1 auto; min-height: 0; place-items: center; overflow: hidden; background: #fff; }
+    .venue-map-art { position: relative; width: min(100cqw, calc(100cqh * .956413)); height: min(100cqh, calc(100cqw * 1.045573)); max-width: 100%; max-height: 100%; aspect-ratio: 768 / 803; }
+    .venue-map-art > img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    .venue-booths { position: absolute; inset: 0; }
+    .venue-booth { position: absolute; left: var(--booth-x); top: var(--booth-y); width: clamp(14px, 1.7vw, 22px); aspect-ratio: 1; display: grid; place-items: center; padding: 0; border: 1px solid transparent; background: transparent; color: transparent; font-size: 0; line-height: 1; transform: translate(-50%, -50%); transition: background .16s, outline-color .16s; }
+    .venue-booth:hover, .venue-booth:focus-visible, .venue-booth.selected { z-index: 2; border-color: var(--db-blue); outline: 2px solid var(--db-blue); outline-offset: 1px; background: rgba(0, 97, 254, .16); }
+    .venue-booth.filtered-out { display: none; }
+    .venue-side { display: grid; grid-template-rows: auto auto auto minmax(0, 1fr); gap: 6px; min-width: 0; min-height: 0; }
+    .venue-search { display: flex; gap: 10px; align-items: center; border-bottom: 1px solid var(--ink); padding: 0 0 12px; }
+    .venue-search label { flex: 1; min-width: 0; }
+    .venue-search input { width: 100%; padding: 8px 0; border: 0; outline: 0; background: transparent; font-size: 16px; }
+    .venue-search input:focus-visible { outline: 2px solid var(--db-blue); outline-offset: 2px; }
+    .venue-results { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-content: start; min-height: 0; border-bottom: 1px solid var(--ink); }
+    .venue-student { display: grid; grid-template-columns: 2.4em minmax(0, 1fr); align-items: center; gap: 4px; min-width: 0; padding: 2px 3px; border-bottom: 1px solid rgba(0,0,0,.18); text-align: left; font-size: 11px; line-height: 1; }
+    .venue-student[hidden] { display: none; }
+    .venue-student-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .venue-student-index { color: #555; font-size: 10px; font-variant-numeric: tabular-nums; line-height: 1; }
+    .venue-student.selected { color: var(--db-blue); }
+    .venue-student.selected .venue-student-index { color: inherit; }
+    .venue-empty { grid-column: 1 / -1; margin: 0; padding: 18px 0; font-size: 13px; }
+    .venue-selected { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; align-items: center; min-height: 96px; }
+    .venue-selected img, .venue-selected-placeholder { width: 72px; aspect-ratio: 3 / 4; object-fit: cover; background: rgba(0,0,0,.08); }
+    .venue-selected-placeholder { display: grid; place-items: center; font-size: 10px; text-align: center; }
+    .venue-selected p { margin: 0 0 5px; font-size: 12px; }
+    .venue-selected h3 { margin: 0; font-size: 18px; font-weight: 400; }
+    .venue-selected strong { display: block; margin-top: 3px; color: var(--db-blue); font-size: 12px; font-weight: 400; }
+    .venue-book-panel { display: grid; grid-template-rows: auto minmax(0, 1fr); min-width: 0; min-height: 0; gap: 6px; border-top: 1px solid var(--ink); padding-top: 6px; }
+    .venue-book-heading { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; gap: 8px; }
+    .venue-book-heading h4 { margin: 0; font-size: 11px; font-weight: 400; }
+    .venue-book-heading span { font-size: 10px; }
+    .venue-book-stage { position: relative; display: grid; align-self: center; justify-self: center; width: auto; height: 100%; max-width: 100%; max-height: 100%; min-height: 0; place-items: center; overflow: hidden; aspect-ratio: 4960 / 3508; background: #fff; }
+    .venue-book-stage .book { width: 100%; height: 100%; }
+    .venue-book-stage .page { padding: 0; }
+    .venue-book-page-image { display: block; width: 100%; height: 100%; object-fit: contain; }
+    .venue-book-empty { display: grid; width: 100%; height: 100%; place-items: center; color: #555; font-size: 11px; }
+    .venue-book-note { margin: 0; font-size: 10px; line-height: 1.2; }
+    .info-row { border-top: 1px solid var(--ink); padding: 15px 0; display: flex; justify-content: space-between; gap: 20px; }
+    
+    .wordle-game { --quiz-gap: 6px; display: flex; flex-direction: column; justify-content: center; width: min(100%, 1260px); min-height: 100%; margin: 0 auto; }
+    .wordle-layout { display: grid; flex: 1; grid-template-columns: minmax(0, min(460px, calc(52vh - 60px))) minmax(0, min(480px, 38vw)); grid-template-rows: auto auto; justify-content: center; align-content: center; align-items: stretch; gap: var(--quiz-gap); min-height: 0; padding: 0; }
+    .wordle-play { display: contents; }
+    .word-board { display: grid; gap: var(--quiz-gap); width: 100%; margin: 0 auto; }
+    .wordle-layout > .word-board { grid-column: 1; grid-row: 1; }
+    .word-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--quiz-gap); }
+    .word-cell { display: grid; aspect-ratio: 1; place-items: center; border: 1px solid rgba(0, 0, 0, .4); background: rgba(255, 255, 255, .32); font-size: clamp(28px, 5vh, 56px); line-height: 1; transition: background .16s, color .16s, border-color .16s; }
+    .portal.quiz-open .word-cell { font-family: 'Doltop', sans-serif !important; }
+    .word-cell.filled { border-width: 2px; border-color: var(--ink); background: rgba(255, 255, 255, .72); }
+    .word-cell.exact { border-color: #FF5349; background: #FF5349; color: #000; }
+    .word-cell.present { border-color: #a47b13; background: #a47b13; color: #fff; }
+    .word-cell.absent { border-color: #343434; background: #343434; color: #fff; }
+    .word-keyboard { display: grid; grid-column: 1; grid-row: 2; gap: var(--quiz-gap); width: 100%; }
+    .word-key-row { display: flex; justify-content: center; gap: var(--quiz-gap); }
+    .word-key { display: grid; flex: 1 1 0; min-width: 0; height: clamp(34px, 5.2vh, 48px); place-items: center; padding: 0 4px; border: 1px solid rgba(0, 0, 0, .26); background: rgba(255, 255, 255, .56); font-family: 'SohneBreitBuch', sans-serif; font-size: clamp(11px, 1.2vw, 14px); transition: background .16s, color .16s, transform .12s; }
+    .word-key:hover:not(:disabled), .word-key:active:not(:disabled) { transform: translateY(-2px); background: var(--ink); color: var(--paper); }
+    .word-key.wide { flex: 1.5 1 0; font-family: inherit; font-size: 10px; }
+    .word-key.exact { border-color: #FF5349; background: #FF5349; }
+    .word-key.present { border-color: #a47b13; background: #a47b13; color: #fff; }
+    .word-key.absent { border-color: #343434; background: #343434; color: #fff; }
+    .word-key:disabled { opacity: .48; cursor: default; }
+    .wordle-side { display: grid; grid-column: 2; grid-row: 1 / 3; grid-template-rows: repeat(8, minmax(0, 1fr)); gap: var(--quiz-gap); align-content: stretch; align-self: stretch; min-width: 0; padding: 0; border: 0; background: none; }
+    .wordle-side > * { box-sizing: border-box; min-height: 0; margin: 0; padding: 8px 14px; border: 1px solid var(--ink); background: rgba(255, 255, 255, .28); }
+    .wordle-progress-cell { display: flex; flex-direction: column; justify-content: center; }
+    .wordle-round { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: var(--quiz-gap); border-bottom: 1px solid rgba(0, 0, 0, .3); }
+    .wordle-round-label, .wordle-round-count { font-size: 11px; }
+    .wordle-round-count { font-variant-numeric: tabular-nums; }
+    .wordle-round-dots { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--quiz-gap); margin-top: var(--quiz-gap); }
+    .wordle-round-dot { height: 4px; background: rgba(0, 0, 0, .16); }
+    .wordle-round-dot.used { background: var(--red); }
+    .wordle-round-dot.current { outline: 1px solid var(--ink); outline-offset: 2px; }
+    .word-message { display: flex; align-items: center; font-size: clamp(15px, 1.7vw, 20px); line-height: 1.25; }
+    .wordle-note { display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+    .wordle-side-label { margin-bottom: 8px; font-size: 10px; }
+    .word-hint { margin: 0; font-size: 13px; line-height: 1.35; }
+    .word-legend { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 10px; line-height: 1.25; }
+    .word-legend-item { display: flex; min-width: 0; align-items: center; gap: 8px; }
+    .word-legend-item > span { letter-spacing: .025em; }
+    .word-legend-swatch { width: 12px; height: 12px; flex: 0 0 12px; border: 1px solid rgba(0, 0, 0, .35); }
+    .word-legend-swatch.exact { background: #FF5349; }
+    .word-legend-swatch.present { background: #a47b13; }
+    .word-legend-swatch.absent { background: #343434; }
+    .portal.quiz-open .wordle-side .control { display: grid; width: 100%; min-width: 0; height: 100%; place-items: center; margin: 0; padding: 8px 10px; font-size: 12px; }
+    .portal.quiz-open .wordle-side .control { border: 1px solid var(--ink); background: var(--ink); color: var(--red); }
+    .portal.quiz-open .wordle-side .control:hover:not(:disabled) { background: var(--red); color: var(--ink); }
+
+    .asset-note { font-size: 12px; opacity: .65; margin-top: 25px; line-height: 1.15; }
+    
+    .zoom { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 40; display: none; align-items: center; justify-content: center; padding: 50px; }
+    .zoom.open { display: flex; }
+    .zoom img, .zoom video { max-width: 95%; max-height: 90svh; object-fit: contain; border: 1px solid var(--ink); }
+    .zoom-pair { display: flex; max-width: 95vw; max-height: 90svh; align-items: center; justify-content: center; gap: 12px; }
+    .zoom-pair[hidden], .zoom-video[hidden], #zoom-image[hidden] { display: none; }
+    .zoom-pair img { width: auto; max-width: calc((95vw - 12px) / 2); max-height: 90svh; }
+    #zoom-face-toggle { top: auto; right: auto; bottom: 20px; left: 50%; transform: translateX(-50%); }
+    .zoom button { position: absolute; right: 25px; top: 20px; border: 1px solid var(--ink); background: var(--red); color: var(--ink); padding: 12px 20px; transition: background 0.2s; }
+    .zoom button:hover { background: var(--ink); color: var(--red); }
+    
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+    .portal.open .portal-content { scroll-behavior: smooth; }
+
+    .portal-content { padding-bottom: 60px; }
+
+    .portal-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .chapter-arrow {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--ink);
+      font-size: 20px;
+      line-height: 1;
+      transition: color .18s, background .18s, transform .18s;
+    }
+
+    .chapter-arrow:hover:not(:disabled) { background: var(--ink); color: var(--red); transform: translateY(-2px); }
+    .chapter-arrow:disabled { opacity: .35; cursor: default; }
+
+    .chapter-index-toggle {
+      min-width: 78px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 10px;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--red);
+      font-size: 11px;
+      transition: background .2s, color .2s;
+    }
+
+    .chapter-index-toggle:hover { background: var(--red); color: var(--ink); }
+    .chapter-menu-mark { width: 18px; display: grid; gap: 4px; }
+    .chapter-menu-mark span { display: block; height: 1px; background: currentColor; transition: transform .2s; }
+    .chapter-index-toggle[aria-expanded="true"] .chapter-menu-mark span:first-child { transform: translateY(2.5px) rotate(45deg); }
+    .chapter-index-toggle[aria-expanded="true"] .chapter-menu-mark span:last-child { transform: translateY(-2.5px) rotate(-45deg); }
+
+    .chapter-index {
+      width: min(960px, calc(100vw - 36px));
+      max-width: none;
+      max-height: min(86svh, 920px);
+      padding: clamp(18px, 4vw, 42px);
+      border: 1px solid var(--red);
+      background: var(--red);
+      color: var(--ink);
+    }
+
+    .chapter-index::backdrop { background: rgba(0, 0, 0, .82); }
+
+    .chapter-index-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .chapter-index-head p { margin: 0 0 8px; font-size: 10px; }
+    .chapter-index-head h2 { margin: 0; font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; font-size: clamp(42px, 8vw, 88px); font-weight: 400; line-height: .82; }
+    .chapter-index-close { padding: 10px 14px; background: var(--ink); color: var(--red); }
+    .chapter-index-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; max-height: calc(86svh - 180px); margin-top: 20px; overflow: auto; border: 1px solid var(--ink); background: var(--ink); }
+
+    .chapter-index-item {
+      min-height: 74px;
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr) 20px;
+      grid-template-rows: 1fr 1fr;
+      align-items: center;
+      gap: 4px 12px;
+      padding: 12px 16px;
+      background: var(--red);
+      color: var(--ink);
+      text-align: left;
+      transition: background .18s, color .18s, padding .18s;
+    }
+
+    .chapter-index-item:hover, .chapter-index-item[aria-current="page"] { padding-left: 22px; background: var(--ink); color: var(--red); }
+    .chapter-index-number { grid-row: 1 / 3; font-size: 11px; }
+    .chapter-index-name { align-self: end; overflow-wrap: anywhere; font-size: 15px; line-height: 1; }
+    .chapter-index-korean { align-self: start; font-size: 11px; }
+    .chapter-index-arrow { grid-column: 3; grid-row: 1 / 3; justify-self: end; font-size: 18px; }
+
+    .chapter-transition-veil, .chapter-transition-word { position: fixed; pointer-events: none; }
+    .chapter-transition-guard { position: fixed; inset: 0; z-index: 99; cursor: progress; }
+    .chapter-transition-veil { inset: 0; z-index: 100; background: var(--red); clip-path: circle(0 at 50% 50%); }
+    .chapter-transition-word { z-index: 101; display: flex; align-items: center; white-space: nowrap; transform-origin: center; }
+    .chapter-transition-word svg { display: block; width: 100%; height: 100%; overflow: visible; fill: currentColor; }
+
+    @keyframes chapter-index-enter { from { opacity: 0; transform: translateY(20px) scale(.985); } to { opacity: 1; transform: none; } }
+    .chapter-index[open] { animation: chapter-index-enter .24s cubic-bezier(.2, .8, .2, 1) both; }
+
+    /* =========================================================
+       반응형 (Mobile)
+       ========================================================= */
+    @media(max-width: 700px) {
+      .portal-header { padding-inline: calc(var(--rail-width) + 10px); }
+      .portal.quiz-open .portal-content { overflow-y: auto; }
+      .portal.quiz-open .portal-content { padding: 10px calc(var(--rail-width) + 10px) 28px; }
+      .portal.quiz-open .wordle-game { width: 100%; height: auto; min-height: 100%; }
+      .portal.quiz-open .wordle-layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; align-content: start; gap: 20px; }
+      .portal.quiz-open .wordle-play { width: min(100%, 360px); }
+      .portal.quiz-open .wordle-layout > .word-board { grid-column: 1; grid-row: 1; width: min(100%, 360px); justify-self: center; }
+      .portal.quiz-open .word-keyboard { grid-column: 1; grid-row: 2; justify-self: center; width: min(100%, 360px); }
+      .portal.quiz-open .wordle-side { grid-column: 1; grid-row: 3; grid-template-rows: repeat(8, minmax(72px, auto)); height: auto; min-height: 0; }
+      .portal.quiz-open .word-key { height: clamp(34px, 5.2vh, 44px); font-size: 12px; }
+      .portal.quiz-open .wordle-side { padding: 0; }
+      .portal.quiz-open .word-message { font-size: 16px; }
+      .portal.quiz-open .word-legend { flex-wrap: wrap; justify-content: flex-start; gap: 5px 10px; font-size: 9px; }
+      .portal.quiz-open .word-legend-item { gap: 5px; }
+      .portal.committee-open .portal-content { padding: var(--committee-space-sm) calc(var(--rail-width) + 10px) 40px; }
+      .committee-page-heading { align-items: flex-start; flex-direction: column; gap: 8px; padding-bottom: 10px; }
+      .committee-page-heading h1 { font-size: clamp(18px, 5.5vw, 24px); }
+      .committee-page-heading p { padding: 0; border: 0; font-size: 10px; white-space: normal; }
+      .committee-greeting { grid-template-columns: 1fr; row-gap: 8px; padding: 12px 0; font-size: 12px; }
+      .committee-department-heading h2 { font-size: 20px; }
+      .committee-pyramid { gap: var(--committee-space-lg); }
+      .committee-tier { gap: 0; }
+      .committee-people { gap: var(--committee-space-sm); }
+      .committee-people-department { gap: var(--committee-space-md); }
+      .committee-single-row { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+      .committee-single-row .committee-department-heading { flex-direction: column; align-items: center; gap: 2px; }
+      .committee-single-row .committee-department-heading h2 { font-size: 16px; }
+      .committee-single-row .committee-department-heading span { font-size: 8px; }
+      .committee-single-row .committee-people-department { gap: 8px; }
+      .committee-single-row .committee-photo, .committee-single-row .committee-photo-placeholder { width: min(100%, 140px); }
+      .committee-photo, .committee-photo-placeholder { width: min(100%, 120px); }
+      .committee-person { display: flex; flex-direction: column; align-items: center; text-align: center; }
+      .committee-people { grid-template-columns: repeat(3, minmax(0, 1fr)); justify-items: center; }
+      .committee-people-executives { grid-template-columns: repeat(auto-fit, minmax(120px, 160px)); justify-items: center; }
+      .committee-person-chair { padding: 0; }
+      .committee-person-chair h2 { font-size: 13px; }
+      .committee-person h2 { margin: var(--committee-space-sm) 0 2px; font-size: 11px; }
+      .committee-person p { font-size: 9px; line-height: 1.2; white-space: normal; }
+      .committee-person-chair h2, .committee-person-vice h2 { min-height: 16px; font-size: 13px; }
+      .committee-tier-label { margin-bottom: -2px; font-size: 10px; }
+      .portal-header strong { max-width: 40%; font-size: 10px; }
+      .portal-header-actions { gap: 3px; }
+      .chapter-arrow { width: 30px; height: 30px; font-size: 17px; }
+      .chapter-index-label { display: none; }
+      .chapter-index-toggle { min-width: 30px; width: 30px; height: 30px; padding: 0; border: 0; background: transparent; }
+      .chapter-index-toggle:hover { background: var(--ink); color: var(--red); }
+      .chapter-menu-mark { width: 15px; }
+      .chapter-index-list { grid-template-columns: 1fr; max-height: calc(86svh - 150px); }
+      .chapter-index-item { min-height: 62px; }
+      .logo-stack { width: 100vw; height: min(100svh, calc(100vw * 799 / 3558)); grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); }
+      .glyph { font-size: min(25.3vw, 113.5svh); }
+      .role-grid { grid-template-columns: repeat(2, 1fr); }
+      .role-card { min-height: 150px; padding: 18px; }
+      .portal.color-open .portal-content { padding: 8px calc(var(--rail-width) + 10px); }
+      .color-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 6px; }
+      .color-option, .color-option[aria-pressed="true"] { min-height: 0; padding: clamp(12px, 4vw, 20px); }
+      .color-option:hover:not([aria-pressed="true"]) { flex-grow: 1; }
+      .color-option-meta { flex-wrap: wrap; gap: 4px; font-size: 9px; line-height: 1.2; }
+      .color-option-meta > span { min-width: 0; overflow-wrap: anywhere; }
+      .color-option-name, .color-option[aria-pressed="true"] .color-option-name { font-size: clamp(24px, 8vw, 44px); }
+      .color-option-value { font-size: clamp(18px, 5vw, 26px); }
+      .poster-experience { grid-template-columns: 1fr; gap: 10px; }
+      .portal.venue-open { display: block; overflow: auto; }
+      .portal.venue-open .portal-header { position: sticky; top: 0; border-bottom: 1px solid var(--ink); }
+      .portal.venue-open .portal-content { display: block; height: auto; min-height: calc(100svh - 56px); overflow: visible; padding: 10px 14px 32px; }
+      .portal.venue-open .portal-content { padding-inline: calc(var(--rail-width) + 10px); }
+      .venue-explorer { grid-template-columns: minmax(0, 1fr); gap: 16px; height: auto; min-height: 0; }
+      .venue-map-column { min-height: 0; }
+      .venue-map-tools { align-items: center; margin-bottom: 6px; font-size: 11px; }
+      .venue-map-viewport { flex: 0 0 auto; height: min(65svh, 480px); min-height: min(360px, 55svh); }
+      .venue-side { grid-template-rows: auto minmax(180px, 38svh) auto minmax(260px, 45svh); gap: 10px; min-height: 0; }
+      .venue-results { grid-template-columns: repeat(3, minmax(0, 1fr)); overflow-y: auto; }
+      .venue-student { gap: 2px; padding: 1px 2px; font-size: 10px; }
+      .venue-student-index { font-size: 9px; }
+      .venue-booth { width: 24px; font-size: 8px; touch-action: manipulation; }
+      .venue-selected { grid-template-columns: 46px minmax(0, 1fr); gap: 7px; min-height: 62px; }
+      .venue-selected img, .venue-selected-placeholder { width: 46px; }
+      .venue-selected h3 { font-size: 15px; }
+      .venue-selected strong { font-size: 10px; }
+      .venue-book-panel { min-height: 0; gap: 6px; padding-top: 6px; }
+      .venue-book-stage { height: calc(45svh - 36px); }
+      .venue-book-heading h4 { font-size: 10px; }
+      .motion-sheet { width: min(78vw, 340px); }
+      .student-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 14px; }
+      .student-thumb { width: min(100%, 180px); }
+      .student-meta { font-size: 13px; }
+      .portal.collaboration-open .portal-content { padding: 10px calc(var(--rail-width) + 10px) 40px; }
+      .collab-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .collab-card { min-height: 150px; }
+      .collab-location { align-items: flex-start; gap: 6px; }
+      .collab-location a { min-width: 0; overflow-wrap: anywhere; }
+      .collab-note { align-items: flex-start; flex-direction: column; gap: 8px; }
+      .puzzle-letter { height: 65px; font-size: 32px; }
+      .puzzle-slot { height: 50px; }
+      .film-placeholder { min-height: 300px; padding: 20px; }
+      .regular-copy { font-size: 16px; }
+      .portal-header strong { font-size: 12px; max-width: 48%; }
+      .close { font-size: 12px; padding: 10px; }
+      .stack-row { padding: 17px; }
+      .type-input { min-width: 0; }
+      .portal.type-open .type-canvas { white-space: normal; overflow-wrap: anywhere; font-size: clamp(32px, 10vw, 64px); }
+      .venue-student-name { overflow-wrap: anywhere; white-space: normal; }
+    }
+
+    @media(max-width: 700px) and (max-height: 720px) {
+      .portal.committee-open .portal-content { padding: var(--committee-space-sm) calc(var(--rail-width) + 10px) 40px; }
+      .committee-pyramid { gap: var(--committee-space-lg); }
+      .committee-tier { gap: 0; }
+      .committee-people { gap: var(--committee-space-sm); }
+      .committee-person-chair { padding: 0; }
+      .committee-person h2 { margin: var(--committee-space-sm) 0 2px; font-size: 10px; }
+      .committee-person p { font-size: 9px; line-height: 1.2; }
+      .committee-person-chair h2, .committee-person-vice h2 { min-height: 12px; font-size: 10px; }
+    }
+
+    @media(max-width: 700px) {
+    }
+
+    @media(prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+      .journey { height: 110svh; }
+      .glyph { transform: none !important; opacity: 1 !important; }
+      .entry { display: none; }
+      .portal-content > .layer, .poster-slice { opacity: 1; transform: none; }
+      .stack-row, .color-stripe, .type-layer { animation: none; }
+    }
+
+    .portal, .portal *, .zoom, .zoom * { font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; }
+    .portal .title-en, .portal .title-en *, .zoom .title-en { font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; }
+    .portal .font-sohne, .portal .font-sohne * { font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; }
+    .portal .font-doltop, .portal .font-doltop * { font-family: 'Doltop', sans-serif !important; }
+  </style>
+</head>
+<body>
+  <section class="journey" aria-label="스크롤하여 로고 쌓기">
+    <div class="stage">
+      <div class="entry">
+        <h1 class="hero-title title-en" tabindex="-1">"WHAT HAVE WE ACCUMULATED?<br>AND SO... WHAT WILL WE ACCUMULATE?"</h1>
+      </div>
+      <div class="logo-stack" aria-label="ACCUMULATION 콘텐츠 메뉴"></div>
+    </div>
+  </section>
+
+  <section class="portal" role="dialog" aria-modal="true" aria-labelledby="portal-title" tabindex="-1">
+    <header class="portal-header">
+      <strong id="portal-label"></strong>
+      <div class="portal-header-actions">
+        <button class="chapter-arrow" id="chapter-prev" aria-label="이전 페이지">←</button>
+        <button class="chapter-arrow" id="chapter-next" aria-label="다음 페이지">→</button>
+        <button class="chapter-index-toggle title-en" id="chapter-index-toggle" aria-haspopup="dialog" aria-controls="chapter-index" aria-expanded="false" aria-label="전체 페이지 목록">
+          <span class="chapter-index-label">INDEX</span>
+          <span class="chapter-menu-mark" aria-hidden="true"><span></span><span></span></span>
+        </button>
+        <button class="close title-en" id="close-portal">Close</button>
+      </div>
+    </header>
+    <div class="portal-content"></div>
+  </section>
+
+  <div class="zoom" role="dialog" aria-modal="true" aria-label="포스터 확대" tabindex="-1">
+    <button id="close-zoom">닫기 ×</button>
+    <button id="zoom-face-toggle" type="button" aria-pressed="false" hidden>뒷면 보기</button>
+    <img id="zoom-image" alt="확대한 전시 포스터">
+    <div class="zoom-pair" id="zoom-pair" aria-label="졸업전시 포스터 한 쌍" hidden>
+      <img alt="졸업전시 포스터 1">
+      <img alt="졸업전시 포스터 2">
+    </div>
+    <video class="zoom-video" id="zoom-video" controls playsinline preload="metadata" aria-label="2023년 무빙 포스터" hidden></video>
+  </div>
+  <div class="poster-lens" aria-hidden="true"></div>
+
+  <dialog class="student-dialog" id="student-modal" aria-labelledby="student-modal-title"></dialog>
+  <dialog class="chapter-index" id="chapter-index" aria-labelledby="chapter-index-title">
+    <header class="chapter-index-head">
+      <div>
+        <p class="title-en">2026 · KMU VISUAL DESIGN</p>
+        <h2 id="chapter-index-title">INDEX.</h2>
+      </div>
+      <button class="chapter-index-close title-en" id="chapter-index-close">CLOSE ×</button>
+    </header>
+    <div class="chapter-index-list" id="chapter-index-list"></div>
+  </dialog>
+  <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+  <script src="wordle.js"></script>
+  <script>
+    const $ = s => document.querySelector(s);
+    const $$ = s => [...document.querySelectorAll(s)];
+
+    const names = ['KVCD', 'COMMITTEE', 'LOGO', 'COLOR', 'TYPEFACE', 'POSTER', 'FILM', 'STUDENTS', 'CATALOGUE', 'COLLABORATION', 'EXHIBITION', 'PLAY'];
+    const korean = ['KVCD', '졸준위원 소개', '로고', '컬러', '타이포그래피', '포스터', '영상', '학생', '온라인 도록', '협업', '전시장', '게임'];
+    const glyphTitles = ['KVCD', 'COMMITTEE', 'LOGO', 'COLOR', 'TYPEFACE', 'POSTER', 'VIDEO', 'GRADUATES', 'ARTWORKS', 'COLLAB', 'VENUE', 'WORDLE'];
+    const glyphKoreanTitles = ['역대 졸업 전시 포스터', '졸업준비위원회', '로고', '색상', '서체', '포스터', '영상', '졸업생', '작품', '협업', '전시장', '워들'];
+    const mapping = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const letters = 'accumulation'.split('');
+    $('.logo-stack').innerHTML = letters.map((c, i) =>
+      `<button class="glyph" data-section="${mapping[i]}" data-letter="${c}" data-title="${glyphTitles[mapping[i]]}" aria-label="${glyphTitles[mapping[i]]} — ${glyphKoreanTitles[mapping[i]]}">
+         <b class="glyph-letter" aria-hidden="true">${c}</b>
+         <span class="glyph-caption" aria-hidden="true"><span class="glyph-caption-en" lang="en">${glyphTitles[mapping[i]]}</span><span class="glyph-caption-ko" lang="ko">${glyphKoreanTitles[mapping[i]]}</span></span>
+       </button>`
+    ).join('');
+    
+    const glyphs = $$('.glyph');
+    // WebKit's Canvas text bounds include Doltop's side bearings. Keep Blink's
+    // existing text rendering intact and use the font's exact outlines on WebKit.
+    const useLogoOutlines = /AppleWebKit/.test(navigator.userAgent) && !/(Chrome|Chromium|Edg|OPR)\//.test(navigator.userAgent);
+    if (useLogoOutlines) {
+      const outlines = {"a":"M50 107C50 165 105 217 171 217H379V223H50V440H594C656 440 708 395 708 336V104C708 45 656 0 594 0H171C105 0 50 45 50 107Z","c":"M50 336V105C50 47 101 0 164 0H708V217H379V223H708V440H164C101 440 50 393 50 336Z","u":"M263 0H708V440H382V223H376V440H50V220C50 101 146 0 263 0Z","m":"M589 440H168C103 440 50 393 50 335V0H265V217H271V0H487V217H493V0H708V335C708 393 654 440 589 440Z","l":"M164 0H708V217H376V440H50V104C50 47 101 0 164 0Z","t":"M50 223H708V440H50ZM271 107C271 48 320 0 380 0C439 0 488 48 488 107C488 168 439 217 380 217C320 217 271 168 271 107Z","i":"M707 333C707 391 653 440 587 440H170C104 440 50 391 50 333C50 273 104 223 170 223H587C653 223 707 273 707 333ZM50 0H708V217H50Z","o":"M263 0H495C612 0 708 99 708 220C708 341 612 440 495 440H263C146 440 50 341 50 220C50 99 146 0 263 0ZM195 223H563V217H195Z","n":"M589 440H168C103 440 50 393 50 335V0H376V217H382V0H708V335C708 393 654 440 589 440Z"};
+      glyphs.forEach(glyph => {
+        glyph.querySelector('.glyph-letter').innerHTML =
+          `<svg viewBox="50 -440 658 440" preserveAspectRatio="none" aria-hidden="true"><path transform="scale(1 -1)" d="${outlines[glyph.dataset.letter]}"/></svg>`;
+      });
+    } else {
+      document.fonts.load('1000px Doltop').then(() => {
+        const context = document.createElement('canvas').getContext('2d');
+        if (!context) return;
+        context.font = '1000px Doltop';
+        glyphs.forEach(glyph => {
+          const character = glyph.dataset.letter;
+          const metrics = context.measureText(character);
+          const width = metrics.actualBoundingBoxLeft + metrics.actualBoundingBoxRight;
+          const height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+          glyph.querySelector('.glyph-letter').innerHTML =
+            `<svg viewBox="${-metrics.actualBoundingBoxLeft} ${-metrics.actualBoundingBoxAscent} ${width} ${height}" preserveAspectRatio="none" aria-hidden="true"><text x="0" y="0" style="font-size:1000px;letter-spacing:0">${character}</text></svg>`;
+        });
+      });
+    }
+    glyphs.forEach((glyph, index) => {
+      const upperGlyph = index >= 6 ? glyphs[index - 6] : null;
+      const activate = () => {
+        glyph.classList.add('is-active');
+        upperGlyph?.classList.add('is-lifted');
+      };
+      const deactivate = () => {
+        if (glyph.matches(':hover, :focus-visible')) return;
+        glyph.classList.remove('is-active');
+        upperGlyph?.classList.remove('is-lifted');
+      };
+
+      glyph.addEventListener('pointerenter', activate);
+      glyph.addEventListener('pointerleave', deactivate);
+      glyph.addEventListener('focus', () => {
+        if (glyph.matches(':focus-visible')) activate();
+      });
+      glyph.addEventListener('blur', deactivate);
+    });
+    const dropOrder = [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5];
+    let raf = false;
+
+    function fallingState(progress, distance, direction) {
+      if (progress <= 0) return { y: -distance, rotation: direction * 12 };
+      if (progress >= 1) return { y: 0, rotation: 0 };
+
+      if (progress < 0.72) {
+        const phase = progress / 0.72;
+        return {
+          y: -distance * (1 - phase * phase),
+          rotation: direction * 12 * (1 - phase * phase)
+        };
+      }
+
+      const settle = (progress - 0.72) / 0.28;
+      return {
+        y: -Math.abs(Math.sin(settle * Math.PI * 2)) * 22 * (1 - settle),
+        rotation: direction * Math.sin(settle * Math.PI * 2) * 2 * (1 - settle)
+      };
+    }
+
+    function accumulate() {
+      const max = $('.journey').offsetHeight - innerHeight;
+      const p = reduced ? 1 : Math.max(0, Math.min(1, scrollY / Math.max(1, max)));
+      $('.entry').style.opacity = String(Math.max(0, 1 - p * 12));
+
+      glyphs.forEach((glyph, index) => {
+        const rank = dropOrder.indexOf(index);
+        const progress = Math.max(0, Math.min(1, (p - 0.08 - rank * 0.066) / 0.16));
+        glyph.style.opacity = String(progress);
+
+        if (progress >= 1) {
+          glyph.style.transform = '';
+        } else {
+          const stack = $('.logo-stack');
+          const row = Math.floor(index / 6);
+          const cellHeight = stack.clientHeight / 2;
+          const distance = stack.offsetTop + row * cellHeight + cellHeight + 50;
+          const state = fallingState(progress, distance, index % 2 ? 1 : -1);
+          glyph.style.transform = `translate3d(0, ${state.y}px, 0) rotate(${state.rotation}deg)`;
+        }
+
+        glyph.disabled = progress < 0.72;
+      });
+
+      raf = false;
+    }
+
+    addEventListener('scroll', () => {
+      if (!raf) {
+        raf = true;
+        requestAnimationFrame(accumulate);
+      }
+    }, { passive: true });
+
+    addEventListener('resize', accumulate);
+    accumulate();
+
+    const portal = $('.portal');
+    let active = -1, lastFocus, previousOverflow;
+    let savedScroll = 0;
+
+    const chapterIndex = $('#chapter-index');
+    const chapterIndexToggle = $('#chapter-index-toggle');
+    const chapterIndexList = $('#chapter-index-list');
+    let chapterTransitioning = false;
+    chapterIndexList.innerHTML = names.map((name, index) =>
+      `<button class="chapter-index-item" data-chapter="${index}">
+         <span class="chapter-index-number title-en">${String(index + 1).padStart(2, '0')}</span>
+         <strong class="chapter-index-name title-en">${name}</strong>
+         <span class="chapter-index-korean">${korean[index]}</span>
+         <span class="chapter-index-arrow title-en" aria-hidden="true">↗</span>
+       </button>`
+    ).join('');
+    const chapterItems = $$('.chapter-index-item');
+
+    function updateChapterNavigation() {
+      $('#chapter-prev').disabled = active <= 0;
+      $('#chapter-next').disabled = active < 0 || active >= names.length - 1;
+      chapterItems.forEach((item, index) => {
+        if (index === active) item.setAttribute('aria-current', 'page');
+        else item.removeAttribute('aria-current');
+      });
+    }
+
+    // 따옴표 간격을 디자인시스템(1.764mm) 변수로 제어하는 인트로 렌더링
+    const intro = (title, desc, hint) => {
+      const titleLanguage = /[가-힣]/.test(title) ? 'ko' : 'en';
+      return `<h2 class="portal-title${titleLanguage === 'en' ? ' title-en' : ''}" lang="${titleLanguage}" id="portal-title">
+         <span class="quote-spacing"><span aria-hidden="true">“</span><span class="quote-text">${title}</span><span aria-hidden="true">”</span></span>
+       </h2>
+       <div class="subline"><span>${desc}</span><span class="title-en">${hint}</span></div>`;
+    };
+
+    const legacyPanels = [
+      () => `<h2 class="sr-only" id="portal-title">로고</h2>
+        <div class="subline"><span>하나의 글자, 하나의 층. 흩어진 조각이 다시 하나가 됩니다.</span><span class="title-en">01 / LOGO PLAYGROUND</span></div>
+        <div class="logo-lab" aria-label="흩어졌다 쌓이는 Doltop 소문자 로고"><div class="lab-layout">${letters.map(c => `<span class="lab-letter" data-character="${c}">${c}</span>`).join('')}</div></div>
+             <div class="controls">
+               <button class="control" id="assemble">로고 쌓기</button>
+               <button class="control" id="scatter">흩트리기</button>
+         </div>`,
+
+      () => `<h2 class="sr-only" id="portal-title">타이포그래피</h2>
+        <div class="subline"><span>쓰고, 늘리고, 겹치며 나만의 문장을 만들어보세요.</span><span class="title-en">02 / TYPE PLAYGROUND</span></div>
+        <label class="sr-only" for="type-input">타이포그래피 문구</label>
+         <input class="type-input title-en" id="type-input" lang="en" maxlength="35" placeholder="영어 문장을 입력하세요">
+         <div class="type-canvas font-doltop" id="type-preview"></div>
+             <div class="controls">
+               <label class="range-wrap">간격 <input id="spacing" type="range" min="-8" max="8" value="-6"></label>
+               <button class="control" id="type-invert">색상 반전</button>
+             </div>`,
+
+      () => `<div class="poster-deck">
+               <button data-poster="assets/graduation-poster.webp" aria-label="졸업전시 포스터 1 확대">
+                 <img src="assets/graduation-poster.webp" alt="2026 계명대학교 시각디자인과 졸업전시 포스터 1">
+               </button>
+               <button data-poster="assets/graduation-poster2.webp" aria-label="졸업전시 포스터 2 확대">
+                 <img src="assets/graduation-poster2.webp" alt="2026 계명대학교 시각디자인과 졸업전시 포스터 2">
+               </button>
+             </div>`,
+
+      () => intro('TIME<br>IN MOTION.', '시간의 흐름을 문장의 축적으로.', '04 / MOTION STUDY') +
+            `<div class="film-stage">
+               <div class="film-lines"></div>
+               <div class="film-word title-en">OBSERVE.</div>
+             </div>
+             <div class="controls">
+               <label class="range-wrap">타임라인 <input id="film-time" type="range" min="0" max="100" value="0"></label>
+               <span id="film-step" class="title-en">01 / 05</span>
+               <button class="control" id="play-film">모션 시안 재생</button>
+             </div>
+             <p class="asset-note">브라우저에서 구현한 모션 시안입니다. 공식 전시 영상은 준비 중입니다.</p>`,
+
+      () => intro('EVERY WORK.<br>A DIFFERENT LAYER.', '각자의 축적을 펼쳐봅니다.', '05 / PROJECT ARCHIVE') +
+            `<div class="work-list">
+               ${['시간의 활자', '축적의 형태', '다음의 그리드'].map((n, i) =>
+                 `<button class="work-item" data-work="${i}">
+                    <span class="title-en">0${i + 1}</span><strong>${n}</strong><span class="title-en">${['GRAPHIC', 'BRAND', 'DIGITAL'][i]} / 예시</span>
+                  </button>`
+               ).join('')}
+             </div>
+             <div class="work-detail" aria-live="polite"></div>
+             <p class="asset-note">작품과 참여자 자료 공개 전, 아카이브 인터랙션 구성 예시입니다.</p>`,
+
+      () => `<div class="book-shell">
+               <div class="book-stage">
+                   <div class="book" id="catalogue-book" aria-label="A4 세로 양면 2026 온라인 도록"></div>
+               </div>
+               <div class="book-controls">
+                 <button class="control" id="prev-page" aria-label="이전 도록 페이지">이전</button>
+                 <span id="page-count" class="title-en" aria-live="polite">01 / 264</span>
+                 <button class="control" id="next-page" aria-label="다음 도록 페이지">다음</button>
+               </div>
+               <p class="sr-only" id="book-status" aria-live="polite">A4 세로 온라인 도록, 전체 264페이지</p>
+             </div>`,
+
+      () => `<div class="venue-explorer">
+               <div class="venue-map-column">
+                 <div class="venue-map-tools"><p>대구경북디자인진흥원 · 4F</p><p><span id="venue-result-count">${studentRecords.length}</span> STUDENTS</p></div>
+                 <div class="venue-map-viewport">
+                   <div class="venue-map-art" id="venue-map-art">
+                     <img src="${assetPath('assets', '전시장.webp')}" alt="4층 전시장 평면도">
+                     <div class="venue-booths" id="venue-booths" aria-label="학생 부스 위치">
+                       ${studentRecords.map((student, index) => {
+                         const [x, y] = venueBoothPositions[index] || [50, 50];
+                         return `<button type="button" class="venue-booth" data-venue-student="${index}" style="--booth-x:${x}%;--booth-y:${y}%" aria-label="${index + 1}번 부스, ${escapeHtml(student.name)}">${index + 1}</button>`;
+                       }).join('')}
+                     </div>
+                   </div>
+                 </div>
+               </div>
+               <div class="venue-side">
+                 <div class="venue-search">
+                   <label><span class="sr-only">학생 이름 검색</span><input id="venue-search" type="search" placeholder="학생 이름 검색" autocomplete="off"></label>
+                   <span class="title-en" id="venue-match-count" aria-live="polite">${studentRecords.length}</span>
+                 </div>
+                 <div class="venue-results" id="venue-results" aria-label="학생과 부스 목록">
+                   ${studentRecords.map((student, index) => `<button type="button" class="venue-student" data-venue-student="${index}" aria-pressed="false"><span class="venue-student-index title-en">${String(index + 1).padStart(2, '0')}</span><span class="venue-student-name">${escapeHtml(student.name)}</span></button>`).join('')}
+                   <p class="venue-empty" id="venue-empty" hidden>검색 결과가 없습니다.</p>
+                 </div>
+                 <div class="venue-selected" id="venue-selected" aria-live="polite"><span class="venue-selected-placeholder">부스 선택</span><div><p>도면 또는 학생 목록에서 선택</p><h3>학생 부스</h3></div></div>
+                 <section class="venue-book-panel" aria-label="선택한 학생 도록">
+                   <div class="venue-book-heading"><h4>학생 도록</h4><span class="title-en" id="venue-page-count" aria-live="polite">01–02 / 04</span></div>
+                   <div class="venue-book-stage"><div class="book" id="venue-book" aria-label="선택한 학생의 도록 4페이지"></div></div>
+                   <p class="sr-only" id="venue-book-status" aria-live="polite">학생 도록 1쪽과 2쪽</p>
+                 </section>
+               </div>
+             </div>`
+    ];
+
+    const typeMobileViewport = matchMedia('(max-width: 700px)');
+    let filmCleanup = null;
+    let posterTimer = null, layerObserver = null, layerRevealTimer = null, layerRevealListener = null, bookTimer = null, filmTimer = null, catalogueFlip = null, studentFlip = null, venueFlip = null, archiveResizeObserver = null;
+
+    $('#student-modal').addEventListener('close', () => {
+      studentFlip?.destroy();
+      studentFlip = null;
+    });
+
+    function prepareLayers() {
+      const layers = [...$('.portal-content').children];
+      layers.forEach((el, index) => {
+        el.classList.add('layer');
+        el.style.transitionDelay = Math.min(index * .1, .5) + 's';
+      });
+      return layers;
+    }
+
+    function revealLayers(layers) {
+      layerObserver?.disconnect();
+      layerObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('arrived');
+            layerObserver.unobserve(e.target);
+          }
+        });
+      }, { root: portal, threshold: .08 });
+
+      layers.forEach(layer => layerObserver.observe(layer));
+    }
+
+    function scheduleLayerReveal() {
+      const revealOnEntry = active === 1 || active === 7 || active === 8;
+      const layers = prepareLayers();
+      const start = event => {
+        if (event && (event.target !== portal || event.propertyName !== 'transform')) return;
+        clearTimeout(layerRevealTimer);
+        layerRevealTimer = null;
+        if (layerRevealListener) portal.removeEventListener('transitionend', layerRevealListener);
+        layerRevealListener = null;
+        requestAnimationFrame(() => {
+          if (revealOnEntry) {
+            layers.forEach(layer => layer.classList.add('arrived'));
+            if (active === 1) $('.committee-pyramid')?.classList.add('stacked');
+            if (active === 7) $('.student-grid')?.classList.add('stacked');
+          }
+          else revealLayers(layers);
+        });
+      };
+
+      if (reduced) {
+        start();
+        return;
+      }
+
+      layerRevealListener = start;
+      portal.addEventListener('transitionend', layerRevealListener);
+      layerRevealTimer = setTimeout(start, 700);
+    }
+
+    function openSection(i, update = true) {
+      filmCleanup?.(); filmCleanup = null;
+      lastFocus = document.activeElement;
+      active = i;
+      venueFlip?.destroy();
+      venueFlip = null;
+      updateChapterNavigation();
+      archiveResizeObserver?.disconnect();
+      archiveResizeObserver = null;
+      
+      $('#portal-label').innerHTML = `<span class="title-en">${String(i + 1).padStart(2, '0')} / ${names[i]}</span><span>— ${korean[i]}</span>`;
+      $('.portal-content').innerHTML = panels[i]();
+
+      savedScroll = scrollY;
+      portal.classList.toggle('catalogue-open', i === 8);
+      portal.classList.toggle('committee-open', i === 1);
+      portal.classList.toggle('collaboration-open', i === 9);
+      portal.classList.toggle('student-page', i === 7);
+      portal.classList.toggle('logo-open', i === 2);
+      portal.classList.toggle('color-open', i === 3);
+      portal.classList.toggle('type-open', i === 4);
+      portal.classList.toggle('video-open', i === 6);
+      portal.classList.toggle('poster-open', i === 5);
+      portal.classList.toggle('archive-open', i === 0);
+      portal.classList.toggle('quiz-open', i === 11);
+      portal.classList.toggle('venue-open', i === 10);
+      portal.classList.add('open');
+      portal.scrollTop = 0;
+      previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+
+      $('.journey').inert = true;
+      $('#close-portal').focus({ preventScroll: true });
+
+      if (update) history.pushState({ section: i }, '', `#${names[i].toLowerCase()}`);
+      wire(i);
+    }
+
+    function finishCloseSection(update = true) {
+      filmCleanup?.(); filmCleanup = null;
+      $('#student-modal').close();
+      archiveResizeObserver?.disconnect();
+      archiveResizeObserver = null;
+      clearTimeout(bookTimer); bookTimer = null;
+      clearInterval(filmTimer); filmTimer = null;
+      clearInterval(posterTimer); 
+      posterTimer = null;
+      catalogueFlip?.destroy();
+      catalogueFlip = null;
+      venueFlip?.destroy();
+      venueFlip = null;
+      clearTimeout(layerRevealTimer);
+      layerRevealTimer = null;
+      if (layerRevealListener) portal.removeEventListener('transitionend', layerRevealListener);
+      layerRevealListener = null;
+      layerObserver?.disconnect();
+
+      resetZoomMedia();
+      $('.zoom').classList.remove('open');
+      $('.poster-lens').classList.remove('visible');
+      portal.classList.remove('catalogue-open');
+      portal.classList.remove('committee-open');
+      portal.classList.remove('collaboration-open');
+      portal.classList.remove('student-page');
+      portal.classList.remove('poster-open');
+      portal.classList.remove('open');
+      portal.inert = false;
+      document.body.style.overflow = previousOverflow || '';
+
+      $('.journey').inert = false;
+      scrollTo({ top: savedScroll, behavior: 'instant' });
+      glyphs.forEach(glyph => glyph.classList.remove('is-active', 'is-lifted'));
+      active = -1;
+      updateChapterNavigation();
+      
+      if (update) history.pushState({}, '', location.pathname);
+      lastFocus?.focus({ preventScroll: true });
+    }
+
+    async function animatePageContentExit() {
+      const content = $('.portal-content');
+      const profileSelector = active === 1 ? '.committee-person' : null;
+      const profileContainer = active === 1 ? $('.committee-page') : null;
+      const profiles = profileSelector ? [...content.querySelectorAll(profileSelector)] : [];
+      const rows = [];
+
+      profiles
+        .map(element => ({ element, top: element.getBoundingClientRect().top }))
+        .sort((a, b) => a.top - b.top)
+        .forEach(item => {
+          const row = rows[rows.length - 1];
+          if (row && item.top - row.top < 4) row.elements.push(item.element);
+          else rows.push({ top: item.top, elements: [item.element] });
+        });
+      rows.reverse();
+
+      const elements = [...content.children]
+        .filter(element => element !== profileContainer && element.getClientRects().length > 0);
+      if (active === 1) elements.push($('.committee-page-heading'));
+      elements.push($('.portal-header'));
+
+      const exitDuration = 420;
+      const elementDuration = exitDuration / elements.length;
+      const animations = elements.map((element, index) => {
+        const style = getComputedStyle(element);
+        return element.animate(
+          [
+            { transform: style.transform, opacity: style.opacity, offset: 0 },
+            { transform: `translate3d(0, ${Math.round(innerHeight * 0.35)}px, 0)`, opacity: style.opacity, offset: 0.55 },
+            { transform: `translate3d(0, ${innerHeight + 80}px, 0)`, opacity: 0 }
+          ],
+          { duration: elementDuration, delay: index * elementDuration, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' }
+        );
+      });
+
+      const rowDuration = rows.length ? exitDuration / rows.length : 0;
+      rows.forEach((row, rowIndex) => {
+        row.elements.forEach(element => {
+          const style = getComputedStyle(element);
+          animations.push(element.animate(
+            [
+              { transform: style.transform, opacity: style.opacity },
+              { transform: `translate3d(0, ${innerHeight + 80}px, 0)`, opacity: 0 }
+            ],
+            { duration: rowDuration, delay: rowIndex * rowDuration, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' }
+          ));
+        });
+      });
+
+      await Promise.all(animations.map(animation => animation.finished));
+      return animations;
+    }
+
+    async function animateSectionExit() {
+      if (reduced || active < 0) return null;
+
+      const guard = document.createElement('div');
+      guard.className = 'chapter-transition-guard';
+      document.body.append(guard);
+
+      const pageAnimations = await animatePageContentExit();
+      const veil = document.createElement('div');
+      veil.className = 'chapter-transition-veil';
+      const glyph = document.querySelector(`.glyph[data-section="${active}"]`);
+      const glyphLetter = glyph?.querySelector('.glyph-letter');
+      const glyphRect = glyphLetter?.getBoundingClientRect();
+      const glyphStyle = glyphLetter && getComputedStyle(glyphLetter);
+      const centerX = glyphRect ? glyphRect.left + glyphRect.width / 2 : innerWidth / 2;
+      const centerY = glyphRect ? glyphRect.top + glyphRect.height / 2 : innerHeight / 2;
+      const radius = Math.hypot(
+        Math.max(centerX, innerWidth - centerX),
+        Math.max(centerY, innerHeight - centerY)
+      ) + 24;
+      const translateX = centerX - innerWidth / 2;
+      const translateY = centerY - innerHeight / 2;
+      const scale = glyphRect?.width
+        ? Math.max(innerWidth / glyphRect.width, innerHeight / glyphRect.height) * 1.35
+        : 1;
+      const word = glyphLetter && glyphStyle && document.createElement('span');
+
+      if (word) {
+        word.className = 'chapter-transition-word';
+        word.innerHTML = glyphLetter.innerHTML;
+        Object.assign(word.style, {
+          left: `${glyphRect.left}px`,
+          top: `${glyphRect.top}px`,
+          width: `${glyphRect.width}px`,
+          height: `${glyphRect.height}px`,
+          fontFamily: glyphStyle.fontFamily,
+          fontSize: glyphStyle.fontSize,
+          fontWeight: glyphStyle.fontWeight,
+          lineHeight: glyphStyle.lineHeight,
+          letterSpacing: glyphStyle.letterSpacing,
+          color: getComputedStyle(portal).color
+        });
+      }
+      document.body.append(veil, ...(word ? [word] : []));
+      await new Promise(requestAnimationFrame);
+
+      let portalAnimation, wordAnimation;
+      try {
+        await Promise.all([
+          veil.animate(
+            [
+              { clipPath: `circle(${radius}px at ${centerX}px ${centerY}px)` },
+              { clipPath: `circle(0px at ${centerX}px ${centerY}px)` }
+            ],
+            { duration: 320, easing: 'cubic-bezier(.76, 0, .24, 1)', fill: 'forwards' }
+          ).finished,
+          word && (wordAnimation = word.animate(
+            [
+              { transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`, color: getComputedStyle(portal).color },
+              { transform: 'translate(0, 0) scale(1)', color: glyphStyle.color }
+            ],
+            { duration: 320, easing: 'cubic-bezier(.76, 0, .24, 1)', fill: 'forwards' }
+          )).finished,
+          (portalAnimation = portal.animate(
+            [
+              { transform: 'translateY(0) scale(1)', opacity: 1 },
+              { transform: `translate(${translateX}px, ${translateY}px) scale(.04)`, opacity: 0 }
+            ],
+            { duration: 320, easing: 'cubic-bezier(.76, 0, .24, 1)', fill: 'forwards' }
+          )).finished
+        ]);
+        return [...pageAnimations, portalAnimation];
+      } finally {
+        guard.remove();
+        veil.remove();
+        word?.remove();
+      }
+    }
+
+    function closeSection(update = true) {
+      if (chapterTransitioning || active < 0) return;
+      chapterTransitioning = true;
+      animateSectionExit().catch(() => null).then(animation => {
+        finishCloseSection(update);
+        animation?.forEach(item => item.cancel());
+        chapterTransitioning = false;
+      });
+    }
+
+    $$('[data-section]').forEach(b => b.onclick = () => navigateSection(+b.dataset.section, b));
+    $('#close-portal').onclick = () => closeSection();
+    $('#close-zoom').onclick = closeZoom;
+
+    async function navigateSection(index, source, update = true) {
+      if (chapterTransitioning) return;
+      chapterTransitioning = true;
+
+      const sourceWord = source?.querySelector('.chapter-index-name, .glyph-letter');
+      const sourceRect = sourceWord?.getBoundingClientRect();
+      const sourceStyle = sourceWord && getComputedStyle(sourceWord);
+      const guard = document.createElement('div');
+      guard.className = 'chapter-transition-guard';
+      const veil = document.createElement('div');
+      veil.className = 'chapter-transition-veil';
+      chapterIndex.close();
+      if (active >= 0) {
+        const exitAnimations = await animateSectionExit();
+        finishCloseSection(false);
+        exitAnimations?.forEach(animation => animation.cancel());
+      }
+
+      if (!reduced && sourceRect?.width && sourceStyle) {
+        const word = document.createElement('span');
+        const centerX = sourceRect.left + sourceRect.width / 2;
+        const centerY = sourceRect.top + sourceRect.height / 2;
+        const scale = Math.max(innerWidth / sourceRect.width, innerHeight / sourceRect.height) * 1.35;
+        const radius = Math.hypot(Math.max(centerX, innerWidth - centerX), Math.max(centerY, innerHeight - centerY)) + 24;
+
+        word.className = 'chapter-transition-word';
+        word.innerHTML = sourceWord.matches('.glyph-letter') ? sourceWord.innerHTML : sourceWord.textContent;
+        Object.assign(word.style, {
+          left: `${sourceRect.left}px`,
+          top: `${sourceRect.top}px`,
+          width: `${sourceRect.width}px`,
+          height: `${sourceRect.height}px`,
+          fontFamily: sourceStyle.fontFamily,
+          fontSize: sourceStyle.fontSize,
+          fontWeight: sourceStyle.fontWeight,
+          lineHeight: sourceStyle.lineHeight,
+          letterSpacing: sourceStyle.letterSpacing,
+          color: sourceStyle.color
+        });
+        document.body.append(guard, veil, word);
+
+        try {
+          await new Promise(requestAnimationFrame);
+          await Promise.all([
+            veil.animate(
+              [
+                { clipPath: `circle(0px at ${centerX}px ${centerY}px)` },
+                { clipPath: `circle(${radius}px at ${centerX}px ${centerY}px)` }
+              ],
+              { duration: 560, easing: 'cubic-bezier(.76, 0, .24, 1)', fill: 'forwards' }
+            ).finished,
+            word.animate(
+              [
+                { transform: 'translate(0, 0) scale(1)', color: sourceStyle.color },
+                {
+                  transform: `translate(${innerWidth / 2 - centerX}px, ${innerHeight / 2 - centerY}px) scale(${scale})`,
+                  color: getComputedStyle(portal).backgroundColor
+                }
+              ],
+              { duration: 560, easing: 'cubic-bezier(.76, 0, .24, 1)', fill: 'forwards' }
+            ).finished
+          ]);
+          openSection(index, update);
+          await new Promise(resolve => setTimeout(resolve, 780));
+          await Promise.all([
+            veil.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180, easing: 'ease-out', fill: 'forwards' }).finished,
+            word.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180, easing: 'ease-out', fill: 'forwards' }).finished
+          ]);
+        } finally {
+          guard.remove();
+          veil.remove();
+          word.remove();
+          chapterTransitioning = false;
+        }
+        return;
+      }
+
+      veil.remove();
+      openSection(index, update);
+      chapterTransitioning = false;
+    }
+
+    chapterIndexToggle.onclick = () => {
+      if (!chapterIndex.open) chapterIndex.showModal();
+    };
+    chapterIndex.addEventListener('close', () => chapterIndexToggle.setAttribute('aria-expanded', 'false'));
+    chapterIndex.addEventListener('cancel', () => chapterIndexToggle.setAttribute('aria-expanded', 'false'));
+    chapterIndex.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        chapterIndex.close();
+      }
+    });
+    chapterIndex.addEventListener('click', event => {
+      if (event.target === chapterIndex) chapterIndex.close();
+    });
+    chapterIndex.addEventListener('toggle', () => chapterIndexToggle.setAttribute('aria-expanded', String(chapterIndex.open)));
+    $('#chapter-index-close').onclick = () => chapterIndex.close();
+    chapterItems.forEach(item => item.onclick = () => navigateSection(+item.dataset.chapter, item));
+    $('#chapter-prev').onclick = () => active > 0 && navigateSection(active - 1, chapterItems[active - 1]);
+    $('#chapter-next').onclick = () => active < names.length - 1 && navigateSection(active + 1, chapterItems[active + 1]);
+    updateChapterNavigation();
+
+    function resetZoomMedia() {
+      const video = $('#zoom-video');
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+      $('#zoom-image').hidden = false;
+      $('#zoom-pair').hidden = true;
+      video.hidden = true;
+      const faceToggle = $('#zoom-face-toggle');
+      faceToggle.hidden = true;
+      faceToggle.textContent = '뒷면 보기';
+      faceToggle.setAttribute('aria-pressed', 'false');
+    }
+
+    function closeZoom() {
+      resetZoomMedia();
+      $('.zoom').classList.remove('open');
+      portal.inert = false;
+      document.querySelector('[data-poster]')?.focus();
+    }
+
+    addEventListener('keydown', e => {
+      if (chapterIndex.open) return;
+      if (e.key === 'Escape') {
+        if ($('.zoom').classList.contains('open')) closeZoom();
+        else if (active >= 0) closeSection();
+      }
+      if (e.key === 'Tab' && active >= 0) {
+        const root = $('.zoom').classList.contains('open') ? $('.zoom') : portal;
+        const focus = [...root.querySelectorAll('button, a, input')].filter(x => !x.disabled && x.offsetParent !== null);
+        const first = focus[0], last = focus[focus.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    addEventListener('popstate', () => {
+      const i = names.findIndex(n => '#' + n.toLowerCase() === location.hash);
+      if (i >= 0) navigateSection(i, chapterItems[i], false);
+      else if (active >= 0) closeSection(false);
+    });
+
+    function legacyWire(i) {
+      if (i === 0) {
+        const lab = $('.logo-lab');
+        const parts = $$('.lab-letter');
+        let motionFrame = 0;
+        let previousTime = 0;
+        let bodies = [];
+        let draggedBody = null;
+        let activePointerId = null;
+        let dragOffsetX = 0, dragOffsetY = 0;
+        let lastPointerX = 0, lastPointerY = 0, lastPointerTime = 0;
+        let pointerVelocityX = 0, pointerVelocityY = 0;
+        let soloMode = false;
+        let releaseOnClick = false;
+        let didDrag = false;
+        const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+        const getHalfExtents = body => {
+          const radians = body.rotation * Math.PI / 180;
+          const width = body.width * body.scale;
+          const height = body.height * body.scale;
+          return {
+            x: (Math.abs(Math.cos(radians)) * width + Math.abs(Math.sin(radians)) * height) / 2,
+            y: (Math.abs(Math.sin(radians)) * width + Math.abs(Math.cos(radians)) * height) / 2
+          };
+        };
+        const keepInsideBox = body => {
+          const half = getHalfExtents(body);
+          const minX = Math.min(half.x, lab.clientWidth / 2);
+          const maxX = Math.max(minX, lab.clientWidth - half.x);
+          const minY = Math.min(half.y, lab.clientHeight / 2);
+          const maxY = Math.max(minY, lab.clientHeight - half.y);
+          if (body.x < minX) { body.x = minX; body.vx = Math.abs(body.vx) * .94; }
+          if (body.x > maxX) { body.x = maxX; body.vx = -Math.abs(body.vx) * .94; }
+          if (body.y < minY) { body.y = minY; body.vy = Math.abs(body.vy) * .94; }
+          if (body.y > maxY) { body.y = maxY; body.vy = -Math.abs(body.vy) * .94; }
+        };
+        const drawBodies = () => bodies.forEach(body => {
+          body.part.style.transform = `translate3d(${(body.x - body.homeX).toFixed(1)}px, ${(body.y - body.homeY).toFixed(1)}px, 0) rotate(${body.rotation.toFixed(1)}deg) scale(${body.scale.toFixed(3)})`;
+        });
+        const scatter = () => {
+          const wasFloating = lab.classList.contains('is-floating') && bodies.length === parts.length;
+          const previousBodies = bodies;
+          if (motionFrame) cancelAnimationFrame(motionFrame);
+          motionFrame = 0;
+          soloMode = false;
+          const labBounds = lab.getBoundingClientRect();
+          const layoutBounds = lab.querySelector('.lab-layout').getBoundingClientRect();
+          lab.classList.add('is-floating');
+          bodies = parts.map((part, index) => {
+            const width = part.offsetWidth;
+            const height = part.offsetHeight;
+            const homeLeft = layoutBounds.left - labBounds.left + part.offsetLeft;
+            const homeTop = layoutBounds.top - labBounds.top + part.offsetTop;
+            const previous = wasFloating ? previousBodies[index] : null;
+            if (!previous) part.style.removeProperty('transform');
+            part.style.zIndex = String(1 + Math.floor(Math.random() * 12));
+            const homeX = homeLeft + width / 2;
+            const homeY = homeTop + height / 2;
+            const x = previous?.x ?? homeX;
+            const y = previous?.y ?? homeY;
+            const dx = x - lab.clientWidth / 2;
+            const dy = y - lab.clientHeight / 2;
+            const angle = Math.atan2(dy, dx) + (Math.random() - .5) * .8;
+            const speed = reduced ? 0 : 260 + Math.random() * 220;
+            const body = {
+              part,
+              width,
+              height,
+              homeX,
+              homeY,
+              x,
+              y,
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed,
+              rotation: previous?.rotation ?? 0,
+              angularVelocity: reduced ? 0 : (Math.random() - .5) * 100,
+              scale: previous?.scale ?? 1,
+              fixed: false
+            };
+            if (reduced) {
+              const half = getHalfExtents(body);
+              body.x = half.x + Math.random() * Math.max(0, lab.clientWidth - half.x * 2);
+              body.y = half.y + Math.random() * Math.max(0, lab.clientHeight - half.y * 2);
+            }
+            return body;
+          });
+          drawBodies();
+          if (reduced) return;
+
+          const tick = timestamp => {
+            if (!lab.isConnected || !lab.classList.contains('is-floating')) {
+              motionFrame = 0;
+              return;
+            }
+            const delta = previousTime ? Math.min((timestamp - previousTime) / 1000, .033) : 0;
+            previousTime = timestamp;
+            bodies.forEach(body => {
+              if (body !== draggedBody && !body.fixed) {
+                body.x += body.vx * delta;
+                body.y += body.vy * delta;
+                body.rotation += body.angularVelocity * delta;
+              } else if (body === draggedBody) {
+                body.vx = 0;
+                body.vy = 0;
+              }
+              keepInsideBox(body);
+            });
+
+            for (let pass = 0; pass < 2; pass++) {
+              for (let first = 0; first < bodies.length; first++) {
+                for (let second = first + 1; second < bodies.length; second++) {
+                  const a = bodies[first], b = bodies[second];
+                  const halfA = getHalfExtents(a), halfB = getHalfExtents(b);
+                  const dx = b.x - a.x, dy = b.y - a.y;
+                  const overlapX = halfA.x + halfB.x - Math.abs(dx);
+                  const overlapY = halfA.y + halfB.y - Math.abs(dy);
+                  if (overlapX <= 0 || overlapY <= 0) continue;
+                    a.fixed = false;
+                    b.fixed = false;
+
+                  const normalX = overlapX < overlapY ? (Math.sign(dx) || 1) : 0;
+                  const normalY = overlapX < overlapY ? 0 : (Math.sign(dy) || 1);
+                  const overlap = Math.min(overlapX, overlapY) + .5;
+                  if (a === draggedBody) {
+                    b.x += normalX * overlap;
+                    b.y += normalY * overlap;
+                  } else if (b === draggedBody) {
+                    a.x -= normalX * overlap;
+                    a.y -= normalY * overlap;
+                  } else {
+                    a.x -= normalX * overlap / 2;
+                    a.y -= normalY * overlap / 2;
+                    b.x += normalX * overlap / 2;
+                    b.y += normalY * overlap / 2;
+                  }
+
+                  const relativeSpeed = (b.vx - a.vx) * normalX + (b.vy - a.vy) * normalY;
+                  if (relativeSpeed < 0) {
+                    if (a === draggedBody) {
+                      b.vx -= (1 + .88) * relativeSpeed * normalX;
+                      b.vy -= (1 + .88) * relativeSpeed * normalY;
+                    } else if (b === draggedBody) {
+                      a.vx += (1 + .88) * relativeSpeed * normalX;
+                      a.vy += (1 + .88) * relativeSpeed * normalY;
+                    } else {
+                      const impulse = -(1 + .88) * relativeSpeed / 2;
+                      a.vx -= impulse * normalX;
+                      a.vy -= impulse * normalY;
+                      b.vx += impulse * normalX;
+                      b.vy += impulse * normalY;
+                    }
+                    a.angularVelocity += (Math.random() - .5) * 18;
+                    b.angularVelocity += (Math.random() - .5) * 18;
+                  }
+                  keepInsideBox(a);
+                  keepInsideBox(b);
+                }
+              }
+            }
+            drawBodies();
+            motionFrame = requestAnimationFrame(tick);
+          };
+          previousTime = 0;
+          motionFrame = requestAnimationFrame(tick);
+        };
+        const onPointerDown = event => {
+          const part = event.target.closest('.lab-letter');
+          if (!part) return;
+          if (!lab.classList.contains('is-floating')) {
+            scatter();
+            soloMode = true;
+            bodies.forEach(body => {
+              body.x = body.homeX;
+              body.y = body.homeY;
+              body.vx = 0;
+              body.vy = 0;
+              body.rotation = 0;
+              body.angularVelocity = 0;
+              body.scale = 1;
+              body.fixed = true;
+              body.part.style.zIndex = '1';
+            });
+          }
+          const body = bodies.find(candidate => candidate.part === part);
+          if (!body) return;
+          releaseOnClick = soloMode;
+          didDrag = false;
+          if (soloMode) {
+            bodies.forEach(candidate => {
+              if (candidate !== body) {
+                candidate.fixed = true;
+                candidate.vx = 0;
+                candidate.vy = 0;
+                candidate.angularVelocity = 0;
+              }
+            });
+            body.fixed = false;
+            body.rotation = Math.random() * 50 - 25;
+            body.angularVelocity = 0;
+            body.scale = .82 + Math.random() * .16;
+          }
+          if (!motionFrame && !reduced) {
+            previousTime = 0;
+          }
+          if (!lab.classList.contains('is-floating')) {
+            lab.classList.add('is-floating');
+          }
+          if (soloMode) {
+            drawBodies();
+          }
+          event.preventDefault();
+          draggedBody = body;
+          activePointerId = event.pointerId;
+          const bounds = lab.getBoundingClientRect();
+          dragOffsetX = body.x - (event.clientX - bounds.left);
+          dragOffsetY = body.y - (event.clientY - bounds.top);
+          lastPointerX = body.x;
+          lastPointerY = body.y;
+          lastPointerTime = performance.now();
+          pointerVelocityX = 0;
+          pointerVelocityY = 0;
+          body.part.style.zIndex = '20';
+          lab.setPointerCapture(event.pointerId);
+        };
+        const onPointerMove = event => {
+          if (!draggedBody || event.pointerId !== activePointerId) return;
+          const bounds = lab.getBoundingClientRect();
+          const targetX = event.clientX - bounds.left + dragOffsetX;
+          const targetY = event.clientY - bounds.top + dragOffsetY;
+          if (Math.hypot(targetX - draggedBody.x, targetY - draggedBody.y) > 3) didDrag = true;
+          const now = performance.now();
+          const elapsed = Math.max((now - lastPointerTime) / 1000, .001);
+          pointerVelocityX = clamp((targetX - lastPointerX) / elapsed, -720, 720);
+          pointerVelocityY = clamp((targetY - lastPointerY) / elapsed, -720, 720);
+          lastPointerX = targetX;
+          lastPointerY = targetY;
+          lastPointerTime = now;
+          draggedBody.x = targetX;
+          draggedBody.y = targetY;
+          keepInsideBox(draggedBody);
+          drawBodies();
+        };
+        const onPointerUp = event => {
+          if (!draggedBody || event.pointerId !== activePointerId) return;
+          const body = draggedBody;
+          if (releaseOnClick && !didDrag && reduced) {
+            const half = getHalfExtents(body);
+            body.x = half.x + Math.random() * Math.max(0, lab.clientWidth - half.x * 2);
+            body.y = half.y + Math.random() * Math.max(0, lab.clientHeight - half.y * 2);
+          }
+          body.vx = reduced ? 0 : (releaseOnClick && !didDrag ? (Math.random() < .5 ? -1 : 1) * (130 + Math.random() * 150) : pointerVelocityX * .82);
+          body.vy = reduced ? 0 : (releaseOnClick && !didDrag ? (Math.random() < .5 ? -1 : 1) * (110 + Math.random() * 130) : pointerVelocityY * .82);
+          body.angularVelocity = reduced ? 0 : (releaseOnClick && !didDrag ? (Math.random() < .5 ? -1 : 1) * (20 + Math.random() * 35) : clamp((pointerVelocityX - pointerVelocityY) * .035, -110, 110));
+          drawBodies();
+          body.part.style.zIndex = String(1 + Math.floor(Math.random() * 12));
+          draggedBody = null;
+          activePointerId = null;
+          releaseOnClick = false;
+          didDrag = false;
+          if (lab.hasPointerCapture(event.pointerId)) lab.releasePointerCapture(event.pointerId);
+        };
+        lab.addEventListener('pointerdown', onPointerDown);
+        lab.addEventListener('pointermove', onPointerMove);
+        lab.addEventListener('pointerup', onPointerUp);
+        lab.addEventListener('pointercancel', onPointerUp);
+        scatter();
+        document.fonts.load('1000px Doltop').then(() => {
+          if (!lab.isConnected) return;
+          const ctx = document.createElement('canvas').getContext('2d');
+          ctx.font = '1000px Doltop';
+          parts.forEach(part => {
+            const c = part.dataset.character, m = ctx.measureText(c);
+            part.innerHTML = `<svg viewBox="${-m.actualBoundingBoxLeft} ${-m.actualBoundingBoxAscent} ${m.actualBoundingBoxLeft+m.actualBoundingBoxRight} ${m.actualBoundingBoxAscent+m.actualBoundingBoxDescent}" preserveAspectRatio="none" aria-hidden="true"><text x="0" y="0" style="font-size:1000px;letter-spacing:0">${c}</text></svg>`;
+          });
+        });
+        $('#assemble').onclick = () => {
+          lab.classList.remove('is-floating');
+          soloMode = false;
+          releaseOnClick = false;
+          didDrag = false;
+          if (activePointerId !== null && lab.hasPointerCapture(activePointerId)) lab.releasePointerCapture(activePointerId);
+          if (motionFrame) cancelAnimationFrame(motionFrame);
+          motionFrame = 0;
+          previousTime = 0;
+          bodies = [];
+          draggedBody = null;
+          activePointerId = null;
+          parts.forEach(part => {
+            part.style.removeProperty('transform');
+            part.style.zIndex = '1';
+          });
+        };
+        $('#scatter').onclick = scatter;
+      }
+
+      if (i === 1) {
+        const preview = $('#type-preview');
+        const typeInput = $('#type-input');
+        const spacing = $('#spacing');
+        const updatePreview = () => {
+          const value = typeInput.value;
+          const sanitized = value.replace(/\p{Script=Hangul}/gu, '');
+          if (sanitized !== value) {
+            const selection = typeInput.selectionStart ?? value.length;
+            const cursor = value.slice(0, selection).replace(/\p{Script=Hangul}/gu, '').length;
+            typeInput.value = sanitized;
+            typeInput.setSelectionRange(cursor, cursor);
+          }
+          preview.textContent = typeInput.value;
+          preview.style.letterSpacing = spacing.value / 100 + 'em';
+          preview.style.whiteSpace = typeMobileViewport.matches ? 'normal' : 'nowrap';
+          if (!typeMobileViewport.matches && Number(spacing.value) > -6 && preview.scrollWidth > preview.clientWidth) {
+            preview.style.whiteSpace = 'normal';
+          }
+        };
+        typeMobileViewport.onchange = updatePreview;
+        typeInput.addEventListener('beforeinput', event => {
+          if (event.data && /^\p{Script=Hangul}+$/u.test(event.data)) event.preventDefault();
+        });
+        typeInput.addEventListener('input', updatePreview);
+        typeInput.addEventListener('compositionend', updatePreview);
+        spacing.oninput = updatePreview;
+        updatePreview();
+        $('#type-invert').onclick = () => {
+          preview.classList.toggle('inverted');
+          preview.style.background = preview.classList.contains('inverted') ? 'var(--red)' : 'var(--ink)';
+          preview.style.color = preview.classList.contains('inverted') ? 'var(--ink)' : 'var(--red)';
+        };
+      }
+
+      if (i === 3) {
+        const words = ['OBSERVE.', 'TRY.', 'MAKE.', 'ACCUMULATE.', 'WHAT’S NEXT?'];
+
+        
+        const render = v => {
+          const j = Math.min(4, Math.floor(v / 21));
+          $('.film-word').textContent = words[j];
+          $('.film-word').style.transform = reduced ? 'none' : `translateY(${(v % 21 - 10) * 2}px) scale(${0.85 + (v % 21) / 70})`;
+          $('#film-step').textContent = String(j + 1).padStart(2, '0') + ' / 05';
+        };
+        
+        $('#film-time').oninput = e => render(+e.target.value);
+        $('#play-film').onclick = () => {
+          if (filmTimer) {
+            clearInterval(filmTimer);
+            filmTimer = null;
+            $('#play-film').textContent = '모션 시안 재생';
+            return;
+          }
+          let v = +$('#film-time').value;
+          if (v >= 100) v = 0;
+          $('#play-film').textContent = '일시정지';
+          
+          filmTimer = setInterval(() => {
+            v++;
+            $('#film-time').value = v;
+            render(v);
+            if (v >= 100) {
+              clearInterval(filmTimer);
+              filmTimer = null;
+              $('#play-film').textContent = '다시 재생';
+            }
+          }, 80);
+        };
+      }
+
+      if (i === 4) {
+        $$('[data-work]').forEach(b => b.onclick = () => {
+          const j = +b.dataset.work;
+          const el = $('.work-detail');
+          el.classList.add('show');
+          el.innerHTML = `<span class="title-en">PROJECT STUDY 0${j + 1}</span>
+                          <h3>${['시간의 활자', '축적의 형태', '다음의 그리드'][j]}</h3>
+                          <p>${['질문과 실험이 타이포그래피의 형태로 축적되는 그래픽 디자인 시안.', '서로 다른 형태가 하나의 정체성으로 이어지는 브랜드 디자인 시안.', '한 번의 선택이 다음 화면의 층이 되는 디지털 경험 시안.'][j]}</p>
+                          <p>실제 작품 이미지와 참여자 소개는 추후 공개됩니다.</p>`;
+          el.scrollIntoView({ behavior: reduced ? 'instant' : 'smooth', block: 'nearest' });
+        });
+      }
+
+      if (i === 5) {
+        const bookElement = $('#catalogue-book');
+        const totalPageCount = 264;
+        bookElement.innerHTML = Array.from({ length: totalPageCount }, (_, index) => {
+          const isCover = index === 0 || index === totalPageCount - 1;
+          return `<article class="page${isCover ? ' page-cover' : ''}"${isCover ? ' data-density="hard"' : ''}></article>`;
+        }).join('');
+        const updatePageControls = pageIndex => {
+          const current = Number.isInteger(pageIndex) ? pageIndex : pageFlip.getCurrentPageIndex();
+          $('#page-count').textContent = `${String(current + 1).padStart(2, '0')} / ${String(totalPageCount).padStart(2, '0')}`;
+          $('#prev-page').disabled = current <= 0;
+          $('#next-page').disabled = current >= totalPageCount - 1;
+          $('#book-status').textContent = `A4 세로 온라인 도록 ${current + 1}페이지 / 전체 ${totalPageCount}페이지`;
+        };
+
+        if (!window.St?.PageFlip) {
+          $('#book-status').textContent = '온라인 도록 넘김 기능을 불러오지 못했습니다.';
+          $('#prev-page').disabled = true;
+          $('#next-page').disabled = true;
+          return;
+        }
+
+        catalogueFlip = new St.PageFlip(bookElement, {
+          width: 2480,
+          height: 3508,
+          size: 'stretch',
+          minWidth: 220,
+          maxWidth: 1400,
+          minHeight: 311,
+          maxHeight: 2000,
+          drawShadow: true,
+          maxShadowOpacity: .24,
+          showCover: true,
+          usePortrait: true,
+          autoSize: false,
+          mobileScrollSupport: false,
+          flippingTime: 900
+        });
+
+        catalogueFlip.on('init', event => updatePageControls(event.data.page));
+        catalogueFlip.on('flip', event => updatePageControls(event.data));
+        catalogueFlip.loadFromHTML(bookElement.querySelectorAll('.page'));
+        updatePageControls(0);
+        $('#prev-page').onclick = () => catalogueFlip.flipPrev('bottom');
+        $('#next-page').onclick = () => catalogueFlip.flipNext('bottom');
+      }
+
+    }
+
+    const exhibitionData = {
+      video: null,
+      students: [], 
+      committee: [], 
+      goods: [],
+      cataloguePdf: null 
+    };
+    
+    const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const assetPath = (...segments) => segments
+      .map(segment => encodeURIComponent(String(segment).normalize('NFD')))
+      .join('/');
+    const loadBookSpread = (images, pageIndex = 0) => {
+      const loadPages = start => Promise.all(images.slice(start, start + 2).map(image => {
+        if (image.dataset.pageLoaded === 'true' || (image.complete && image.currentSrc)) {
+          image.dataset.pageLoaded = 'true';
+          return Promise.resolve();
+        }
+        return new Promise(resolve => {
+          image.addEventListener('load', () => {
+            image.dataset.pageLoaded = 'true';
+            image.dataset.pageLoading = 'false';
+            resolve();
+          }, { once: true });
+          image.addEventListener('error', () => {
+            image.dataset.pageLoading = 'false';
+            image.remove();
+            resolve();
+          }, { once: true });
+          if (image.dataset.pageLoading !== 'true') {
+            image.dataset.pageLoading = 'true';
+            image.fetchPriority = images.indexOf(image) < 2 ? 'high' : 'low';
+            image.src = image.dataset.pageSrc;
+          }
+        });
+      }));
+      const spreadStart = Math.floor(pageIndex / 2) * 2;
+      return loadPages(spreadStart).then(() => loadPages(spreadStart + 2));
+    };
+    
+    const studentPhotos = [
+      '권주은', '김규리', '김락영', '김설', '김성훈', '김소현', '김승찬', '김예경', '김은혜',
+      '김채원', '김하늘', '김현진', '김효은', '류벼리', '문채원', '박광균', '박민주', '박소영',
+      '박수빈', '박수진', '박예경', '박용하', '박진희', '성세진', '성아진', '신세희', '어진희',
+      '여로건', '우경민', '우진하', '유가인', '윤호연', '이규림', '이규빈', '이동현', '이예진',
+      '이윤주', '이천일', '임정빈', '장문경', '장혜진', '전가람', '정유진', '정재서', '조민식',
+      '조홍비', '최민규', '최은우', '최정욱', '하민규', '황수빈', '황해욱'
+    ];
+
+    const rgbThumbnailNames = new Set(['박용하', '유가인']);
+    const previewStudents = studentPhotos.map(name => ({
+        name,
+        project: '작품 자료 준비 중',
+        medium: '매체 정보 준비 중',
+        thumbnail: `${assetPath('assets', 'optimized', 'students', `${name}.webp`)}${rgbThumbnailNames.has(name) ? '?v=rgb-20261019' : ''}`,
+        pages: [1, 2, 3, 4].map(page => assetPath('assets', 'optimized', 'graduates', name, `${page}.webp`)),
+        description: '작품 자료 준비 중'
+      }));
+    
+    const studentRecords = exhibitionData.students.length ? exhibitionData.students : previewStudents;
+    const venueBoothPositions = [
+      [44.6,59.0],[47.8,59.0],[51.0,59.0],[54.2,59.0],[57.4,59.0],
+      [58.6,53.2],[58.6,50.2],[58.6,47.4],[58.6,42.2],[58.6,39.3],[58.6,36.4],
+      [57.8,32.4],[54.6,32.4],[51.4,32.4],[48.2,32.4],[45.0,32.4],
+      [42.5,36.0],[42.5,38.9],[42.5,41.8],[40.8,41.8],[40.8,38.9],[40.8,36.0],
+      [37.4,32.4],[34.4,32.4],
+      [30.9,34.1],[30.9,36.9],[30.9,39.9],[29.2,39.9],[29.2,36.9],[29.2,34.0],
+      [20.5,34.5],[20.5,37.4],[20.5,40.3],[20.5,43.2],[20.5,46.1],[20.5,48.9],[20.5,51.9],[20.5,54.8],[20.5,57.7],[20.5,60.6],[20.5,63.4],[20.5,66.3],[20.5,69.2],
+      [23.4,72.7],[26.4,72.7],[24.8,74.3],[20.5,77.5],[20.5,80.4],[23.4,83.9],[26.4,83.9],[29.7,80.4],[29.7,77.5]
+    ];
+    const committeeGroups = [
+      { title: '운영진', members: [{ name: '유가인', role: '졸준위원장' }, { name: '최정욱', role: '부총괄' }] },
+      { title: '디자인팀', members: [{ name: '여로건', role: '팀장' }, { name: '김설', role: '팀원' }, { name: '이규림', role: '팀원' }, { name: '황해욱', role: '팀원' }, { name: '우진하', role: '팀원' }] },
+      { title: '웹개발팀', members: [{ name: '박광균', role: '팀장' }, { name: '박용하', role: '팀원' }] },
+      { title: '기획팀', members: [{ name: '하민규', role: '팀장' }] },
+      { title: '홍보팀', members: [{ name: '장문경', role: '팀장' }] },
+      { title: '총무팀', members: [{ name: '최민규', role: '팀장' }] }
+    ];
+    
+    const renderCommitteePerson = (member, department, tier, order = 0) => {
+      const profile = studentRecords.find(student => student.name === member.name);
+      return `<article class="committee-person committee-person-${tier}" style="--committee-order:${order}">
+        ${profile?.thumbnail ? `<img class="committee-photo" src="${escapeHtml(profile.thumbnail)}" alt="${escapeHtml(member.name)} 프로필 사진" loading="lazy" decoding="async">` : '<div class="committee-photo-placeholder">사진 준비 중</div>'}
+        <h2>${escapeHtml(member.name)}</h2>
+        <p>${department ? `${escapeHtml(department)} · ` : ''}${escapeHtml(member.role)}</p>
+      </article>`;
+    };
+
+    const committeeLeadership = committeeGroups[0].members;
+    const renderCommitteeDepartment = (group, departmentIndex) => `<section class="committee-department" aria-label="${escapeHtml(group.title)}">
+      <header class="committee-department-heading">
+        <h2>${escapeHtml(group.title)}</h2>
+        <span class="title-en">${String(group.members.length).padStart(2, '0')} MEMBERS</span>
+      </header>
+      <div class="committee-people committee-people-department">
+        ${group.members.map((member, memberIndex) => renderCommitteePerson(member, '', member.role === '팀장' ? 'head' : 'member', departmentIndex * 5 + memberIndex + 2)).join('')}
+      </div>
+    </section>`;
+    const panels = [
+      () => `<section class="poster-archive" aria-label="역대 졸업전시 포스터">
+               <header class="archive-heading"><p class="title-en">ALL-TIME POSTERS</p></header>
+               <div class="archive-stage" id="archive-stage" role="group" aria-label="연도별 전시 포스터"></div>
+               <section class="archive-caption" aria-live="polite">
+                 <p class="archive-caption-year title-en" id="archive-caption-year"></p>
+                 <h2 class="archive-caption-title" id="archive-caption-title"></h2>
+                 <p class="archive-caption-description" id="archive-caption-description"></p>
+               </section>
+               <nav class="archive-controls" aria-label="포스터 연도 이동">
+                 <button class="archive-nav" id="archive-prev" type="button" aria-label="이전 연도" title="이전 연도">←</button>
+                 <span class="archive-count title-en" aria-hidden="true" id="archive-position">03 / 05</span>
+                 <button class="archive-nav" id="archive-next" type="button" aria-label="다음 연도" title="다음 연도">→</button>
+               </nav>
+             </section>`,
+             
+      () => `<section class="committee-page">
+               <header class="committee-page-heading">
+                 <h1>졸업전시준비위원회</h1>
+                 <p class="title-en">2026 · 12 MEMBERS</p>
+               </header>
+               <div class="committee-pyramid">
+               <section class="committee-greeting" aria-label="졸업준비위원회 인사말">
+                 <p>서로 다른 시선과 고민으로 시작한 작업들이 모여 하나의 졸업전시가 되었습니다. 이번 전시는 대학에서 보낸 시간의 결실이자, 각자의 디자인을 통해 세상과 대화하기 시작하는 첫걸음입니다. 작품마다 담긴 질문과 수많은 시도, 끝까지 놓지 않았던 마음이 이 도록을 통해 오래 전해지기를 바랍니다.</p>
+                 <p>졸업준비위원회는 그 과정이 온전히 드러날 수 있도록 전시의 여러 장면을 함께 준비했습니다. 익숙하지 않은 일들을 마주하며 시행착오도 있었지만, 서로의 빈자리를 채우고 힘을 보태 준 동료들 덕분에 여기까지 올 수 있었습니다. 보이지 않는 곳에서 기꺼이 시간을 내어 준 모든 분께 깊이 감사드립니다.</p>
+                 <p>따뜻한 가르침과 조언으로 이끌어 주신 교수님들, 꾸준한 응원을 보내 주신 가족과 친구들, 그리고 전시에 관심을 갖고 함께해 주신 모든 분께 감사의 마음을 전합니다. 이 도록이 지난 시간을 돌아보는 기록이자 앞으로의 가능성을 발견하는 계기가 되기를 바랍니다. 함께 완성한 오늘을 소중히 간직하며, 각자의 자리에서 이어질 새로운 시작을 응원합니다.</p>
+                 <p class="committee-greeting-signoff">졸업준비위원회 일동</p>
+               </section>
+               <section class="committee-leadership" aria-label="졸준위원장과 부총괄">
+                 <div class="committee-people committee-people-executives">
+                   ${renderCommitteePerson(committeeLeadership[0], '', 'chair', 0)}
+                   ${renderCommitteePerson(committeeLeadership[1], '', 'vice', 1)}
+                 </div>
+               </section>
+                 ${committeeGroups.slice(1, 3).map((group, departmentIndex) => renderCommitteeDepartment(group, departmentIndex)).join('')}
+                 <div class="committee-single-row" aria-label="각 팀 한 명씩 배치된 팀">
+                   ${committeeGroups.slice(3).map((group, departmentIndex) => renderCommitteeDepartment(group, departmentIndex + 2)).join('')}
+                 </div>
+               </div>
+             </section>`,
+             
+      () => legacyPanels[0](),
+      
+      () => `<div class="color-studio">
+               <div class="color-options" role="group" aria-label="전시 주조색 선택">
+                 ${[
+                   ['#FF5349','CORAL','CORE','#000007'],
+                   ['#000007','INK','STRUCTURE','#F0EEE9'],
+                   ['#F0EEE9','PAPER','GROUND','#000007'],
+                   ['#FFFFFF','WHITE','SPACE','#000007']
+                 ].map(([color,name,role,ink],i) => `<button class="color-option" type="button" data-color="${color}" data-name="${name}" aria-label="${name}, ${color}, ${role} 색상 선택" aria-pressed="${i===0}" style="--option-color:${color};--option-ink:${ink}"><span class="color-option-meta title-en"><span>0${i+1} / ${role}</span><span>ACCUMULATION</span></span><span class="color-option-name title-en">${name}</span><strong class="color-option-value title-en">${color}</strong><span class="color-option-meta title-en"><span>KMU VISUAL DESIGN</span><span>2026</span></span></button>`).join('')}
+               </div>
+             </div>`,
+             
+      () => legacyPanels[1]() + 
+            `<div class="controls">
+               <button class="control" id="type-stack">이 문장 쌓기</button>
+               <button class="control" id="type-clear">문장 비우기</button>
+             </div>
+             <div class="type-layers" aria-live="polite"></div>`,
+             
+      () => legacyPanels[2](),
+             
+      () => `<section class="film-experience" aria-labelledby="portal-title">
+               <div class="film-art" aria-hidden="true"><img src="assets/film-stones.png" alt="" decoding="async"></div>
+               <div class="film-intro">
+                 <p class="film-eyebrow title-en">ACCUMULATION — THE EXHIBITION FILM</p>
+                 <h2 class="film-title title-en" id="portal-title"><span>TIME</span><span>ACCUMULATED.</span></h2>
+                 <p class="film-caption">쌓아온 시간, 하나의 장면이 되다.</p>
+                 <button class="film-launch" id="film-launch" type="button" aria-controls="film-screen" aria-expanded="false">
+                   <span class="film-play-disc" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3 21 12 6 21Z"/></svg></span>
+                   <span class="film-launch-label"><strong class="title-en">PLAY FILM</strong><small>전시 영상 보기</small></span>
+                 </button>
+               </div>
+               <div class="film-colophon"><span class="title-en">2026 / ACCUMULATION</span><span>계명대학교 시각디자인 졸업전시</span></div>
+               <div class="film-screen" id="film-screen" hidden>
+                 <button class="film-return" id="film-return" type="button" aria-label="영상 닫기">돌아가기 ↙</button>
+                 <video id="exhibition-film" controls playsinline preload="metadata" aria-label="ACCUMULATION 메인 모션 포스터 영상" tabindex="0">
+                   <source src="assets/optimized/exhibition-film.mp4" type="video/mp4">
+                   브라우저가 MP4 영상을 지원하지 않습니다.
+                 </video>
+               </div>
+               <p class="film-notice" id="film-notice" role="status"></p>
+             </section>`,
+
+      () => `<div class="student-heading"><h2>학생</h2><p>${studentRecords.length}명</p></div>
+             <div class="student-grid">
+               ${studentRecords.map((r,index) => 
+                 `<button class="student-tile" style="--student-order:${index}" data-student="${index}" data-category="${escapeHtml(r.category)}">
+                    <div class="student-thumb">
+                      ${r.thumbnail ? `<img src="${escapeHtml(r.thumbnail)}" alt="${escapeHtml(r.name)} 프로필 사진" loading="lazy" decoding="async">` : '<span class="student-placeholder">사진 준비 중</span>'}
+                    </div>
+                    <div class="student-meta">
+                      <span>${escapeHtml(r.name)}</span>
+                    </div>
+                  </button>`
+               ).join('')}
+             </div>`,
+             
+      () => legacyPanels[5]() + 
+            (exhibitionData.cataloguePdf ? `<a class="control" href="${escapeHtml(exhibitionData.cataloguePdf)}" target="_blank" rel="noopener">전체 도록 PDF 보기</a>` : ''),
+            
+      () => `<h2 class="sr-only" id="portal-title">협업</h2>
+        <div class="collab-page">
+          ${[
+            {title:'기업 협업',english:'CORPORATE',partners:[
+              {name:'윤디자인',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '윤디자인.webp'),location:'서울특별시 마포구 독막로9길 13'},
+              {name:'산돌구름',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '산돌구름.webp'),location:'서울특별시 성동구 아차산로17길 49'},
+              {name:'직지소프트',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '직지소프트.webp'),location:'서울특별시 중구 수표로 48-7'}
+            ]},
+            {title:'포토부스 협업',english:'PHOTO BOOTH',partners:[
+              {name:'빈티스트',type:'포토부스 협업',image:assetPath('assets', 'COLLABORATION', '빈티스트.webp'),location:'대구광역시 중구 경상감영길 207'}
+            ]},
+            {title:'매장 협업',english:'LOCAL PARTNERS',partners:[
+              {name:'오렌지우드',type:'와인바',image:assetPath('assets', 'COLLABORATION', '오렌지우드.webp'),location:'대구 중구 동덕로 184-1'},
+              {name:'카페헤더',type:'카페',image:assetPath('assets', 'COLLABORATION', '카페헤더.webp'),location:'대구광역시 중구 남산4동 명덕로 24'},
+              {name:'나무가지',type:'카페',image:assetPath('assets', 'COLLABORATION', '나무가지.webp'),location:'대구 중구 국채보상로 738'},
+              {name:'칭진',type:'술집',image:assetPath('assets', 'COLLABORATION', '칭진.webp'),location:'대구광역시 중구 중앙대로81길 30'},
+              {name:'쿠라쿠라',type:'술집',image:assetPath('assets', 'COLLABORATION', '쿠라쿠라.webp'),location:'대구 달서구 서당로7길 35'},
+              {name:'서당로61',type:'술집',image:assetPath('assets', 'COLLABORATION', '서당로 61.webp'),location:'대구 달서구 서당로7길 61'}
+            ]}
+          ].map((group,groupIndex) => `<section class="collab-category" aria-labelledby="collab-category-${groupIndex}">
+            <header class="collab-category-head"><h3 id="collab-category-${groupIndex}">${group.title}</h3><span class="title-en">0${groupIndex+1} / ${group.english}</span></header>
+            <ul class="collab-grid">${group.partners.map(partner => `<li class="collab-card">
+              <div class="collab-photo"${partner.image ? '' : ` role="img" aria-label="${escapeHtml(partner.name)} 사진 준비 중"`}>
+                ${partner.image
+                  ? `<img src="${escapeHtml(partner.image)}" alt="${escapeHtml(partner.name)} 협업 이미지" loading="lazy">`
+                  : `<span class="collab-photo-label"><strong>${escapeHtml(partner.name.slice(0,1))}</strong><span class="title-en">PHOTO / ADD IMAGE</span></span>`}
+              </div>
+              <div class="collab-card-info">
+                <div><h4>${escapeHtml(partner.name)}</h4><p class="collab-card-type">${escapeHtml(partner.type)}</p></div>
+                <span class="title-en" aria-hidden="true">↗</span>
+                <div class="collab-location">
+                  <span class="collab-location-label title-en">LOCATION</span>
+                  ${partner.location
+                    ? `<a href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(partner.location)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(partner.name)} 지도에서 보기">${escapeHtml(partner.location)} ↗</a>`
+                    : '<span>위치 정보 준비 중</span>'}
+                </div>
+              </div>
+            </li>`).join('')}</ul>
+          </section>`).join('')}
+        </div>`,
+             
+      () => legacyPanels[6](),
+      
+      () => `<section class="wordle-game" aria-labelledby="portal-title">
+        <h2 class="sr-only" id="portal-title">영어 단어 퀴즈</h2>
+        <div class="wordle-layout">
+          <div class="wordle-play">
+            <div class="word-board" id="word-board" role="grid" aria-label="단어 추측 보드"></div>
+            <div class="word-keyboard" id="word-keyboard" aria-label="화면 키보드">
+              ${[['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','⌫']].map(row => `<div class="word-key-row">${row.map(key => `<button class="word-key${key === 'ENTER' || key === '⌫' ? ' wide' : ''}" type="button" data-key="${key === 'ENTER' ? 'Enter' : key === '⌫' ? 'Backspace' : key}" aria-label="${key === 'ENTER' ? '입력한 단어 제출' : key === '⌫' ? '글자 지우기' : `${key} 입력`}">${key}</button>`).join('')}</div>`).join('')}
+            </div>
+          </div>
+          <aside class="wordle-side" aria-label="퀴즈 안내와 조작">
+            <div class="wordle-progress-cell">
+              <div class="wordle-round"><span class="wordle-round-label title-en">ATTEMPTS</span><span class="wordle-round-count title-en" id="word-progress">00 / 06</span></div>
+              <div class="wordle-round-dots" id="word-progress-dots" aria-hidden="true">${Array.from({length:6},() => '<span class="wordle-round-dot"></span>').join('')}</div>
+            </div>
+            <p class="word-message" id="word-message" aria-live="polite">영어 다섯 글자를 입력하세요.</p>
+            <div class="wordle-note">
+              <p class="wordle-side-label title-en">FIELD NOTE</p>
+              <p class="word-hint" id="word-hint" aria-live="polite">화면 키보드 또는 영문 키보드로 입력하세요. Enter로 제출하고, Backspace로 지울 수 있어요.</p>
+            </div>
+            <div class="wordle-note">
+              <p class="wordle-side-label title-en">HOW TO PLAY</p>
+              <p class="word-hint">다섯 글자 단어를 여섯 번 안에 맞혀보세요.</p>
+            </div>
+            <div class="wordle-note">
+              <p class="wordle-side-label title-en">HINTS</p>
+              <p class="word-hint">힌트에서 단어의 뜻과 첫 글자를 확인할 수 있어요.</p>
+            </div>
+            <div class="word-legend" aria-label="색상 안내">
+              <span class="word-legend-item"><i class="word-legend-swatch exact"></i><span>자리와 글자 모두 일치</span></span>
+              <span class="word-legend-item"><i class="word-legend-swatch present"></i><span>글자는 정답에 포함</span></span>
+              <span class="word-legend-item"><i class="word-legend-swatch absent"></i><span>정답에 없는 글자</span></span>
+            </div>
+            <button class="control word-hint-button" id="word-hint-button" type="button">힌트 보기</button>
+            <button class="control word-new" id="word-new" type="button">새 단어 ↗</button>
+          </aside>
+        </div>
+      </section>`
+    ];
+
+    function wire(i) {
+      if (i === 6) {
+        const stage = $('.film-experience');
+        const video = $('#exhibition-film');
+        const screen = $('#film-screen');
+        const launch = $('#film-launch');
+        const intro = $('.film-intro');
+        const notice = $('#film-notice');
+        const controller = new AbortController();
+        let hideTimer;
+        const showFilm = async () => {
+          clearTimeout(hideTimer);
+          notice.textContent = '';
+          screen.hidden = false;
+          screen.inert = false;
+          void screen.offsetWidth;
+          stage.classList.add('is-watching');
+          intro.inert = true;
+          launch.setAttribute('aria-expanded', 'true');
+          video.focus({preventScroll:true});
+          try { await video.play(); } catch {
+            if (stage.classList.contains('is-watching') && !controller.signal.aborted) notice.textContent = '영상의 재생 버튼을 눌러주세요.';
+          }
+        };
+        const hideFilm = () => {
+          video.pause();
+          stage.classList.remove('is-watching');
+          screen.inert = true;
+          intro.inert = false;
+          notice.textContent = '';
+          launch.setAttribute('aria-expanded', 'false');
+          launch.focus({preventScroll:true});
+          hideTimer = setTimeout(() => { screen.hidden = true; }, reduced ? 0 : 500);
+        };
+        launch.addEventListener('click', showFilm, {signal:controller.signal});
+        $('#film-return').addEventListener('click', hideFilm, {signal:controller.signal});
+        stage.addEventListener('keydown', event => {
+          if (event.key === 'Escape' && stage.classList.contains('is-watching')) {
+            event.preventDefault(); event.stopPropagation(); hideFilm();
+          }
+        }, {signal:controller.signal});
+        video.addEventListener('playing', () => { notice.textContent = ''; }, {signal:controller.signal});
+        video.addEventListener('error', () => { notice.textContent = '영상을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.'; }, {signal:controller.signal});
+        if (!reduced && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+          stage.addEventListener('pointermove', event => {
+            const bounds = stage.getBoundingClientRect();
+            stage.style.setProperty('--film-x', `${(event.clientX-bounds.left-bounds.width/2)*.018}px`);
+            stage.style.setProperty('--film-y', `${(event.clientY-bounds.top-bounds.height/2)*.018}px`);
+          }, {signal:controller.signal});
+          stage.addEventListener('pointerleave', () => {
+            stage.style.setProperty('--film-x', '0px'); stage.style.setProperty('--film-y', '0px');
+          }, {signal:controller.signal});
+        }
+        filmCleanup = () => { controller.abort(); clearTimeout(hideTimer); video.pause(); };
+      }
+
+      const legacy = { 2:0, 4:1, 8:5 };
+      if (Object.hasOwn(legacy, i)) legacyWire(legacy[i]);
+
+      if (i === 5) {
+        const lens = $('.poster-lens');
+        $$('[data-poster]').forEach(button => {
+          const image = button.querySelector('img');
+          const updateLens = event => {
+            if (event.pointerType === 'touch') return;
+            const rect = image.getBoundingClientRect();
+            const magnification = 1.6;
+            const radius = lens.offsetWidth / 2;
+            lens.style.backgroundImage = `url("${image.currentSrc || image.src}")`;
+            lens.style.backgroundSize = `${rect.width * magnification}px ${rect.height * magnification}px`;
+            lens.style.backgroundPosition = `${radius - (event.clientX - rect.left) * magnification}px ${radius - (event.clientY - rect.top) * magnification}px`;
+            lens.style.left = `${event.clientX}px`;
+            lens.style.top = `${event.clientY}px`;
+            lens.classList.add('visible');
+          };
+          button.addEventListener('pointerenter', updateLens);
+          button.addEventListener('pointermove', updateLens);
+          button.addEventListener('pointerleave', () => lens.classList.remove('visible'));
+          button.onclick = () => {
+            lens.classList.remove('visible');
+            resetZoomMedia();
+            $('#zoom-image').src = button.dataset.poster;
+            $('.zoom').classList.add('open');
+            portal.inert = true;
+            $('#close-zoom').focus();
+          };
+        });
+      }
+      
+      if (i === 0) {
+        const posters = [
+          {year:2022,asset:'2022.webp',title:'EXPRESS',description:'48명의 시선이 각자의 목적지를 향해 출발합니다.'},
+          {year:2023,video:'web/2023-preview.m4v',title:'TAKE YOUR TICKET',description:'티켓을 쥐고 서로 다른 이야기의 전시장으로.'},
+          {year:2024,asset:'2024.webp',title:'GATHERING (AND) DISPERSING',description:'집중과 확산, 흩어진 시선이 다시 빛이 되는 순간.'},
+          {year:2025,fronts:['2025-1.webp','2025-2.webp'],back:'2025_back_preview.webp',title:'프롤로그: 시작과 끝을 잇다',description:'졸업의 끝에서 새로운 시작을 잇는 프롤로그.'},
+          {year:2026,fronts:['assets/graduation-poster.webp','assets/graduation-poster2.webp'],title:'ACCUMULATION',description:'질문과 시도가 쌓여 각자의 다음으로 이어집니다.'}
+        ];
+        const stage = $('#archive-stage');
+        let currentIndex = posters.findIndex(poster => poster.year === 2026);
+        let pointerId = null;
+        let startX = 0;
+        let dragged = false;
+        let suppressClick = false;
+
+        const updateArchiveCaption = () => {
+          const currentCard = stage.querySelector('.archive-card-current');
+          const caption = $('.archive-caption');
+          const archive = $('.poster-archive');
+          if (!currentCard || !caption || !archive) return;
+          caption.style.top = `${currentCard.getBoundingClientRect().bottom - archive.getBoundingClientRect().top + 14}px`;
+        };
+
+        const renderArchive = motion => {
+          if (motion) stage.dataset.motion = motion;
+          else delete stage.dataset.motion;
+          stage.innerHTML = [-1, 0, 1].map(offset => {
+            const index = currentIndex + offset;
+            if (index < 0 || index >= posters.length) return '';
+            const poster = posters[index];
+            const year = poster.year;
+            const position = offset === 0 ? 'current' : offset < 0 ? 'previous' : 'next';
+            const videoPath = poster.video ? `assets/All-time%20posters/${poster.video}` : '';
+            const primaryImage = poster.fronts?.[0] || poster.asset || '';
+            const posterPath = primaryImage
+              ? poster.fronts
+                ? (primaryImage.startsWith('assets/') ? primaryImage : `assets/All-time%20posters/web/${primaryImage}`)
+                : `assets/All-time%20posters/web/${primaryImage}`
+              : videoPath;
+            const frontImagePath = front => front.startsWith('assets/')
+              ? front
+              : `assets/All-time%20posters/web/${front}`;
+            const dataMedia = poster.video
+              ? `data-poster-video="${videoPath}"`
+              : poster.fronts
+                ? `data-poster-front-one="${frontImagePath(poster.fronts[0])}" data-poster-front-two="${frontImagePath(poster.fronts[1])}"${poster.back ? ` data-poster-back="assets/All-time%20posters/web/${poster.back}"` : ''}`
+                : '';
+            const media = poster.video
+              ? `<video class="archive-card-video" src="${videoPath}" muted autoplay loop playsinline preload="metadata" aria-label="${year}년 무빙 포스터"></video>`
+              : poster.fronts
+                ? `<span class="archive-poster-pair">${poster.fronts.map((front, frontIndex) => `<img src="${frontImagePath(front)}" alt="${year}년 포스터 ${frontIndex + 1}" draggable="false">`).join('')}</span>`
+                : `<img src="assets/All-time%20posters/web/${poster.asset}" alt="${year}년 계명대학교 시각디자인 졸업전시 포스터" draggable="false">`;
+            return `<button class="archive-card archive-card-${position}${poster.fronts ? ' archive-card-pair' : ''}" data-archive-offset="${offset}" data-poster="${posterPath}" data-poster-year="${year}" ${dataMedia} aria-label="${year}년 포스터${offset === 0 ? ' 확대' : ''}" type="button">
+                      ${media}
+                    </button>`;
+          }).join('');
+          const poster = posters[currentIndex];
+          $('#archive-caption-year').textContent = poster.year;
+          $('#archive-caption-title').textContent = poster.title;
+          $('#archive-caption-description').textContent = poster.description;
+          $('#archive-position').textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(posters.length).padStart(2, '0')}`;
+          $('#archive-prev').disabled = currentIndex === 0;
+          $('#archive-next').disabled = currentIndex === posters.length - 1;
+          updateArchiveCaption();
+        };
+        const moveArchive = direction => {
+          const nextIndex = currentIndex + direction;
+          if (nextIndex < 0 || nextIndex >= posters.length) return;
+          currentIndex = nextIndex;
+          renderArchive(direction > 0 ? 'next' : 'previous');
+        };
+        const openPoster = card => {
+          resetZoomMedia();
+          if (card.dataset.posterVideo) {
+            const video = $('#zoom-video');
+            video.src = card.dataset.posterVideo;
+            video.hidden = false;
+            video.play().catch(() => {});
+          } else if (card.dataset.posterFrontOne) {
+            const image = $('#zoom-image');
+            const pair = $('#zoom-pair');
+            const frontImages = pair.querySelectorAll('img');
+            frontImages[0].src = card.dataset.posterFrontOne;
+            frontImages[1].src = card.dataset.posterFrontTwo;
+            pair.setAttribute('aria-label', `${card.dataset.posterYear}년 포스터 한 쌍`);
+            frontImages.forEach((frontImage, index) => {
+              frontImage.alt = `${card.dataset.posterYear}년 포스터 ${index + 1}`;
+            });
+            image.hidden = true;
+            pair.hidden = false;
+            const faceToggle = $('#zoom-face-toggle');
+            faceToggle.hidden = !card.dataset.posterBack;
+            faceToggle.onclick = card.dataset.posterBack ? () => {
+                const showingBack = faceToggle.getAttribute('aria-pressed') !== 'true';
+                faceToggle.setAttribute('aria-pressed', String(showingBack));
+                faceToggle.textContent = showingBack ? '앞면 보기' : '뒷면 보기';
+                pair.hidden = showingBack;
+                image.hidden = !showingBack;
+                if (showingBack) image.src = card.dataset.posterBack;
+              } : null;
+          } else {
+            $('#zoom-image').src = card.dataset.poster;
+          }
+          $('.zoom').classList.add('open');
+          portal.inert = true;
+          $('#close-zoom').focus();
+        };
+
+        renderArchive();
+        archiveResizeObserver = new ResizeObserver(updateArchiveCaption);
+        archiveResizeObserver.observe($('.poster-archive'));
+        stage.addEventListener('animationend', event => {
+          if (event.target.matches('.archive-card-current')) {
+            delete stage.dataset.motion;
+            updateArchiveCaption();
+          }
+        });
+        $('#archive-prev').onclick = () => moveArchive(-1);
+        $('#archive-next').onclick = () => moveArchive(1);
+        stage.addEventListener('pointerdown', event => {
+          if (!event.isPrimary || event.button > 0) return;
+          pointerId = event.pointerId;
+          startX = event.clientX;
+          dragged = false;
+        });
+        stage.addEventListener('pointermove', event => {
+          if (event.pointerId !== pointerId) return;
+          const offset = event.clientX - startX;
+          if (Math.abs(offset) > 7 && !dragged) {
+            dragged = true;
+            stage.classList.add('is-dragging');
+            stage.setPointerCapture(pointerId);
+          }
+          if (dragged) {
+            event.preventDefault();
+            stage.style.setProperty('--drag-offset', `${offset}px`);
+          }
+        });
+        stage.addEventListener('pointerup', event => {
+          if (event.pointerId !== pointerId) return;
+          const offset = event.clientX - startX;
+          if (dragged) {
+            suppressClick = true;
+            setTimeout(() => { suppressClick = false; }, 0);
+            if (Math.abs(offset) > 48) moveArchive(offset < 0 ? 1 : -1);
+          }
+          stage.classList.remove('is-dragging');
+          stage.style.removeProperty('--drag-offset');
+          pointerId = null;
+          dragged = false;
+        });
+        stage.addEventListener('pointercancel', () => {
+          stage.classList.remove('is-dragging');
+          stage.style.removeProperty('--drag-offset');
+          pointerId = null;
+          dragged = false;
+        });
+        stage.addEventListener('click', event => {
+          if (suppressClick) {
+            suppressClick = false;
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+          }
+          const card = event.target.closest('[data-archive-offset]');
+          if (!card) return;
+          const offset = Number(card.dataset.archiveOffset);
+          if (offset) moveArchive(offset);
+          else openPoster(card);
+        });
+        stage.addEventListener('keydown', event => {
+          if (event.key === 'ArrowLeft') moveArchive(-1);
+          if (event.key === 'ArrowRight') moveArchive(1);
+        });
+      }
+      
+      if (i === 3) {
+        const options = $$('.color-option');
+        options.forEach(option => option.onclick = () => {
+          options.forEach(item => item.setAttribute('aria-pressed', String(item === option)));
+        });
+      }
+      
+      if (i === 4) {
+        const host = $('.type-layers');
+        const preview = $('#type-preview');
+        const typeInput = $('#type-input');
+        const storageKey = 'accumulation-example-sentences';
+        let sentences = [];
+        try {
+          const savedSentences = JSON.parse(localStorage.getItem(storageKey) || '[]');
+          if (Array.isArray(savedSentences)) sentences = savedSentences.filter(sentence => typeof sentence === 'string');
+        } catch {}
+
+        const renderSentences = () => {
+          host.replaceChildren();
+          sentences.slice().reverse().forEach(sentence => {
+            const row = document.createElement('button');
+            row.type = 'button';
+            row.className = 'type-layer';
+            const doltopText = document.createElement('span');
+            doltopText.className = 'font-doltop';
+            doltopText.textContent = sentence;
+            const readableText = document.createElement('span');
+            readableText.className = 'type-layer-readable';
+            readableText.textContent = ` (${sentence})`;
+            row.append(doltopText, readableText);
+            row.setAttribute('aria-pressed', 'false');
+            row.addEventListener('click', () => {
+              typeInput.value = sentence;
+              typeInput.dispatchEvent(new Event('input', { bubbles: true }));
+              preview.style.background = 'var(--ink)';
+              preview.style.color = '#fff';
+              preview.classList.remove('inverted');
+              host.querySelectorAll('.type-layer').forEach(item => item.setAttribute('aria-pressed', 'false'));
+              row.setAttribute('aria-pressed', 'true');
+            });
+            host.append(row);
+          });
+        };
+
+        const saveSentences = () => {
+          try {
+            localStorage.setItem(storageKey, JSON.stringify(sentences));
+          } catch {}
+        };
+
+        $('#type-stack').onclick = () => {
+          const sentence = typeInput.value.trim();
+          if (!sentence) return;
+          sentences.push(sentence);
+          saveSentences();
+          renderSentences();
+        };
+
+        $('#type-clear').onclick = () => {
+          sentences = [];
+          saveSentences();
+          renderSentences();
+          try {
+            localStorage.removeItem(storageKey);
+          } catch {}
+        };
+      }
+      if (i === 7) {
+        $$('[data-student]').forEach(b => b.onclick = () => {
+          const r = studentRecords[+b.dataset.student];
+          const dialog = $('#student-modal');
+          studentFlip?.destroy();
+          studentFlip = null;
+          dialog.innerHTML = `<h3 class="sr-only" id="student-modal-title">${escapeHtml(r.name)} 작품</h3>
+            <div class="book-shell">
+              <div class="book-stage student-book-stage">
+                <div class="book" id="student-book" tabindex="0" aria-label="${escapeHtml(r.name)} A4 세로 작품 4페이지. 두 쪽씩 펼쳐집니다. 왼쪽 클릭은 이전, 오른쪽 클릭은 다음 펼침">
+                  ${Array.from({ length: 4 }, (_, pageIndex) => {
+                    const image = r.pages?.[pageIndex];
+                    return `<article class="page" aria-label="작품 ${pageIndex + 1}쪽">${image ? `<img class="student-work-image" data-page-src="${escapeHtml(image)}" alt="${escapeHtml(r.name)} 작품 ${pageIndex + 1}쪽" decoding="async">` : ''}</article>`;
+                  }).join('')}
+                </div>
+                <span id="student-page-count" class="student-page-count title-en" aria-live="polite">01 / 02</span>
+              </div>
+              <p class="sr-only" id="student-book-status" aria-live="polite">A4 세로 작품, 4페이지</p>
+            </div>`;
+          const studentPageImages = [...dialog.querySelectorAll('.student-work-image')];
+          studentPageImages.forEach(image => {
+            image.addEventListener('error', () => image.remove(), { once: true });
+          });
+          dialog.onclick = event => {
+            if (event.target === dialog) dialog.close();
+          };
+          dialog.showModal();
+
+          const bookElement = $('#student-book');
+          const pageCount = bookElement.querySelectorAll('.page').length;
+          const updateStudentControls = pageIndex => {
+            const current = Number.isInteger(pageIndex) ? pageIndex : studentFlip.getCurrentPageIndex();
+            const spreadStart = Math.floor(current / 2) * 2;
+            const spreadEnd = Math.min(spreadStart + 2, pageCount);
+            $('#student-page-count').textContent = `${String(spreadStart + 1).padStart(2, '0')} / ${String(spreadEnd).padStart(2, '0')}`;
+            $('#student-book-status').textContent = `A4 세로 작품 ${spreadStart + 1}페이지와 ${spreadEnd}페이지 / 전체 ${pageCount}페이지`;
+          };
+
+          if (!window.St?.PageFlip) {
+            $('#student-book-status').textContent = '작품 페이지 넘김 기능을 불러오지 못했습니다.';
+            return;
+          }
+
+          studentFlip = new St.PageFlip(bookElement, {
+            width: 2480,
+            height: 3508,
+            size: 'stretch',
+            minWidth: 220,
+            maxWidth: 1400,
+            minHeight: 311,
+            maxHeight: 2000,
+            drawShadow: true,
+            maxShadowOpacity: .24,
+            showCover: false,
+            usePortrait: false,
+            autoSize: false,
+            mobileScrollSupport: false,
+            flippingTime: 900
+          });
+
+          studentFlip.on('init', event => updateStudentControls(event.data.page));
+          studentFlip.on('flip', event => {
+            updateStudentControls(event.data);
+            loadBookSpread(studentPageImages, event.data);
+          });
+          studentFlip.loadFromHTML(bookElement.querySelectorAll('.page'));
+          updateStudentControls(0);
+          loadBookSpread(studentPageImages, 0);
+          const turnStudentPage = direction => {
+            if (!studentFlip || studentFlip.getState() !== 'read') return;
+            if (direction < 0) studentFlip.flipPrev('bottom');
+            else studentFlip.flipNext('bottom');
+          };
+          bookElement.addEventListener('click', event => {
+            const bounds = bookElement.getBoundingClientRect();
+            turnStudentPage(event.clientX < bounds.left + bounds.width / 2 ? -1 : 1);
+          });
+          bookElement.addEventListener('keydown', event => {
+            if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+            event.preventDefault();
+            turnStudentPage(event.key === 'ArrowLeft' ? -1 : 1);
+          });
+        });
+      }
+      
+      if (i === 10) {
+        const venueButtons = $$('[data-venue-student]');
+        const searchInput = $('#venue-search');
+        const selectedPanel = $('#venue-selected');
+        const venueBookStage = $('.venue-book-stage');
+        let venueBook = $('#venue-book');
+        const venuePageCount = $('#venue-page-count');
+        const venueBookStatus = $('#venue-book-status');
+        let selectedIndex = -1;
+
+        const selectVenueStudent = index => {
+          const student = studentRecords[index];
+          if (!student) return;
+          selectedIndex = index;
+          venueButtons.forEach(button => {
+            const selected = Number(button.dataset.venueStudent) === index;
+            button.classList.toggle('selected', selected);
+            if (button.classList.contains('venue-student')) button.setAttribute('aria-pressed', String(selected));
+          });
+          selectedPanel.innerHTML = `${student.thumbnail ? `<img src="${escapeHtml(student.thumbnail)}" alt="${escapeHtml(student.name)} 프로필 사진" decoding="async">` : '<span class="venue-selected-placeholder">사진 준비 중</span>'}<div><p>선택한 학생</p><h3>${escapeHtml(student.name)}</h3><strong>${String(index + 1).padStart(2, '0')}번 부스</strong></div>`;
+          const pageImages = Array.from({ length: 4 }, (_, pageIndex) => student.pages?.[pageIndex]);
+          venueFlip?.destroy();
+          venueFlip = null;
+          venueBookStage.innerHTML = '<div class="book" id="venue-book" aria-label="선택한 학생의 도록 4페이지"></div>';
+          venueBook = $('#venue-book');
+          venueBook.innerHTML = pageImages.map((image, pageIndex) => `<article class="page" aria-label="${pageIndex + 1}쪽">${image ? `<img class="venue-book-page-image" data-page-src="${escapeHtml(image)}" alt="${escapeHtml(student.name)} 도록 ${pageIndex + 1}쪽" decoding="async">` : '<span class="venue-book-empty">자료 준비 중</span>'}</article>`).join('');
+          const venuePageImages = [...venueBook.querySelectorAll('.venue-book-page-image')];
+
+          const updateVenueBookControls = pageIndex => {
+            const current = Number.isInteger(pageIndex) ? pageIndex : venueFlip.getCurrentPageIndex();
+            const spreadStart = Math.floor(current / 2) * 2;
+            const spreadEnd = Math.min(spreadStart + 2, pageImages.length);
+            venuePageCount.textContent = `${String(spreadStart + 1).padStart(2, '0')}–${String(spreadEnd).padStart(2, '0')} / ${String(pageImages.length).padStart(2, '0')}`;
+            venueBookStatus.textContent = `${student.name} 도록 ${spreadStart + 1}쪽과 ${spreadEnd}쪽`;
+          };
+
+          if (!window.St?.PageFlip) {
+            venuePageCount.textContent = '도록 준비 중';
+            venueBookStatus.textContent = '도록 넘김 기능을 불러오지 못했습니다.';
+            return;
+          }
+
+          venueFlip = new St.PageFlip(venueBook, {
+            width: 2480,
+            height: 3508,
+            size: 'stretch',
+            minWidth: 130,
+            maxWidth: 1400,
+            minHeight: 184,
+            maxHeight: 2000,
+            drawShadow: true,
+            maxShadowOpacity: .24,
+            showCover: false,
+            usePortrait: false,
+            autoSize: false,
+            mobileScrollSupport: false,
+            flippingTime: 900
+          });
+
+          venueFlip.on('init', event => updateVenueBookControls(event.data.page));
+          venueFlip.on('flip', event => {
+            updateVenueBookControls(event.data);
+            loadBookSpread(venuePageImages, event.data);
+          });
+          venueFlip.loadFromHTML(venueBook.querySelectorAll('.page'));
+          updateVenueBookControls(0);
+          loadBookSpread(venuePageImages, 0);
+        };
+
+        venueButtons.forEach(button => button.addEventListener('click', () => selectVenueStudent(Number(button.dataset.venueStudent))));
+        searchInput.addEventListener('input', () => {
+          const query = searchInput.value.trim().toLocaleLowerCase('ko');
+          let firstMatch = -1;
+          let matchCount = 0;
+          venueButtons.forEach(button => {
+            const index = Number(button.dataset.venueStudent);
+            const matches = studentRecords[index].name.toLocaleLowerCase('ko').includes(query);
+            if (button.classList.contains('venue-student')) button.hidden = !matches;
+            if (button.classList.contains('venue-booth')) button.classList.toggle('filtered-out', !matches);
+            if (matches && button.classList.contains('venue-student')) {
+              firstMatch = firstMatch < 0 ? index : firstMatch;
+              matchCount++;
+            }
+          });
+          $('#venue-match-count').textContent = matchCount;
+          $('#venue-result-count').textContent = matchCount;
+          $('#venue-empty').hidden = matchCount > 0;
+          if (matchCount && (selectedIndex < 0 || !studentRecords[selectedIndex].name.toLocaleLowerCase('ko').includes(query))) {
+            selectVenueStudent(firstMatch);
+          } else if (!matchCount) {
+            selectedIndex = -1;
+            venueButtons.forEach(button => {
+              button.classList.remove('selected');
+              if (button.classList.contains('venue-student')) button.setAttribute('aria-pressed', 'false');
+            });
+            selectedPanel.innerHTML = '<span class="venue-selected-placeholder">검색 결과 없음</span><div><p>다른 이름으로 검색</p><h3>학생을 찾을 수 없습니다</h3></div>';
+            venueFlip?.destroy();
+            venueFlip = null;
+            venueBookStage.innerHTML = '<div class="book" id="venue-book" aria-label="선택한 학생의 도록 4페이지"></div>';
+            venueBook = $('#venue-book');
+            venuePageCount.textContent = '00–00 / 04';
+            venueBookStatus.textContent = '검색 결과가 없습니다.';
+          }
+        });
+        if (studentRecords.length) selectVenueStudent(0);
+      }
+
+      if (i === 11) window.initAccumulationWordle();
+      
+      scheduleLayerReveal();
+    }
+
+    const initial = names.findIndex(n => '#' + n.toLowerCase() === location.hash);
+    if (initial >= 0) openSection(initial, false);
+  </script>
+</body>
+</html>
