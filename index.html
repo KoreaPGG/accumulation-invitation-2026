@@ -2314,7 +2314,7 @@
     
     const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const assetPath = (...segments) => segments
-      .map(segment => encodeURIComponent(String(segment).normalize('NFD')))
+      .map(segment => encodeURIComponent(String(segment)))
       .join('/');
     const loadBookSpread = (images, pageIndex = 0) => {
       const loadPages = start => Promise.all(images.slice(start, start + 2).map(image => {
