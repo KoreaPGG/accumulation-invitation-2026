@@ -161,7 +161,7 @@
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
       grid-template-rows: repeat(2, minmax(0, 1fr));
-      gap: var(--type-unit);
+      gap: min(var(--type-unit), .15vw);
       padding: 0;
     }
 
@@ -475,9 +475,9 @@
     .color-option:hover:not([aria-pressed="true"]) { flex-grow: 1.2; }
     .color-option:focus-visible { outline: 3px solid var(--db-blue); outline-offset: -5px; }
     
-    .logo-lab { height: clamp(340px, 40vw, 560px); position: relative; background: var(--ink); overflow: hidden; user-select: none; -webkit-user-select: none; }
+    .logo-lab { height: clamp(340px, 40vw, 560px); position: relative; container-type: inline-size; background: var(--ink); overflow: hidden; user-select: none; -webkit-user-select: none; }
     .logo-lab * { user-select: none; -webkit-user-select: none; }
-    .lab-layout { position: absolute; top: 50%; left: 50%; display: grid; width: 100%; aspect-ratio: 3558 / 799; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: var(--type-unit); transform: translate(-50%, -50%); }
+    .lab-layout { position: absolute; top: 50%; left: 50%; display: grid; width: 100%; aspect-ratio: 3558 / 799; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: min(var(--type-unit), .15cqi); transform: translate(-50%, -50%); }
     .logo-lab .lab-letter { position: relative; display: grid; place-items: center; width: 100%; height: 100%; overflow: hidden; color: var(--red); transform-origin: center; transition: transform .9s cubic-bezier(.2,.8,.2,1); -webkit-user-drag: none; touch-action: none; cursor: grab; }
     .logo-lab .lab-letter svg { display: block; width: 100%; height: 100%; fill: currentColor; overflow: visible; }
     .logo-lab.is-floating .lab-letter { transition: none; will-change: transform; }
@@ -1127,6 +1127,8 @@
       .portal.open { opacity: 1; transition: opacity .16s ease, visibility 0s !important; }
       .portal-content > .layer, .poster-slice { opacity: 1; transform: none; }
       .stack-row, .color-stripe, .type-layer { animation: none; }
+      .logo-lab.is-floating .lab-letter { transition: none !important; }
+      .logo-lab:not(.is-floating) .lab-letter { transition: transform .9s cubic-bezier(.2,.8,.2,1) !important; }
     }
 
     .portal, .portal *, .zoom, .zoom * { font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; }
@@ -1954,10 +1956,14 @@
       if (i === 0) {
         const lab = $('.logo-lab');
         const parts = $$('.lab-letter');
-        const reduceLogoMotion = reduced && !matchMedia('(pointer: coarse)').matches;
+        const hasTouchInput = navigator.maxTouchPoints > 0
+          || matchMedia('(pointer: coarse)').matches
+          || matchMedia('(any-pointer: coarse)').matches;
+        const reduceLogoMotion = reduced && !hasTouchInput;
         let motionFrame = 0;
         let previousTime = 0;
         let bodies = [];
+        let assembleAnimations = [];
         let draggedBody = null;
         let activePointerId = null;
         let dragOffsetX = 0, dragOffsetY = 0;
@@ -1991,6 +1997,8 @@
           body.part.style.transform = `translate3d(${(body.x - body.homeX).toFixed(1)}px, ${(body.y - body.homeY).toFixed(1)}px, 0) rotate(${body.rotation.toFixed(1)}deg) scale(${body.scale.toFixed(3)})`;
         });
         const scatter = () => {
+          assembleAnimations.forEach(animation => animation.cancel());
+          assembleAnimations = [];
           const wasFloating = lab.classList.contains('is-floating') && bodies.length === parts.length;
           const previousBodies = bodies;
           if (motionFrame) cancelAnimationFrame(motionFrame);
@@ -2227,7 +2235,6 @@
           });
         });
         $('#assemble').onclick = () => {
-          lab.classList.remove('is-floating');
           soloMode = false;
           releaseOnClick = false;
           didDrag = false;
@@ -2235,13 +2242,30 @@
           if (motionFrame) cancelAnimationFrame(motionFrame);
           motionFrame = 0;
           previousTime = 0;
+          assembleAnimations.forEach(animation => animation.cancel());
+          assembleAnimations = parts.map(part => {
+            const currentTransform = getComputedStyle(part).transform;
+            return part.animate(
+              [{ transform: currentTransform }, { transform: 'none' }],
+              { duration: 900, easing: 'cubic-bezier(.2, .8, .2, 1)' }
+            );
+          });
+          let remainingAnimations = assembleAnimations.length;
+          assembleAnimations.forEach(animation => {
+            animation.onfinish = () => {
+              remainingAnimations -= 1;
+              if (remainingAnimations > 0) return;
+              lab.classList.remove('is-floating');
+              parts.forEach(part => {
+                part.style.removeProperty('transform');
+                part.style.zIndex = '1';
+              });
+              assembleAnimations = [];
+            };
+          });
           bodies = [];
           draggedBody = null;
           activePointerId = null;
-          parts.forEach(part => {
-            part.style.removeProperty('transform');
-            part.style.zIndex = '1';
-          });
         };
         $('#scatter').onclick = scatter;
       }
