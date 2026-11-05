@@ -730,7 +730,7 @@
     .book-shell { width: 100%; height: min(74vh, 860px); min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto; overflow: hidden; }
     .portal.catalogue-open .book-shell { height: 100%; }
     .book-stage { width: min(960px, calc(100vw - 180px)); max-width: 960px; height: auto; max-height: calc(100% - 44px); flex-shrink: 0; aspect-ratio: 4960 / 3508; position: relative; margin: 0 auto; overflow: hidden; }
-    .portal.catalogue-open .book-stage { width: min(100%, 960px, calc(141.4svh - 166px)); max-width: none; }
+    .portal.catalogue-open .book-stage { width: min(100%, 960px, calc(141.4svh - 235px)); max-width: 100%; }
     .book { width: 100%; height: 100%; }
     .page { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; padding: 0; border: 0; background: #ffffff !important; color: #000000; }
     #catalogue-book .page-cover { box-sizing: border-box; padding: clamp(24px, 5%, 72px); }
@@ -1119,9 +1119,11 @@
 
     @media(prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition: none !important; animation: none !important; }
-      .journey { height: 110svh; }
-      .glyph { transform: none !important; opacity: 1 !important; }
-      .entry { display: none; }
+      .glyph { transform: none !important; }
+      .glyph-caption { transform: none !important; transition: opacity .12s ease !important; }
+      .glyph.is-active .glyph-letter, .glyph:focus-visible .glyph-letter, .glyph.is-lifted .glyph-letter { transform: none !important; }
+      .portal { opacity: 0; transform: none !important; transition: opacity .16s ease, visibility .16s !important; }
+      .portal.open { opacity: 1; transition: opacity .16s ease, visibility 0s !important; }
       .portal-content > .layer, .poster-slice { opacity: 1; transform: none; }
       .stack-row, .color-stripe, .type-layer { animation: none; }
     }
@@ -1187,10 +1189,14 @@
     const $ = s => document.querySelector(s);
     const $$ = s => [...document.querySelectorAll(s)];
 
-    const names = ['KVCD', 'COMMITTEE', 'LOGO', 'COLOR', 'TYPEFACE', 'POSTER', 'FILM', 'STUDENTS', 'CATALOGUE', 'COLLABORATION', 'EXHIBITION', 'PLAY'];
-    const korean = ['KVCD', '졸준위원 소개', '로고', '컬러', '타이포그래피', '포스터', '영상', '학생', '온라인 도록', '협업', '전시장', '게임'];
-    const glyphTitles = ['KVCD', 'COMMITTEE', 'LOGO', 'COLOR', 'TYPEFACE', 'POSTER', 'VIDEO', 'GRADUATES', 'ARTWORKS', 'COLLAB', 'VENUE', 'WORDLE'];
-    const glyphKoreanTitles = ['역대 졸업 전시 포스터', '졸업준비위원회', '로고', '색상', '서체', '포스터', '영상', '졸업생', '작품', '협업', '전시장', '워들'];
+    const names = ['KVCD', 'COMMITTEE', 'LOGO', 'COLOR', 'TYPEFACE', 'POSTER', 'FILM', 'STUDENTS', 'CATALOGUE', 'PARTNERSHIP', 'EXHIBITION', 'PLAY'];
+    const sectionSlugs = names.map((name, index) => index === 9 ? 'collaboration' : name.toLowerCase());
+    const sectionFromHash = () => location.hash === '#partnership'
+      ? names.indexOf('PARTNERSHIP')
+      : sectionSlugs.findIndex(slug => '#' + slug === location.hash);
+    const korean = ['KVCD', '졸준위원 소개', '로고', '컬러', '타이포그래피', '포스터', '영상', '학생', '온라인 도록', '파트너십', '전시장', '게임'];
+    const glyphTitles = ['KVCD', 'COMMITTEE', 'LOGO', 'COLOR', 'TYPEFACE', 'POSTER', 'VIDEO', 'GRADUATES', 'ARTWORKS', 'PARTNERSHIP', 'VENUE', 'WORDLE'];
+    const glyphKoreanTitles = ['역대 졸업 전시 포스터', '졸업준비위원회', '로고', '색상', '서체', '포스터', '영상', '졸업생', '작품', '파트너십', '전시장', '워들'];
     const mapping = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const letters = 'accumulation'.split('');
@@ -1269,7 +1275,7 @@
 
     function accumulate() {
       const max = $('.journey').offsetHeight - innerHeight;
-      const p = reduced ? 1 : Math.max(0, Math.min(1, scrollY / Math.max(1, max)));
+      const p = Math.max(0, Math.min(1, scrollY / Math.max(1, max)));
       $('.entry').style.opacity = String(Math.max(0, 1 - p * 12));
 
       glyphs.forEach((glyph, index) => {
@@ -1532,7 +1538,7 @@
       $('.journey').inert = true;
       $('#close-portal').focus({ preventScroll: true });
 
-      if (update) history.pushState({ section: i }, '', `#${names[i].toLowerCase()}`);
+      if (update) history.pushState({ section: i }, '', `#${sectionSlugs[i]}`);
       wire(i);
     }
 
@@ -1871,7 +1877,7 @@
     });
 
     addEventListener('popstate', () => {
-      const i = names.findIndex(n => '#' + n.toLowerCase() === location.hash);
+      const i = sectionFromHash();
       if (i >= 0) navigateSection(i, chapterItems[i], false);
       else if (active >= 0) closeSection(false);
     });
@@ -2504,10 +2510,10 @@
       () => legacyPanels[5]() + 
             (exhibitionData.cataloguePdf ? `<a class="control" href="${escapeHtml(exhibitionData.cataloguePdf)}" target="_blank" rel="noopener">전체 도록 PDF 보기</a>` : ''),
             
-      () => `<h2 class="sr-only" id="portal-title">협업</h2>
+      () => `<h2 class="sr-only" id="portal-title">파트너십</h2>
         <div class="collab-page">
           ${[
-            {title:'기업 협업',english:'CORPORATE',partners:[
+            {title:'파트너십',english:'PARTNERSHIP',partners:[
               {name:'윤디자인',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '윤디자인.webp'),location:'서울특별시 마포구 독막로9길 13'},
               {name:'산돌구름',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '산돌구름.webp'),location:'서울특별시 성동구 아차산로17길 49'},
               {name:'직지소프트',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '직지소프트.webp'),location:'서울특별시 중구 수표로 48-7'}
@@ -3116,7 +3122,7 @@
       scheduleLayerReveal();
     }
 
-    const initial = names.findIndex(n => '#' + n.toLowerCase() === location.hash);
+    const initial = sectionFromHash();
     if (initial >= 0) openSection(initial, false);
   </script>
 </body>
