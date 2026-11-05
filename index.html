@@ -314,9 +314,15 @@
 
     .portal.student-page { --paper: #FF4349; --white: #FF4349; background: var(--paper); }
     .portal.student-page::before, .portal.student-page::after { display: none; }
-    .portal.color-open { --paper: #F0EEE9; --white: #FFFFFF; display: flex; flex-direction: column; overflow: hidden; background: #FF5349; }
-    .portal.color-open .portal-header { position: relative; top: auto; flex: 0 0 auto; }
-    .portal.color-open .portal-content { box-sizing: border-box; display: flex; flex: 1 1 auto; width: 100%; height: 0; min-height: 0; max-width: none; margin: 0; overflow: hidden; padding: clamp(8px, 1.2vw, 18px) calc(var(--rail-width) + var(--basic-margin)); }
+    .portal.color-open { --paper: #F0EEE9; --white: #FFFFFF; display: flex; flex-direction: column; overflow: hidden; background: #FF5349; transition: transform .6s cubic-bezier(.22, 1, .36, 1), opacity .6s, visibility .6s; }
+    .portal.color-open::before, .portal.color-open::after { background: transparent; color: var(--color-rail-ink, var(--ink)); transition: color .85s cubic-bezier(.16, 1, .3, 1); }
+    .portal.color-open .portal-header { position: relative; top: auto; z-index: 4; flex: 0 0 auto; background: transparent; }
+    .portal.color-open .portal-header { color: var(--color-rail-ink, var(--ink)); border-color: var(--color-rail-ink, var(--ink)); transition: color .85s cubic-bezier(.16, 1, .3, 1), border-color .85s cubic-bezier(.16, 1, .3, 1); }
+    .portal.color-open .portal-header button { border-color: var(--color-rail-ink, var(--ink)); transition: color .85s cubic-bezier(.16, 1, .3, 1), background-color .85s cubic-bezier(.16, 1, .3, 1), border-color .85s cubic-bezier(.16, 1, .3, 1); }
+    .portal.color-open .portal-header .chapter-arrow { background: transparent; color: var(--color-rail-ink, var(--ink)); }
+    .portal.color-open .portal-header .chapter-index-toggle,
+    .portal.color-open .portal-header .close { background: var(--color-rail-ink, var(--ink)); color: var(--color-rail-background, var(--red)); }
+    .portal.color-open .portal-content { position: relative; z-index: 1; box-sizing: border-box; display: flex; flex: 1 1 auto; width: 100%; height: 0; min-height: 0; max-width: none; margin: 0; overflow: hidden; padding: clamp(8px, 1.2vw, 18px) calc(var(--rail-width) + var(--basic-margin)); }
     .portal.logo-open { display: flex; flex-direction: column; overflow: hidden; }
     .portal.logo-open .portal-header { position: relative; top: auto; flex: 0 0 auto; }
     .portal.logo-open .portal-content { box-sizing: border-box; display: flex; flex: 1 1 auto; flex-direction: column; gap: clamp(6px, 1.2vh, 12px); height: 0; min-height: 0; overflow: hidden; padding: clamp(8px, 1.6vh, 16px) calc(var(--rail-width) + var(--basic-margin)); }
@@ -477,7 +483,7 @@
     
     .logo-lab { height: clamp(340px, 40vw, 560px); position: relative; container-type: inline-size; background: var(--ink); overflow: hidden; user-select: none; -webkit-user-select: none; }
     .logo-lab * { user-select: none; -webkit-user-select: none; }
-    .lab-layout { position: absolute; top: 50%; left: 50%; display: grid; width: 100%; aspect-ratio: 3558 / 799; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: min(var(--type-unit), .15cqi); transform: translate(-50%, -50%); }
+    .lab-layout { position: absolute; top: 50%; left: 50%; display: grid; width: 100%; aspect-ratio: 3558 / 799; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: min(var(--type-unit), .15vw); transform: translate(-50%, -50%); }
     .logo-lab .lab-letter { position: relative; display: grid; place-items: center; width: 100%; height: 100%; overflow: hidden; color: var(--red); transform-origin: center; transition: transform .9s cubic-bezier(.2,.8,.2,1); -webkit-user-drag: none; touch-action: none; cursor: grab; }
     .logo-lab .lab-letter svg { display: block; width: 100%; height: 100%; fill: currentColor; overflow: visible; }
     .logo-lab.is-floating .lab-letter { transition: none; will-change: transform; }
@@ -487,6 +493,7 @@
     .student-dialog::backdrop { background: rgba(0,0,0,.55); }
     .student-dialog, .student-dialog * { font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif !important; }
     .student-dialog .book-shell { height: auto; overflow: hidden; }
+    .student-dialog .student-book-stage { width: min(100%, 960px); max-width: 100%; aspect-ratio: 4960 / 3508; }
     .student-work-image { display: block; width: 100%; height: 100%; min-height: 0; object-fit: cover; background: transparent; }
     .student-work-placeholder { display: grid; width: 100%; height: 100%; margin: 0; place-items: center; color: #777; font-size: 14px; text-align: center; }
     .type-canvas { min-height: 340px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--db-blue); color: var(--white); padding: 30px; font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; font-size: clamp(56px, 12vw, 200px); line-height: .82; letter-spacing: var(--tracking-en); white-space: nowrap; word-break: normal; overflow-wrap: anywhere; text-align: center; border: 1px solid var(--ink); }
@@ -743,7 +750,7 @@
     #student-book:focus-visible { outline: 2px solid var(--db-blue); outline-offset: -2px; }
     #student-book .page { padding: 0; }
     .student-work-image { width: 100%; height: 100%; object-fit: contain; }
-    #student-book .student-work-image { object-fit: cover; }
+    #student-book .student-work-image { object-fit: contain; }
     .student-book-stage { position: relative; }
     .student-page-count { position: absolute; z-index: 5; bottom: clamp(8px, 2%, 18px); left: 50%; box-sizing: border-box; width: 68px; transform: translateX(-50%); padding: 6px 10px; border: 1px solid rgba(255, 255, 255, .28); background: rgba(0, 0, 0, .52); color: rgba(255, 255, 255, .88); font-size: clamp(10px, 1vw, 12px); font-variant-numeric: tabular-nums; line-height: 1; text-align: center; white-space: nowrap; backdrop-filter: blur(2px); pointer-events: none; }
     .page-meta, .page-footer { display: flex; justify-content: space-between; gap: 16px; align-items: center; font-size: clamp(8px, .8vw, 12px); }
@@ -772,6 +779,8 @@
     @media(max-width: 700px) {
       .portal.catalogue-open .portal-content { padding: 4px calc(var(--rail-width) + 2px) 6px; }
       .book-stage { width: min(100%, 420px); max-height: calc(100% - 44px); aspect-ratio: 2480 / 3508; }
+      .student-dialog { box-sizing: border-box; width: min(940px, calc(100vw - 24px)); padding: 12px; }
+      .student-dialog .student-book-stage { width: min(100%, calc((90svh - 48px) * .707)); max-width: 100%; aspect-ratio: 2480 / 3508; }
       .page { padding: clamp(14px, 5vw, 24px); }
       .page-copy { max-width: 100%; }
       .page-columns { gap: 14px; }
@@ -788,13 +797,17 @@
     .collab-photo-label { display: grid; gap: 8px; justify-items: center; color: rgba(0, 0, 0, .62); font-size: 11px; text-align: center; }
     .collab-photo-label strong { color: var(--ink); font-size: clamp(28px, 4vw, 48px); font-weight: 400; }
     .collab-photo img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
-    .collab-card-info { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 12px; padding: 12px 0 0; }
+    .collab-card-info { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: 12px; padding: 12px 0 0; }
     .collab-card h4 { margin: 0; font-size: clamp(18px, 2vw, 26px); font-weight: 400; overflow-wrap: anywhere; }
     .collab-card-type { margin: 6px 0 0; font-size: 12px; }
     .collab-location { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 10px; min-height: 30px; padding: 8px 0; border-top: 1px solid rgba(0, 0, 0, .28); font-size: 12px; line-height: 1.3; }
     .collab-location-label { flex: 0 0 auto; font-size: 10px; }
     .collab-location a { text-decoration: underline; text-underline-offset: 3px; }
     .collab-location a:hover { color: var(--db-blue); }
+    .collab-contact { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 10px; font-size: 12px; line-height: 1.3; }
+    .collab-contact-links { display: flex; flex-wrap: wrap; gap: 6px 12px; }
+    .collab-contact a { text-decoration: underline; text-underline-offset: 3px; }
+    .collab-contact a:hover { color: var(--db-blue); }
     
     .portal.venue-open { display: flex; flex-direction: column; overflow: hidden; }
     .portal.venue-open .portal-header { position: relative; top: auto; flex: 0 0 auto; padding-block: 6px; }
@@ -1076,8 +1089,6 @@
       .venue-student { gap: 2px; padding: 1px 2px; font-size: 10px; }
       .venue-student-index { font-size: 9px; }
       .venue-booth { width: 24px; font-size: 8px; touch-action: manipulation; }
-      .venue-selected { grid-template-columns: 46px minmax(0, 1fr); gap: 7px; min-height: 62px; }
-      .venue-selected img, .venue-selected-placeholder { width: 46px; }
       .venue-selected h3 { font-size: 15px; }
       .venue-selected strong { font-size: 10px; }
       .venue-book-panel { min-height: 0; gap: 6px; padding-top: 6px; }
@@ -1197,7 +1208,7 @@
     const sectionFromHash = () => location.hash === '#partnership'
       ? names.indexOf('PARTNERSHIP')
       : sectionSlugs.findIndex(slug => '#' + slug === location.hash);
-    const korean = ['KVCD', '졸준위원 소개', '로고', '컬러', '타이포그래피', '포스터', '영상', '학생', '온라인 도록', '파트너십', '전시장', '게임'];
+    const korean = ['KVCD', '졸준위원 소개', '로고', '컬러', '타이포그래피', '포스터', '영상', '졸업생', '온라인 도록', '파트너십', '전시장', '게임'];
     const glyphTitles = ['KVCD', 'COMMITTEE', 'LOGO', 'COLOR', 'TYPEFACE', 'POSTER', 'VIDEO', 'GRADUATES', 'ARTWORKS', 'PARTNERSHIP', 'VENUE', 'WORDLE'];
     const glyphKoreanTitles = ['역대 졸업 전시 포스터', '졸업준비위원회', '로고', '색상', '서체', '포스터', '영상', '졸업생', '작품', '파트너십', '전시장', '워들'];
     const mapping = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
@@ -1366,7 +1377,7 @@
     chapterIndexList.innerHTML = names.map((name, index) =>
       `<button class="chapter-index-item" data-chapter="${index}">
          <span class="chapter-index-number title-en">${String(index + 1).padStart(2, '0')}</span>
-         <strong class="chapter-index-name title-en">${name}</strong>
+         <strong class="chapter-index-name title-en">${index === 6 ? 'VIDEO' : name}</strong>
          <span class="chapter-index-korean">${korean[index]}</span>
          <span class="chapter-index-arrow title-en" aria-hidden="true">↗</span>
        </button>`
@@ -1393,7 +1404,6 @@
 
     const legacyPanels = [
       () => `<h2 class="sr-only" id="portal-title">로고</h2>
-        <div class="subline"><span>하나의 글자, 하나의 층. 흩어진 조각이 다시 하나가 됩니다.</span><span class="title-en">01 / LOGO PLAYGROUND</span></div>
         <div class="logo-lab" aria-label="흩어졌다 쌓이는 Doltop 소문자 로고"><div class="lab-layout">${letters.map(c => `<span class="lab-letter" data-character="${c}">${c}</span>`).join('')}</div></div>
              <div class="controls">
                <button class="control" id="assemble">로고 쌓기</button>
@@ -1401,7 +1411,6 @@
          </div>`,
 
       () => `<h2 class="sr-only" id="portal-title">타이포그래피</h2>
-        <div class="subline"><span>쓰고, 늘리고, 겹치며 나만의 문장을 만들어보세요.</span><span class="title-en">02 / TYPE PLAYGROUND</span></div>
         <label class="sr-only" for="type-input">타이포그래피 문구</label>
          <input class="type-input title-en" id="type-input" lang="en" maxlength="35" placeholder="영어 문장을 입력하세요">
          <div class="type-canvas font-doltop" id="type-preview"></div>
@@ -1456,7 +1465,7 @@
 
       () => `<div class="venue-explorer">
                <div class="venue-map-column">
-                 <div class="venue-map-tools"><p>대구경북디자인진흥원 · 4F</p><p><span id="venue-result-count">${studentRecords.length}</span> STUDENTS</p></div>
+                 <div class="venue-map-tools"><p>대구경북디자인진흥원 · 4F</p><p id="venue-selected-name" aria-live="polite"></p></div>
                  <div class="venue-map-viewport">
                    <div class="venue-map-art" id="venue-map-art">
                      <img src="${assetPath('assets', '전시장.webp')}" alt="4층 전시장 평면도">
@@ -1480,9 +1489,9 @@
                  </div>
                  <div class="venue-selected" id="venue-selected" aria-live="polite"><span class="venue-selected-placeholder">부스 선택</span><div><p>도면 또는 학생 목록에서 선택</p><h3>학생 부스</h3></div></div>
                  <section class="venue-book-panel" aria-label="선택한 학생 도록">
-                   <div class="venue-book-heading"><h4>학생 도록</h4><span class="title-en" id="venue-page-count" aria-live="polite">01–02 / 04</span></div>
+                   <div class="venue-book-heading"><h4>학생 도록</h4><span class="title-en" id="venue-page-count" aria-live="polite">00–00 / 04</span></div>
                    <div class="venue-book-stage"><div class="book" id="venue-book" aria-label="선택한 학생의 도록 4페이지"></div></div>
-                   <p class="sr-only" id="venue-book-status" aria-live="polite">학생 도록 1쪽과 2쪽</p>
+                   <p class="sr-only" id="venue-book-status" aria-live="polite">학생을 선택하면 도록이 표시됩니다.</p>
                  </section>
                </div>
              </div>`
@@ -1490,7 +1499,25 @@
 
     const typeMobileViewport = matchMedia('(max-width: 700px)');
     let filmCleanup = null;
+    let colorRippleElement = null, colorRippleAnimation = null;
     let posterTimer = null, layerObserver = null, layerRevealTimer = null, layerRevealListener = null, bookTimer = null, filmTimer = null, catalogueFlip = null, studentFlip = null, venueFlip = null, archiveResizeObserver = null;
+
+    function clearColorRipple(resetBackground = false) {
+      if (colorRippleAnimation) {
+        colorRippleAnimation.onfinish = null;
+        colorRippleAnimation.oncancel = null;
+        colorRippleAnimation.cancel();
+      }
+      colorRippleElement?.remove();
+      colorRippleAnimation = null;
+      colorRippleElement = null;
+      if (resetBackground) {
+        portal.style.removeProperty('background-color');
+        portal.style.removeProperty('--color-rail-background');
+        portal.style.removeProperty('--color-rail-ink');
+        delete portal.dataset.colorBackground;
+      }
+    }
 
     $('#student-modal').addEventListener('close', () => {
       studentFlip?.destroy();
@@ -1550,6 +1577,7 @@
     }
 
     function openSection(i, update = true) {
+      clearColorRipple(true);
       filmCleanup?.(); filmCleanup = null;
       lastFocus = document.activeElement;
       active = i;
@@ -1588,6 +1616,7 @@
     }
 
     function finishCloseSection(update = true) {
+      clearColorRipple(true);
       filmCleanup?.(); filmCleanup = null;
       $('#student-modal').close();
       archiveResizeObserver?.disconnect();
@@ -2380,9 +2409,9 @@
           width: 2480,
           height: 3508,
           size: 'stretch',
-          minWidth: 220,
+          minWidth: 110,
           maxWidth: 1400,
-          minHeight: 311,
+          minHeight: 156,
           maxHeight: 2000,
           drawShadow: true,
           maxShadowOpacity: .24,
@@ -2586,7 +2615,7 @@
                <p class="film-notice" id="film-notice" role="status"></p>
              </section>`,
 
-      () => `<div class="student-heading"><h2>학생</h2><p>${studentRecords.length}명</p></div>
+      () => `<div class="student-heading"><h2>졸업생</h2><p>${studentRecords.length}명</p></div>
              <div class="student-grid">
                ${studentRecords.map((r,index) => 
                  `<button class="student-tile" style="--student-order:${index}" data-student="${index}" data-category="${escapeHtml(r.category)}">
@@ -2607,20 +2636,20 @@
         <div class="collab-page">
           ${[
             {title:'파트너십',english:'PARTNERSHIP',partners:[
-              {name:'윤디자인',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '윤디자인.webp'),location:'서울특별시 마포구 독막로9길 13'},
-              {name:'산돌구름',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '산돌구름.webp'),location:'서울특별시 성동구 아차산로17길 49'},
-              {name:'직지소프트',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '직지소프트.webp'),location:'서울특별시 중구 수표로 48-7'}
+              {name:'윤디자인',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '윤디자인.webp'),location:'서울특별시 마포구 독막로9길 13',phone:'02-2287-6800',instagram:'https://www.instagram.com/yoondesign_official/'},
+              {name:'산돌구름',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '산돌구름.webp'),location:'서울특별시 성동구 아차산로17길 49',instagram:'https://www.instagram.com/sandollcloud/'},
+              {name:'직지소프트',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '직지소프트.webp'),location:'서울특별시 중구 수표로 48-7',phone:'02-546-9412',instagram:'https://www.instagram.com/jikjifont.archive/'}
             ]},
             {title:'포토부스 협업',english:'PHOTO BOOTH',partners:[
               {name:'빈티스트',type:'포토부스 협업',image:assetPath('assets', 'COLLABORATION', '빈티스트.webp'),location:'대구광역시 중구 경상감영길 207'}
             ]},
             {title:'매장 협업',english:'LOCAL PARTNERS',partners:[
-              {name:'오렌지우드',type:'와인바',image:assetPath('assets', 'COLLABORATION', '오렌지우드.webp'),location:'대구 중구 동덕로 184-1'},
-              {name:'카페헤더',type:'카페',image:assetPath('assets', 'COLLABORATION', '카페헤더.webp'),location:'대구광역시 중구 남산4동 명덕로 24'},
-              {name:'나무가지',type:'카페',image:assetPath('assets', 'COLLABORATION', '나무가지.webp'),location:'대구 중구 국채보상로 738'},
-              {name:'칭진',type:'술집',image:assetPath('assets', 'COLLABORATION', '칭진.webp'),location:'대구광역시 중구 중앙대로81길 30'},
-              {name:'쿠라쿠라',type:'술집',image:assetPath('assets', 'COLLABORATION', '쿠라쿠라.webp'),location:'대구 달서구 서당로7길 35'},
-              {name:'서당로61',type:'술집',image:assetPath('assets', 'COLLABORATION', '서당로 61.webp'),location:'대구 달서구 서당로7길 61'}
+              {name:'오렌지우드',type:'와인바',image:assetPath('assets', 'COLLABORATION', '오렌지우드.webp'),location:'대구 중구 동인동1가 294-4',phone:'050-71321-9366',instagram:'https://www.instagram.com/orangewood_daegu/'},
+              {name:'카페헤더',type:'카페',image:assetPath('assets', 'COLLABORATION', '카페헤더.webp'),location:'대구 중구 남산동 2488-15',phone:'053-268-0818',instagram:'https://www.instagram.com/cafe_heather/'},
+              {name:'나무가지',type:'카페',image:assetPath('assets', 'COLLABORATION', '나무가지.webp'),location:'대구 중구 동인동4가 439-2',phone:'0507-1339-0174',instagram:'https://www.instagram.com/summer_dabang/'},
+              {name:'칭진',type:'술집',image:assetPath('assets', 'COLLABORATION', '칭진.webp'),location:'대구 중구 종로1가 52',phone:'0507-1394-9661'},
+              {name:'쿠라쿠라',type:'술집',image:assetPath('assets', 'COLLABORATION', '쿠라쿠라.webp'),location:'대구 달서구 신당동 1799',phone:'0507-1330-8167',instagram:'https://www.instagram.com/kurakura_daegu/'},
+              {name:'서당로61',type:'술집',image:assetPath('assets', 'COLLABORATION', '서당로 61.webp'),location:'대구 달서구 서당로7길 61',phone:'0507-1343-1027',instagram:'https://www.instagram.com/seodangro61_daegu/'}
             ]}
           ].map((group,groupIndex) => `<section class="collab-category" aria-labelledby="collab-category-${groupIndex}">
             <header class="collab-category-head"><h3 id="collab-category-${groupIndex}">${group.title}</h3><span class="title-en">0${groupIndex+1} / ${group.english}</span></header>
@@ -2632,13 +2661,19 @@
               </div>
               <div class="collab-card-info">
                 <div><h4>${escapeHtml(partner.name)}</h4><p class="collab-card-type">${escapeHtml(partner.type)}</p></div>
-                <span class="title-en" aria-hidden="true">↗</span>
                 <div class="collab-location">
                   <span class="collab-location-label title-en">LOCATION</span>
                   ${partner.location
-                    ? `<a href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(partner.location)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(partner.name)} 지도에서 보기">${escapeHtml(partner.location)} ↗</a>`
+                    ? `<a href="https://map.naver.com/p/search/${encodeURIComponent(partner.name)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(partner.name)} 네이버 지도에서 보기">${escapeHtml(partner.location)} ↗</a>`
                     : '<span>위치 정보 준비 중</span>'}
                 </div>
+                ${partner.phone || partner.instagram ? `<div class="collab-contact">
+                  <span class="collab-location-label title-en">CONTACT</span>
+                  <div class="collab-contact-links">
+                    ${partner.phone ? `<a href="tel:${escapeHtml(partner.phone)}" aria-label="${escapeHtml(partner.name)} 전화하기">${escapeHtml(partner.phone)}</a>` : ''}
+                    ${partner.instagram ? `<a href="${escapeHtml(partner.instagram)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(partner.name)} 인스타그램">${partner.instagram.includes('instagram.com/') ? 'INSTAGRAM ↗' : escapeHtml(partner.instagram)}</a>` : ''}
+                  </div>
+                </div>` : ''}
               </div>
             </li>`).join('')}</ul>
           </section>`).join('')}
@@ -2952,8 +2987,41 @@
       
       if (i === 3) {
         const options = $$('.color-option');
-        options.forEach(option => option.onclick = () => {
+        options.forEach(option => option.onclick = event => {
           options.forEach(item => item.setAttribute('aria-pressed', String(item === option)));
+          if (!matchMedia('(max-width: 700px)').matches) return;
+
+          clearColorRipple();
+          const previousColor = portal.dataset.colorBackground || '#FF5349';
+          const color = option.dataset.color;
+          const ink = getComputedStyle(option).getPropertyValue('--option-ink').trim();
+          const originX = event.clientX || innerWidth / 2;
+          const originY = event.clientY || innerHeight / 2;
+          const radius = Math.hypot(
+            Math.max(originX, innerWidth - originX),
+            Math.max(originY, innerHeight - originY)
+          );
+          colorRippleElement = document.createElement('div');
+          colorRippleElement.setAttribute('aria-hidden', 'true');
+          colorRippleElement.style.cssText = `position:fixed;inset:0;z-index:0;pointer-events:none;background:${color};clip-path:circle(0 at ${originX}px ${originY}px)`;
+          portal.append(colorRippleElement);
+          portal.style.backgroundColor = previousColor;
+          portal.style.setProperty('--color-rail-background', color);
+          portal.style.setProperty('--color-rail-ink', ink);
+          colorRippleAnimation = colorRippleElement.animate(
+            [
+              { clipPath: `circle(0 at ${originX}px ${originY}px)` },
+              { clipPath: `circle(${radius}px at ${originX}px ${originY}px)` }
+            ],
+            { duration: 850, easing: 'cubic-bezier(.16, 1, .3, 1)' }
+          );
+          colorRippleAnimation.onfinish = () => {
+            portal.style.backgroundColor = color;
+            portal.dataset.colorBackground = color;
+            colorRippleElement?.remove();
+            colorRippleAnimation = null;
+            colorRippleElement = null;
+          };
         });
       }
       
@@ -3072,7 +3140,7 @@
             drawShadow: true,
             maxShadowOpacity: .24,
             showCover: false,
-            usePortrait: false,
+            usePortrait: true,
             autoSize: false,
             mobileScrollSupport: false,
             flippingTime: 900
@@ -3107,16 +3175,34 @@
         const venueButtons = $$('[data-venue-student]');
         const searchInput = $('#venue-search');
         const selectedPanel = $('#venue-selected');
+        const selectedName = $('#venue-selected-name');
         const venueBookStage = $('.venue-book-stage');
         let venueBook = $('#venue-book');
         const venuePageCount = $('#venue-page-count');
         const venueBookStatus = $('#venue-book-status');
         let selectedIndex = -1;
 
+        const clearVenueSelection = () => {
+          selectedIndex = -1;
+          selectedName.textContent = '';
+          venueButtons.forEach(button => {
+            button.classList.remove('selected');
+            if (button.classList.contains('venue-student')) button.setAttribute('aria-pressed', 'false');
+          });
+          selectedPanel.innerHTML = '<span class="venue-selected-placeholder">부스 선택</span><div><p>도면 또는 학생 목록에서 선택</p><h3>학생 부스</h3></div>';
+          venueFlip?.destroy();
+          venueFlip = null;
+          venueBookStage.innerHTML = '<div class="book" id="venue-book" aria-label="선택한 학생의 도록 4페이지"></div>';
+          venueBook = $('#venue-book');
+          venuePageCount.textContent = '00–00 / 04';
+          venueBookStatus.textContent = '학생을 선택하면 도록이 표시됩니다.';
+        };
+
         const selectVenueStudent = index => {
           const student = studentRecords[index];
           if (!student) return;
           selectedIndex = index;
+          selectedName.textContent = student.name;
           venueButtons.forEach(button => {
             const selected = Number(button.dataset.venueStudent) === index;
             button.classList.toggle('selected', selected);
@@ -3175,7 +3261,6 @@
         venueButtons.forEach(button => button.addEventListener('click', () => selectVenueStudent(Number(button.dataset.venueStudent))));
         searchInput.addEventListener('input', () => {
           const query = searchInput.value.trim().toLocaleLowerCase('ko');
-          let firstMatch = -1;
           let matchCount = 0;
           venueButtons.forEach(button => {
             const index = Number(button.dataset.venueStudent);
@@ -3183,31 +3268,15 @@
             if (button.classList.contains('venue-student')) button.hidden = !matches;
             if (button.classList.contains('venue-booth')) button.classList.toggle('filtered-out', !matches);
             if (matches && button.classList.contains('venue-student')) {
-              firstMatch = firstMatch < 0 ? index : firstMatch;
               matchCount++;
             }
           });
           $('#venue-match-count').textContent = matchCount;
-          $('#venue-result-count').textContent = matchCount;
           $('#venue-empty').hidden = matchCount > 0;
-          if (matchCount && (selectedIndex < 0 || !studentRecords[selectedIndex].name.toLocaleLowerCase('ko').includes(query))) {
-            selectVenueStudent(firstMatch);
-          } else if (!matchCount) {
-            selectedIndex = -1;
-            venueButtons.forEach(button => {
-              button.classList.remove('selected');
-              if (button.classList.contains('venue-student')) button.setAttribute('aria-pressed', 'false');
-            });
-            selectedPanel.innerHTML = '<span class="venue-selected-placeholder">검색 결과 없음</span><div><p>다른 이름으로 검색</p><h3>학생을 찾을 수 없습니다</h3></div>';
-            venueFlip?.destroy();
-            venueFlip = null;
-            venueBookStage.innerHTML = '<div class="book" id="venue-book" aria-label="선택한 학생의 도록 4페이지"></div>';
-            venueBook = $('#venue-book');
-            venuePageCount.textContent = '00–00 / 04';
-            venueBookStatus.textContent = '검색 결과가 없습니다.';
+          if (selectedIndex >= 0 && (!matchCount || !studentRecords[selectedIndex].name.toLocaleLowerCase('ko').includes(query))) {
+            clearVenueSelection();
           }
         });
-        if (studentRecords.length) selectVenueStudent(0);
       }
 
       if (i === 11) window.initAccumulationWordle();
