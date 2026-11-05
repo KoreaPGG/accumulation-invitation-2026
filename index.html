@@ -1119,6 +1119,7 @@
 
     @media(prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition: none !important; animation: none !important; }
+      .glyph-letter { transition: transform .52s cubic-bezier(.22, 1, .36, 1), color .24s !important; }
       .glyph-caption { transform: none !important; transition: opacity .12s ease !important; }
       .portal { opacity: 0; transform: none !important; transition: opacity .16s ease, visibility .16s !important; }
       .portal.open { opacity: 1; transition: opacity .16s ease, visibility 0s !important; }
