@@ -1119,9 +1119,7 @@
 
     @media(prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition: none !important; animation: none !important; }
-      .glyph { transform: none !important; }
       .glyph-caption { transform: none !important; transition: opacity .12s ease !important; }
-      .glyph.is-active .glyph-letter, .glyph:focus-visible .glyph-letter, .glyph.is-lifted .glyph-letter { transform: none !important; }
       .portal { opacity: 0; transform: none !important; transition: opacity .16s ease, visibility .16s !important; }
       .portal.open { opacity: 1; transition: opacity .16s ease, visibility 0s !important; }
       .portal-content > .layer, .poster-slice { opacity: 1; transform: none; }
@@ -1232,25 +1230,43 @@
         });
       });
     }
+    let touchGlyphDeactivate = null;
     glyphs.forEach((glyph, index) => {
       const upperGlyph = index >= 6 ? glyphs[index - 6] : null;
       const activate = () => {
         glyph.classList.add('is-active');
         upperGlyph?.classList.add('is-lifted');
       };
-      const deactivate = () => {
-        if (glyph.matches(':hover, :focus-visible')) return;
+      const deactivate = (force = false) => {
+        if (!force && glyph.matches(':hover, :focus-visible')) return;
         glyph.classList.remove('is-active');
         upperGlyph?.classList.remove('is-lifted');
+        if (touchGlyphDeactivate === clearTouchActivation) touchGlyphDeactivate = null;
       };
+      const clearTouchActivation = () => deactivate(true);
 
-      glyph.addEventListener('pointerenter', activate);
-      glyph.addEventListener('pointerleave', deactivate);
+      glyph.addEventListener('pointerenter', event => {
+        activate();
+        if (event.pointerType === 'touch') touchGlyphDeactivate = clearTouchActivation;
+      });
+      glyph.addEventListener('pointerdown', event => {
+        if (event.pointerType !== 'touch') return;
+        activate();
+        touchGlyphDeactivate = clearTouchActivation;
+      });
+      glyph.addEventListener('pointerleave', event => deactivate(event.pointerType === 'touch'));
       glyph.addEventListener('focus', () => {
         if (glyph.matches(':focus-visible')) activate();
       });
       glyph.addEventListener('blur', deactivate);
     });
+    const clearTouchGlyph = event => {
+      if (event.pointerType !== 'touch') return;
+      touchGlyphDeactivate?.();
+      touchGlyphDeactivate = null;
+    };
+    document.addEventListener('pointerup', clearTouchGlyph);
+    document.addEventListener('pointercancel', clearTouchGlyph);
     const dropOrder = [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5];
     let raf = false;
 
