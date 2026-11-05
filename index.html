@@ -232,6 +232,11 @@
     .glyph-caption-en { font-size: clamp(8px, 1.4vw, 22px); line-height: 1.1; letter-spacing: 0; }
     .glyph-caption-ko { font-size: clamp(9px, 1vw, 16px); line-height: 1.35; letter-spacing: 0; word-break: normal; }
     @media (max-width: 640px) { .glyph-caption { gap: 3px; } }
+    @media (max-width: 700px) {
+      .glyph-caption-en, .glyph-caption-ko { white-space: nowrap; }
+      .glyph-caption-en { font-size: clamp(6px, 1.6vw, 10px); }
+      .glyph-caption-ko { font-size: clamp(6px, 1.65vw, 10px); }
+    }
 
     .glyph.is-active .glyph-letter,
     .glyph:focus-visible .glyph-letter {
@@ -999,6 +1004,7 @@
        반응형 (Mobile)
        ========================================================= */
     @media(max-width: 700px) {
+      .journey { height: 360vh; }
       .portal-header { padding-inline: calc(var(--rail-width) + 10px); }
       .portal.quiz-open .portal-content { overflow-y: auto; }
       .portal.quiz-open .portal-content { padding: 10px calc(var(--rail-width) + 10px) 28px; }
@@ -1024,15 +1030,11 @@
       .committee-people { gap: var(--committee-space-sm); }
       .committee-people-department { gap: var(--committee-space-md); }
       .committee-single-row { grid-template-columns: minmax(0, 1fr); gap: 8px; }
-      .committee-single-row .committee-department-heading { flex-direction: column; align-items: center; gap: 2px; }
-      .committee-single-row .committee-department-heading h2 { font-size: 16px; }
-      .committee-single-row .committee-department-heading span { font-size: 8px; }
-      .committee-single-row .committee-people-department { gap: 8px; }
-      .committee-single-row .committee-photo, .committee-single-row .committee-photo-placeholder { width: min(100%, 140px); }
+      .committee-single-row .committee-people-department { grid-template-columns: repeat(3, minmax(0, 1fr)); justify-items: center; }
       .committee-photo, .committee-photo-placeholder { width: min(100%, 120px); }
       .committee-person { display: flex; flex-direction: column; align-items: center; text-align: center; }
       .committee-people { grid-template-columns: repeat(3, minmax(0, 1fr)); justify-items: center; }
-      .committee-people-executives { grid-template-columns: repeat(auto-fit, minmax(120px, 160px)); justify-items: center; }
+      .committee-people-executives { grid-template-columns: repeat(2, minmax(0, 1fr)); justify-items: center; }
       .committee-person-chair { padding: 0; }
       .committee-person-chair h2 { font-size: 13px; }
       .committee-person h2 { margin: var(--committee-space-sm) 0 2px; font-size: 11px; }
@@ -1232,6 +1234,8 @@
       });
     }
     let touchGlyphDeactivate = null;
+    let selectedTouchGlyph = null;
+    let touchGlyphTap = null;
     glyphs.forEach((glyph, index) => {
       const upperGlyph = index >= 6 ? glyphs[index - 6] : null;
       const activate = () => {
@@ -1253,6 +1257,7 @@
       glyph.addEventListener('pointerdown', event => {
         if (event.pointerType !== 'touch') return;
         activate();
+        touchGlyphTap = glyph;
         touchGlyphDeactivate = clearTouchActivation;
       });
       glyph.addEventListener('pointerleave', event => deactivate(event.pointerType === 'touch'));
@@ -1267,7 +1272,10 @@
       touchGlyphDeactivate = null;
     };
     document.addEventListener('pointerup', clearTouchGlyph);
-    document.addEventListener('pointercancel', clearTouchGlyph);
+    document.addEventListener('pointercancel', event => {
+      clearTouchGlyph(event);
+      if (event.pointerType === 'touch') touchGlyphTap = null;
+    });
     const dropOrder = [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5];
     let raf = false;
 
@@ -1293,11 +1301,15 @@
     function accumulate() {
       const max = $('.journey').offsetHeight - innerHeight;
       const p = Math.max(0, Math.min(1, scrollY / Math.max(1, max)));
+      const mobile = matchMedia('(max-width: 700px)').matches;
+      const start = mobile ? 0.025 : 0.08;
+      const stagger = mobile ? 0.055 : 0.066;
+      const duration = mobile ? 0.13 : 0.16;
       $('.entry').style.opacity = String(Math.max(0, 1 - p * 12));
 
       glyphs.forEach((glyph, index) => {
         const rank = dropOrder.indexOf(index);
-        const progress = Math.max(0, Math.min(1, (p - 0.08 - rank * 0.066) / 0.16));
+        const progress = Math.max(0, Math.min(1, (p - start - rank * stagger) / duration));
         glyph.style.opacity = String(progress);
 
         if (progress >= 1) {
@@ -1743,7 +1755,28 @@
       });
     }
 
-    $$('[data-section]').forEach(b => b.onclick = () => navigateSection(+b.dataset.section, b));
+    $$('[data-section]').forEach(b => b.onclick = event => {
+      if (b.classList.contains('glyph') && touchGlyphTap === b) {
+        touchGlyphTap = null;
+        if (selectedTouchGlyph === b) {
+          selectedTouchGlyph = null;
+          navigateSection(+b.dataset.section, b);
+          return;
+        }
+
+        if (selectedTouchGlyph) {
+          const previousIndex = glyphs.indexOf(selectedTouchGlyph);
+          selectedTouchGlyph.classList.remove('is-active');
+          glyphs[previousIndex - 6]?.classList.remove('is-lifted');
+        }
+        selectedTouchGlyph = b;
+        b.classList.add('is-active');
+        glyphs[glyphs.indexOf(b) - 6]?.classList.add('is-lifted');
+        return;
+      }
+
+      navigateSection(+b.dataset.section, b);
+    });
     $('#close-portal').onclick = () => closeSection();
     $('#close-zoom').onclick = closeZoom;
 
