@@ -1236,6 +1236,22 @@
     let touchGlyphDeactivate = null;
     let selectedTouchGlyph = null;
     let touchGlyphTap = null;
+    let touchGlyphDismissTimer = null;
+    const resetTouchGlyphDismissTimer = () => {
+      clearTimeout(touchGlyphDismissTimer);
+      if (!selectedTouchGlyph) return;
+      touchGlyphDismissTimer = setTimeout(() => {
+        const selectedIndex = glyphs.indexOf(selectedTouchGlyph);
+        selectedTouchGlyph.classList.remove('is-active');
+        glyphs[selectedIndex - 6]?.classList.remove('is-lifted');
+        selectedTouchGlyph = null;
+        touchGlyphDismissTimer = null;
+      }, 5000);
+    };
+    ['pointerdown', 'pointermove', 'keydown', 'wheel'].forEach(type =>
+      document.addEventListener(type, resetTouchGlyphDismissTimer, { passive: true })
+    );
+    addEventListener('scroll', resetTouchGlyphDismissTimer, { passive: true });
     glyphs.forEach((glyph, index) => {
       const upperGlyph = index >= 6 ? glyphs[index - 6] : null;
       const activate = () => {
@@ -1759,12 +1775,15 @@
       if (b.classList.contains('glyph') && touchGlyphTap === b) {
         touchGlyphTap = null;
         if (selectedTouchGlyph === b) {
+          clearTimeout(touchGlyphDismissTimer);
+          touchGlyphDismissTimer = null;
           selectedTouchGlyph = null;
           navigateSection(+b.dataset.section, b);
           return;
         }
 
         if (selectedTouchGlyph) {
+          clearTimeout(touchGlyphDismissTimer);
           const previousIndex = glyphs.indexOf(selectedTouchGlyph);
           selectedTouchGlyph.classList.remove('is-active');
           glyphs[previousIndex - 6]?.classList.remove('is-lifted');
@@ -1772,6 +1791,7 @@
         selectedTouchGlyph = b;
         b.classList.add('is-active');
         glyphs[glyphs.indexOf(b) - 6]?.classList.add('is-lifted');
+        resetTouchGlyphDismissTimer();
         return;
       }
 
