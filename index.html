@@ -4305,39 +4305,6 @@
     let active = -1, lastFocus, previousOverflow;
     let savedScroll = 0;
     let typefaceRefreshTimer = null;
-    let pageTurnSound = null;
-
-    function getPageTurnSound() {
-      if (!pageTurnSound) {
-        pageTurnSound = new Audio('assets/sound%20effect/book.mp3');
-        pageTurnSound.preload = 'auto';
-        pageTurnSound.volume = 0.45;
-      }
-      return pageTurnSound;
-    }
-
-    function playPageTurnSound() {
-      const sound = getPageTurnSound();
-      sound.currentTime = 0;
-      sound.play().catch(error => {
-        console.warn('도록 페이지 넘김 효과음을 재생하지 못했습니다.', error);
-      });
-    }
-
-    function startPageTurnSound() {
-      const sound = getPageTurnSound();
-      if (!sound.paused && !sound.ended) return;
-      sound.currentTime = 0;
-      sound.play().catch(error => {
-        console.warn('도록 페이지 넘김 효과음을 재생하지 못했습니다.', error);
-      });
-    }
-
-    function stopPageTurnSound() {
-      if (!pageTurnSound) return;
-      pageTurnSound.pause();
-      pageTurnSound.currentTime = 0;
-    }
 
     const chapterIndex = $('#chapter-index');
     const chapterIndexToggle = $('#chapter-index-toggle');
@@ -5403,7 +5370,6 @@
         catalogueFlip.on('init', event => updatePageControls(event.data.page));
         catalogueFlip.on('flip', event => {
           updatePageControls(event.data);
-          playPageTurnSound();
         });
         catalogueFlip.loadFromHTML(bookElement.querySelectorAll('.page'));
         updatePageControls(0);
@@ -6459,7 +6425,6 @@
             const mobileImage = $('#student-mobile-image');
             const setMobilePage = pageIndex => {
               const nextPage = Math.max(0, Math.min(pageCount - 1, pageIndex));
-              if (nextPage !== currentPage) playPageTurnSound();
               currentPage = nextPage;
               const imagePath = r.pages?.[currentPage];
               mobileImage.alt = `${r.name} 작품 ${currentPage + 1}쪽`;
@@ -6521,10 +6486,6 @@
             updateStudentControls(event.data);
             loadBookSpread(studentPageImages, event.data);
           });
-          studentFlip.on('changeState', event => {
-            if (event.data === 'flipping' || event.data === 'user_fold') startPageTurnSound();
-            else stopPageTurnSound();
-          });
           studentFlip.loadFromHTML(bookElement.querySelectorAll('.page'));
           updateStudentControls(0);
           loadBookSpread(studentPageImages, 0);
@@ -6532,32 +6493,16 @@
             if (!studentFlip || studentFlip.getState() !== 'read') return;
             const currentPage = studentFlip.getCurrentPageIndex();
             if ((direction < 0 && currentPage <= 0) || (direction > 0 && currentPage >= pageCount - 1)) return;
-            startPageTurnSound();
             if (direction < 0) studentFlip.flipPrev('bottom');
             else studentFlip.flipNext('bottom');
           };
           previousStudentPage.addEventListener('click', () => turnStudentPage(-1));
           nextStudentPage.addEventListener('click', () => turnStudentPage(1));
           if (!studentBookIsMobile.matches) {
-            bookElement.addEventListener('pointerdown', event => {
-              if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0) || studentFlip.getState() !== 'read') return;
-              const bounds = bookElement.getBoundingClientRect();
-              const direction = event.clientX < bounds.left + bounds.width / 2 ? -1 : 1;
-              const currentPage = studentFlip.getCurrentPageIndex();
-              if ((direction < 0 && currentPage > 0) || (direction > 0 && currentPage < pageCount - 1)) {
-                startPageTurnSound();
-              }
-            });
-            bookElement.addEventListener('pointerup', () => {
-              setTimeout(() => {
-                if (studentFlip?.getState() === 'read') stopPageTurnSound();
-              }, 0);
-            });
             bookElement.addEventListener('click', event => {
               const bounds = bookElement.getBoundingClientRect();
               turnStudentPage(event.clientX < bounds.left + bounds.width / 2 ? -1 : 1);
             });
-            bookElement.addEventListener('pointercancel', stopPageTurnSound);
           }
           bookElement.addEventListener('keydown', event => {
             if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
@@ -6648,7 +6593,6 @@
           venueFlip.on('flip', event => {
             updateVenueBookControls(event.data);
             loadBookSpread(venuePageImages, event.data);
-            playPageTurnSound();
           });
           venueFlip.loadFromHTML(venueBook.querySelectorAll('.page'));
           updateVenueBookControls(0);
