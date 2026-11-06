@@ -1,14 +1,45 @@
 create table if not exists public.typeface_entries (
   id uuid primary key default gen_random_uuid(),
   sentence text not null,
+  nickname text not null default '익명',
   owner_token_hash text,
   created_at timestamptz not null default now(),
   constraint typeface_entries_sentence_length
-    check (char_length(btrim(sentence)) between 1 and 35)
+    check (char_length(btrim(sentence)) between 1 and 35),
+  constraint typeface_entries_nickname_length
+    check (char_length(btrim(nickname)) between 1 and 20)
 );
 
 alter table public.typeface_entries
   add column if not exists owner_token_hash text;
+
+alter table public.typeface_entries
+  add column if not exists nickname text not null default '익명';
+
+alter table public.typeface_entries
+  alter column nickname set default '익명';
+
+update public.typeface_entries
+set nickname = '익명'
+where nickname is null or btrim(nickname) = '';
+
+alter table public.typeface_entries
+  alter column nickname set not null;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_catalog.pg_constraint
+    where conrelid = 'public.typeface_entries'::regclass
+      and conname = 'typeface_entries_nickname_length'
+  ) then
+    alter table public.typeface_entries
+      add constraint typeface_entries_nickname_length
+      check (char_length(btrim(nickname)) between 1 and 20);
+  end if;
+end;
+$$;
 
 create table if not exists public.typeface_blocked_terms (
   term text primary key
@@ -2888,7 +2919,10 @@ create policy "Anyone can add typeface entries"
   on public.typeface_entries
   for insert
   to anon, authenticated
-  with check (char_length(btrim(sentence)) between 1 and 35);
+  with check (
+    char_length(btrim(sentence)) between 1 and 35
+    and char_length(btrim(nickname)) between 1 and 20
+  );
 
 create or replace function public.typeface_sentence_has_blocked_terms(input_sentence text)
 returns boolean
@@ -2989,7 +3023,9 @@ security definer
 set search_path = ''
 as $$
 begin
-  if public.typeface_sentence_has_blocked_terms(new.sentence) then
+  if public.typeface_sentence_has_blocked_terms(
+    coalesce(new.nickname, '') || ' ' || new.sentence
+  ) then
     raise exception using
       errcode = 'P0001',
       message = 'TYPEFACE_BLOCKED_TERM';
@@ -3035,7 +3071,7 @@ delete from public.typeface_entries
 where public.typeface_sentence_has_blocked_terms(sentence);
 
 revoke select, delete on public.typeface_entries from anon, authenticated;
-grant select (id, sentence, created_at) on public.typeface_entries to anon, authenticated;
+grant select (id, sentence, nickname, created_at) on public.typeface_entries to anon, authenticated;
 grant insert on public.typeface_entries to anon, authenticated;
 
 notify pgrst, 'reload schema';

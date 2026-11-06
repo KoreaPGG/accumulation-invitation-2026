@@ -512,8 +512,18 @@
     .type-layer-row .type-layer { flex: 1 1 auto; width: auto; min-width: 0; }
     .type-layer:hover, .type-layer[aria-pressed="true"] { background: var(--db-blue); color: var(--white); }
     .type-layer-readable { font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; font-size: 14px; line-height: 1.3; }
+    .type-layer-nickname { display: block; margin-bottom: 8px; font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; font-size: 14px; line-height: 1.2; }
     .type-layer-delete { align-self: center; flex: 0 0 auto; margin: 8px; padding: 9px 12px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); font: inherit; font-size: 12px; cursor: pointer; }
     .type-layer-delete:hover, .type-layer-delete:focus-visible { background: var(--ink); color: var(--white); }
+    .type-nickname-dialog { width: min(420px, calc(100vw - 32px)); padding: 24px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); }
+    .type-nickname-dialog::backdrop { background: rgba(0,0,0,.65); }
+    .type-nickname-dialog h3 { margin: 0 0 16px; font-size: 22px; font-weight: 400; }
+    .type-nickname-dialog label { display: block; margin-bottom: 8px; font-size: 14px; }
+    .type-nickname-dialog input { box-sizing: border-box; width: 100%; padding: 12px; border: 1px solid var(--ink); background: var(--white); color: var(--ink); font: inherit; font-size: 18px; }
+    .type-nickname-error { min-height: 1.4em; margin: 8px 0; color: #a11; font-size: 13px; }
+    .type-nickname-actions { display: flex; justify-content: flex-end; gap: 8px; }
+    .type-nickname-actions button { padding: 10px 14px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); font: inherit; cursor: pointer; }
+    .type-nickname-actions button[type="submit"] { background: var(--ink); color: var(--white); }
 
     .portal.type-open { display: flex; flex-direction: column; overflow: hidden; }
     .portal.type-open .portal-header { position: relative; top: auto; flex: 0 0 auto; }
@@ -5506,7 +5516,19 @@
                <button class="control" id="type-clear">입력 지우기</button>
              </div>
              <p class="type-status" id="type-status" role="status" aria-live="polite">공용 기록을 불러오는 중…</p>
-             <div class="type-layers" aria-live="polite"></div>`,
+               <div class="type-layers" aria-live="polite"></div>
+               <dialog class="type-nickname-dialog" id="type-nickname-dialog" aria-labelledby="type-nickname-title">
+                 <form id="type-nickname-form">
+                   <h3 id="type-nickname-title">닉네임 입력</h3>
+                   <label for="type-nickname">닉네임 (한글 가능, 1~20자)</label>
+                   <input id="type-nickname" lang="ko" maxlength="20" autocomplete="nickname" required>
+                   <p class="type-nickname-error" id="type-nickname-error" role="alert"></p>
+                   <div class="type-nickname-actions">
+                     <button type="button" id="type-nickname-cancel">취소</button>
+                     <button type="submit">확인</button>
+                   </div>
+                 </form>
+               </dialog>`,
              
       () => legacyPanels[2](),
              
@@ -5985,8 +6007,13 @@
         const typeInput = $('#type-input');
         const status = $('#type-status');
         const stackButton = $('#type-stack');
+        const nicknameDialog = $('#type-nickname-dialog');
+        const nicknameForm = $('#type-nickname-form');
+        const nicknameField = $('#type-nickname');
+        const nicknameError = $('#type-nickname-error');
         const endpoint = `${typefaceSupabaseUrl}/rest/v1/typeface_entries`;
         let sentences = [];
+        let nicknameSchemaAvailable = true;
         let ownedTokens = {};
         let ownerStorageReady = false;
         try {
@@ -6022,22 +6049,64 @@
           localStorage.setItem(typefaceOwnerStorageKey, JSON.stringify(nextTokens));
           ownedTokens = nextTokens;
         };
+        let resolveNicknameRequest = null;
+        const finishNicknameRequest = nickname => {
+          const resolve = resolveNicknameRequest;
+          resolveNicknameRequest = null;
+          nicknameDialog.close();
+          resolve?.(nickname);
+        };
+        const requestNickname = () => new Promise(resolve => {
+          if (typeof nicknameDialog.showModal !== 'function') {
+            status.textContent = '이 브라우저에서는 닉네임 입력창을 열 수 없습니다. 브라우저를 업데이트해 주세요.';
+            resolve(null);
+            return;
+          }
+          resolveNicknameRequest = resolve;
+          nicknameField.value = '';
+          nicknameError.textContent = '';
+          nicknameDialog.showModal();
+          nicknameField.focus();
+        });
+        nicknameForm.addEventListener('submit', event => {
+          event.preventDefault();
+          const nickname = nicknameField.value.trim();
+          if (!nickname || Array.from(nickname).length > 20) {
+            nicknameError.textContent = '닉네임을 1~20자로 입력해 주세요.';
+            nicknameField.focus();
+            return;
+          }
+          if (containsBlockedTypefaceTerm(nickname)) {
+            nicknameError.textContent = '비속어나 모욕적인 표현은 닉네임으로 사용할 수 없습니다.';
+            nicknameField.focus();
+            return;
+          }
+          finishNicknameRequest(nickname);
+        });
+        $('#type-nickname-cancel').addEventListener('click', () => finishNicknameRequest(null));
+        nicknameDialog.addEventListener('cancel', event => {
+          event.preventDefault();
+          finishNicknameRequest(null);
+        });
 
         const renderSentences = () => {
           host.replaceChildren();
-          sentences.forEach(({ id, sentence }) => {
+          sentences.forEach(({ id, sentence, nickname }) => {
             const row = document.createElement('div');
             row.className = 'type-layer-row';
             const selectButton = document.createElement('button');
             selectButton.type = 'button';
             selectButton.className = 'type-layer';
+            const nicknameText = document.createElement('span');
+            nicknameText.className = 'type-layer-nickname';
+            nicknameText.textContent = nickname || '익명';
             const doltopText = document.createElement('span');
             doltopText.className = 'font-doltop';
             doltopText.textContent = sentence;
             const readableText = document.createElement('span');
             readableText.className = 'type-layer-readable';
             readableText.textContent = ` (${sentence})`;
-            selectButton.append(doltopText, readableText);
+            selectButton.append(nicknameText, doltopText, readableText);
             selectButton.setAttribute('aria-pressed', 'false');
             selectButton.addEventListener('click', () => {
               typeInput.value = sentence;
@@ -6117,16 +6186,41 @@
           throw error;
         };
 
+        const isNicknameColumnMissing = message =>
+          /nickname.*(?:schema cache|does not exist|could not find)|column .*nickname.*does not exist/i.test(message);
+        const isOwnerTokenColumnMissing = message =>
+          /owner_token_hash.*(?:schema cache|does not exist|could not find)|column .*owner_token_hash.*does not exist/i.test(message);
+        const saveEntry = body => fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            apikey: typefaceSupabaseKey,
+            'Content-Type': 'application/json',
+            Prefer: 'return=minimal'
+          },
+          body: JSON.stringify(body)
+        });
+
         const loadSentences = async (quiet = false) => {
-          const response = await fetch(`${endpoint}?select=id,sentence,created_at&order=created_at.desc&limit=100`, {
+          let response = await fetch(`${endpoint}?select=id,sentence,nickname,created_at&order=created_at.desc&limit=100`, {
             headers: { apikey: typefaceSupabaseKey }
           });
+          if (!response.ok && isNicknameColumnMissing(await response.clone().text())) {
+            nicknameSchemaAvailable = false;
+            response = await fetch(`${endpoint}?select=id,sentence,created_at&order=created_at.desc&limit=100`, {
+              headers: { apikey: typefaceSupabaseKey }
+            });
+          } else {
+            nicknameSchemaAvailable = true;
+          }
           await requireSuccess(response, '공용 기록 조회 실패');
           const records = await response.json();
           if (!Array.isArray(records)) throw new Error('공용 기록 응답 형식이 올바르지 않습니다.');
-          sentences = records.filter(record =>
+          sentences = records.map(record => nicknameSchemaAvailable
+            ? record
+            : { ...record, nickname: '익명' }
+          ).filter(record =>
             record && typeof record.sentence === 'string' &&
-            !containsBlockedTypefaceTerm(record.sentence)
+            !containsBlockedTypefaceTerm(`${record.nickname || ''} ${record.sentence}`)
           );
           renderSentences();
           if (!quiet) status.textContent = `함께 쌓인 문장 ${sentences.length}개`;
@@ -6163,54 +6257,73 @@
             typeInput.focus();
             return;
           }
-          if (!window.confirm('문장을 등록하시겠습니까?\n등록하면 삭제가 불가능합니다.')) return;
+          const nickname = await requestNickname();
+          if (!nickname) return;
+          if (!window.confirm('문장을 등록하시겠습니까?')) return;
           stackButton.disabled = true;
           status.textContent = '문장을 공용 방명록에 저장하는 중…';
+          let pendingEntryId;
           try {
             const id = createEntryId();
+            pendingEntryId = id;
             const ownerToken = createRandomHex(32);
             const ownerTokenHash = await hashOwnerToken(ownerToken);
             saveOwnedTokens({ ...ownedTokens, [id]: ownerTokenHash });
-            let response = await fetch(endpoint, {
-              method: 'POST',
-              headers: {
-                apikey: typefaceSupabaseKey,
-                'Content-Type': 'application/json',
-                Prefer: 'return=minimal'
-              },
-              body: JSON.stringify({ id, sentence, owner_token_hash: ownerTokenHash })
-            });
+            let response = await saveEntry({ id, sentence, nickname, owner_token_hash: ownerTokenHash });
             let legacySave = false;
+            let nicknameNotSaved = false;
             if (!response.ok) {
               const errorBody = await response.clone().text();
-              if (!/owner_token_hash.*schema cache|could not find.*owner_token_hash/i.test(errorBody)) {
+              if (isNicknameColumnMissing(errorBody)) {
+                response = await saveEntry({ id, sentence, owner_token_hash: ownerTokenHash });
+                nicknameNotSaved = true;
+                if (!response.ok && isOwnerTokenColumnMissing(await response.clone().text())) {
+                  response = await saveEntry({ sentence });
+                  legacySave = true;
+                }
+              } else if (isOwnerTokenColumnMissing(errorBody)) {
+                response = await saveEntry({ sentence, nickname });
+                if (!response.ok && isNicknameColumnMissing(await response.clone().text())) {
+                  response = await saveEntry({ sentence });
+                  nicknameNotSaved = true;
+                }
+                legacySave = true;
+              } else {
                 await requireSuccess(response, '공용 기록 저장 실패');
               }
+            }
+            await requireSuccess(response, '공용 기록 저장 실패');
+            if (legacySave) {
               const nextTokens = { ...ownedTokens };
               delete nextTokens[id];
               saveOwnedTokens(nextTokens);
-              response = await fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                  apikey: typefaceSupabaseKey,
-                  'Content-Type': 'application/json',
-                  Prefer: 'return=minimal'
-                },
-                body: JSON.stringify({ sentence })
-              });
-              await requireSuccess(response, '공용 기록 저장 실패');
-              legacySave = true;
             }
+            pendingEntryId = undefined;
             await loadSentences();
             if (legacySave) {
-              status.textContent = '문장을 등록했습니다.';
+              status.textContent = nicknameNotSaved
+                ? '문장을 등록했습니다. 닉네임과 개별 삭제 기능은 최신 Supabase 설정 적용 후 사용할 수 있습니다.'
+                : '문장을 등록했습니다. 개별 삭제 기능은 최신 Supabase 설정 적용 후 사용할 수 있습니다.';
+            } else if (nicknameNotSaved) {
+              status.textContent = '문장을 등록했습니다. 닉네임 저장은 최신 Supabase SQL 적용 후 사용할 수 있습니다.';
             }
           } catch (error) {
             console.error('서체 공용 기록 저장 실패:', error);
-            if (/owner_token_hash.*schema cache|could not find.*owner_token_hash/i.test(error.message)) {
+            if (pendingEntryId) {
+              const nextTokens = { ...ownedTokens };
+              delete nextTokens[pendingEntryId];
+              try {
+                saveOwnedTokens(nextTokens);
+              } catch (storageError) {
+                console.error('서체 문장 소유 정보 정리 실패:', storageError);
+              }
+            }
+            if (isOwnerTokenColumnMissing(error.message)) {
               status.textContent = 'Supabase 설정 SQL이 반영되지 않았습니다. 같은 프로젝트의 SQL Editor에서 supabase/typeface_entries.sql을 실행하고, 완료 후 잠시 기다렸다 다시 시도해 주세요.';
             } else if (error.code === 'P0001' && error.message.includes('TYPEFACE_BLOCKED_TERM')) {
-              status.textContent = '비속어나 모욕적인 표현은 등록할 수 없습니다. 다른 문장으로 입력해 주세요.';
+              status.textContent = '비속어나 모욕적인 표현은 닉네임이나 문장에 사용할 수 없습니다.';
+            } else if (isNicknameColumnMissing(error.message)) {
+              status.textContent = '닉네임 기능을 사용하려면 Supabase SQL Editor에서 최신 supabase/typeface_entries.sql을 실행해 주세요.';
             } else {
               status.textContent = error.code === 'PGRST205'
                 ? 'Supabase에서 기록 테이블을 찾을 수 없습니다. 설정 SQL을 해당 프로젝트에서 실행해 주세요.'
