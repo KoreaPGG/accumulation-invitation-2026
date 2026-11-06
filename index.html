@@ -4526,7 +4526,8 @@
       archiveResizeObserver?.disconnect();
       archiveResizeObserver = null;
       
-      $('#portal-label').innerHTML = `<span class="title-en">${String(i + 1).padStart(2, '0')} / ${names[i]}</span><span>— ${korean[i]}</span>`;
+      const sectionLabel = i === 6 ? 'VIDEO' : names[i];
+      $('#portal-label').innerHTML = `<span class="title-en">${String(i + 1).padStart(2, '0')} / ${sectionLabel}</span><span>— ${korean[i]}</span>`;
       $('.portal-content').innerHTML = panels[i]();
 
       savedScroll = scrollY;
