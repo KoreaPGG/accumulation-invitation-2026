@@ -4084,39 +4084,48 @@
       "peeping"
     ];
     typefaceBlockedTerms.push(...typefaceDatasetBlockedTerms);
+    const typefaceLookalikeCharacters = {
+      а: 'a', е: 'e', о: 'o', р: 'p', с: 'c', х: 'x', у: 'y',
+      і: 'i', ј: 'j', к: 'k', м: 'm', т: 't', в: 'b', н: 'h'
+    };
+    const typefaceLeetspeakCharacters = {
+      '$': 's', '@': 'a', '!': 'i', '0': 'o', '1': 'i', '5': 's'
+    };
     const normalizeTypefaceText = text => text
       .normalize('NFKC')
       .toLowerCase()
-      .replace(/[аеорсхуіјкмтвн]/g, character => ({
-        а: 'a', е: 'e', о: 'o', р: 'p', с: 'c', х: 'x', у: 'y',
-        і: 'i', ј: 'j', к: 'k', м: 'm', т: 't', в: 'b', н: 'h'
-      })[character])
-      .replace(/[$@!015]/g, character => ({
-        '$': 's', '@': 'a', '!': 'i', '0': 'o', '1': 'i', '5': 's'
-      })[character]);
-    const escapeTypefaceRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const typefaceBlockedTermPatterns = typefaceBlockedTerms
-      .map(term => {
-        const normalizedTerm = normalizeTypefaceText(term).trim();
-        const separatedTerm = normalizedTerm.replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
-        const compactTerm = normalizedTerm.replace(/[^\p{L}\p{N}]/gu, '');
-        if (!compactTerm) return null;
-        const termPattern = escapeTypefaceRegExp(separatedTerm).replace(/\s+/g, '\\s+');
-        const wordBoundary = pattern =>
-          new RegExp(`(^|[^\\p{L}\\p{N}])${pattern}($|[^\\p{L}\\p{N}])`, 'u');
-        return {
-          separated: wordBoundary(termPattern),
-          compact: wordBoundary(escapeTypefaceRegExp(compactTerm))
-        };
-      })
-      .filter(Boolean);
+      .replace(/[аеорсхуіјкмтвн]/g, character => typefaceLookalikeCharacters[character])
+      .replace(/[$@!015]/g, character => typefaceLeetspeakCharacters[character]);
+    const createTypefaceTermNode = () => ({ children: new Map(), terminal: false });
+    const typefaceBlockedTermTrie = createTypefaceTermNode();
+    const typefaceCompactBlockedTerms = new Set();
+    for (const term of new Set(typefaceBlockedTerms)) {
+      const normalizedTerm = normalizeTypefaceText(term).trim();
+      const termWords = normalizedTerm.match(/[\p{L}\p{N}]+/gu) || [];
+      const compactTerm = normalizedTerm.replace(/[^\p{L}\p{N}]/gu, '');
+      if (!compactTerm) continue;
+      typefaceCompactBlockedTerms.add(compactTerm);
+      let node = typefaceBlockedTermTrie;
+      for (const word of termWords) {
+        if (!node.children.has(word)) node.children.set(word, createTypefaceTermNode());
+        node = node.children.get(word);
+      }
+      if (termWords.length) node.terminal = true;
+    }
     const containsBlockedTypefaceTerm = text => {
       const normalized = normalizeTypefaceText(text);
-      const separated = normalized.replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
       const compact = normalized.replace(/[^\p{L}\p{N}]/gu, '');
-      return typefaceBlockedTermPatterns.some(pattern =>
-        pattern.separated.test(separated) || pattern.compact.test(compact)
-      );
+      if (typefaceCompactBlockedTerms.has(compact)) return true;
+      const words = normalized.match(/[\p{L}\p{N}]+/gu) || [];
+      for (let start = 0; start < words.length; start++) {
+        let node = typefaceBlockedTermTrie;
+        for (let index = start; index < words.length; index++) {
+          node = node.children.get(words[index]);
+          if (!node) break;
+          if (node.terminal) return true;
+        }
+      }
+      return false;
     };
 
     const names = ['KVCD', 'COMMITTEE', 'LOGO', 'COLOR', 'TYPEFACE', 'POSTER', 'FILM', 'STUDENTS', 'CATALOGUE', 'PARTNERSHIP', 'EXHIBITION', 'PLAY'];
@@ -5533,7 +5542,7 @@
       () => legacyPanels[2](),
              
       () => `<section class="film-experience" aria-labelledby="portal-title">
-               <div class="film-art" aria-hidden="true"><img src="assets/film-stones.png" alt="" decoding="async"></div>
+               <div class="film-art" aria-hidden="true"><img src="assets/film-stones.png" alt="" loading="lazy" decoding="async"></div>
                <div class="film-intro">
                  <p class="film-eyebrow title-en">ACCUMULATION — THE EXHIBITION FILM</p>
                  <h2 class="film-title title-en" id="portal-title"><span>TIME</span><span>ACCUMULATED.</span></h2>
@@ -5546,7 +5555,7 @@
                <div class="film-colophon"><span class="title-en">2026 / ACCUMULATION</span><span>계명대학교 시각디자인 졸업전시</span></div>
                <div class="film-screen" id="film-screen" hidden>
                  <button class="film-return" id="film-return" type="button" aria-label="영상 닫기">돌아가기 ↙</button>
-                 <video id="exhibition-film" controls playsinline preload="metadata" aria-label="ACCUMULATION 메인 모션 포스터 영상" tabindex="0">
+                 <video id="exhibition-film" controls playsinline preload="none" aria-label="ACCUMULATION 메인 모션 포스터 영상" tabindex="0">
                    <source src="assets/optimized/exhibition-film.mp4" type="video/mp4">
                    브라우저가 MP4 영상을 지원하지 않습니다.
                  </video>
@@ -5835,8 +5844,8 @@
             const media = poster.video
               ? `<video class="archive-card-video" src="${videoPath}" muted autoplay loop playsinline preload="metadata" aria-label="${year}년 무빙 포스터"></video>`
               : poster.fronts
-                ? `<span class="archive-poster-pair">${poster.fronts.map((front, frontIndex) => `<img src="${frontImagePath(front)}" alt="${year}년 포스터 ${frontIndex + 1}" draggable="false">`).join('')}</span>`
-                : `<img src="assets/All-time%20posters/web/${poster.asset}" alt="${year}년 계명대학교 시각디자인 졸업전시 포스터" draggable="false">`;
+                ? `<span class="archive-poster-pair">${poster.fronts.map((front, frontIndex) => `<img src="${frontImagePath(front)}" alt="${year}년 포스터 ${frontIndex + 1}" loading="lazy" decoding="async" draggable="false">`).join('')}</span>`
+                : `<img src="assets/All-time%20posters/web/${poster.asset}" alt="${year}년 계명대학교 시각디자인 졸업전시 포스터" loading="lazy" decoding="async" draggable="false">`;
             return `<button class="archive-card archive-card-${position}${poster.fronts ? ' archive-card-pair' : ''}" data-archive-offset="${offset}" data-poster="${posterPath}" data-poster-year="${year}" ${dataMedia} aria-label="${year}년 포스터${offset === 0 ? ' 확대' : ''}" type="button">
                       ${media}
                     </button>`;
@@ -6467,7 +6476,7 @@
             button.classList.toggle('selected', selected);
             if (button.classList.contains('venue-student')) button.setAttribute('aria-pressed', String(selected));
           });
-          selectedPanel.innerHTML = `${student.thumbnail ? `<img src="${escapeHtml(student.thumbnail)}" alt="${escapeHtml(student.name)} 프로필 사진" decoding="async">` : '<span class="venue-selected-placeholder">사진 준비 중</span>'}<div><p>선택한 학생</p><h3>${escapeHtml(student.name)}</h3><strong>${String(index + 1).padStart(2, '0')}번 부스</strong></div>`;
+          selectedPanel.innerHTML = `${student.thumbnail ? `<img src="${escapeHtml(student.thumbnail)}" alt="${escapeHtml(student.name)} 프로필 사진" loading="lazy" decoding="async">` : '<span class="venue-selected-placeholder">사진 준비 중</span>'}<div><p>선택한 학생</p><h3>${escapeHtml(student.name)}</h3><strong>${String(index + 1).padStart(2, '0')}번 부스</strong></div>`;
           const pageImages = Array.from({ length: 4 }, (_, pageIndex) => student.pages?.[pageIndex]);
           venueFlip?.destroy();
           venueFlip = null;
