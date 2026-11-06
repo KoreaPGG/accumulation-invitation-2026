@@ -776,6 +776,7 @@
     #student-book .student-work-image { width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; object-position: center; }
     .student-book-stage { position: relative; }
     .student-page-count { position: absolute; z-index: 5; bottom: clamp(8px, 2%, 18px); left: 50%; box-sizing: border-box; width: 68px; transform: translateX(-50%); padding: 6px 10px; border: 1px solid rgba(255, 255, 255, .28); background: rgba(0, 0, 0, .52); color: rgba(255, 255, 255, .88); font-size: clamp(10px, 1vw, 12px); font-variant-numeric: tabular-nums; line-height: 1; text-align: center; white-space: nowrap; backdrop-filter: blur(2px); pointer-events: none; }
+    .student-book-navigation { display: none; }
     .page-meta, .page-footer { display: flex; justify-content: space-between; gap: 16px; align-items: center; font-size: clamp(8px, .8vw, 12px); }
     .page-meta { padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
     .page-footer { padding-top: 12px; border-top: 1px solid var(--ink); }
@@ -804,6 +805,11 @@
       .book-stage { width: min(100%, 420px); max-height: calc(100% - 44px); aspect-ratio: 2480 / 3508; }
       .student-dialog { box-sizing: border-box; width: min(940px, calc(100vw - 24px)); padding: 12px; }
       .student-dialog .student-book-stage { width: min(100%, calc((90svh - 48px) * .707)); max-width: 100%; max-height: calc(90svh - 48px); aspect-ratio: 2480 / 3508; }
+      .student-book-navigation { position: absolute; z-index: 6; right: 8px; bottom: 8px; left: 8px; display: flex; justify-content: space-between; pointer-events: none; }
+      .student-book-navigation button { min-width: 44px; min-height: 44px; padding: 8px 12px; border: 1px solid rgba(255,255,255,.55); border-radius: 0; background: rgba(0,0,0,.62); color: #fff; font: inherit; font-size: 15px; touch-action: manipulation; pointer-events: auto; }
+      .student-book-navigation button:disabled { opacity: .4; }
+      .student-book-navigation button:focus-visible { outline: 2px solid var(--db-blue); outline-offset: 2px; }
+      .student-page-count { width: auto; min-width: 48px; }
       .page { padding: clamp(14px, 5vw, 24px); }
       .page-copy { max-width: 100%; }
       .page-columns { gap: 14px; }
@@ -6374,13 +6380,17 @@
           dialog.innerHTML = `<h3 class="sr-only" id="student-modal-title">${escapeHtml(r.name)} 작품</h3>
             <div class="book-shell">
               <div class="book-stage student-book-stage">
-                <div class="book" id="student-book" tabindex="0" aria-label="${escapeHtml(r.name)} A4 세로 작품 4페이지. 두 쪽씩 펼쳐집니다. 왼쪽 클릭은 이전, 오른쪽 클릭은 다음 펼침">
+                <div class="book" id="student-book" tabindex="0" aria-label="${escapeHtml(r.name)} A4 세로 작품 4페이지. 모바일에서는 한 페이지씩 넘길 수 있습니다.">
                   ${Array.from({ length: 4 }, (_, pageIndex) => {
                     const image = r.pages?.[pageIndex];
                     return `<article class="page" aria-label="작품 ${pageIndex + 1}쪽">${image ? `<img class="student-work-image" data-page-src="${escapeHtml(image)}" alt="${escapeHtml(r.name)} 작품 ${pageIndex + 1}쪽" decoding="async">` : ''}</article>`;
                   }).join('')}
                 </div>
-                <span id="student-page-count" class="student-page-count title-en" aria-live="polite">01 / 02</span>
+                <nav class="student-book-navigation" aria-label="도록 페이지 이동">
+                  <button type="button" id="student-page-prev" aria-label="이전 페이지">←</button>
+                  <button type="button" id="student-page-next" aria-label="다음 페이지">→</button>
+                </nav>
+                <span id="student-page-count" class="student-page-count title-en" aria-live="polite">01 / 04</span>
               </div>
               <p class="sr-only" id="student-book-status" aria-live="polite">A4 세로 작품, 4페이지</p>
             </div>`;
@@ -6395,12 +6405,21 @@
 
           const bookElement = $('#student-book');
           const pageCount = bookElement.querySelectorAll('.page').length;
+          const studentBookIsMobile = matchMedia('(max-width: 700px)');
+          const previousStudentPage = $('#student-page-prev');
+          const nextStudentPage = $('#student-page-next');
           const updateStudentControls = pageIndex => {
             const current = Number.isInteger(pageIndex) ? pageIndex : studentFlip.getCurrentPageIndex();
             const spreadStart = Math.floor(current / 2) * 2;
             const spreadEnd = Math.min(spreadStart + 2, pageCount);
-            $('#student-page-count').textContent = `${String(spreadStart + 1).padStart(2, '0')} / ${String(spreadEnd).padStart(2, '0')}`;
-            $('#student-book-status').textContent = `A4 세로 작품 ${spreadStart + 1}페이지와 ${spreadEnd}페이지 / 전체 ${pageCount}페이지`;
+            $('#student-page-count').textContent = studentBookIsMobile.matches
+              ? `${String(current + 1).padStart(2, '0')} / ${String(pageCount).padStart(2, '0')}`
+              : `${String(spreadStart + 1).padStart(2, '0')} / ${String(spreadEnd).padStart(2, '0')}`;
+            $('#student-book-status').textContent = studentBookIsMobile.matches
+              ? `A4 세로 작품 ${current + 1}페이지 / 전체 ${pageCount}페이지`
+              : `A4 세로 작품 ${spreadStart + 1}페이지와 ${spreadEnd}페이지 / 전체 ${pageCount}페이지`;
+            previousStudentPage.disabled = current <= 0;
+            nextStudentPage.disabled = current >= pageCount - 1;
           };
 
           if (!window.St?.PageFlip) {
@@ -6422,7 +6441,8 @@
             usePortrait: true,
             autoSize: false,
             mobileScrollSupport: false,
-            flippingTime: 900
+            flippingTime: 650,
+            swipeDistance: 24
           });
 
           studentFlip.on('init', event => updateStudentControls(event.data.page));
@@ -6438,7 +6458,9 @@
             if (direction < 0) studentFlip.flipPrev('bottom');
             else studentFlip.flipNext('bottom');
           };
-          bookElement.addEventListener('click', event => {
+          previousStudentPage.addEventListener('click', () => turnStudentPage(-1));
+          nextStudentPage.addEventListener('click', () => turnStudentPage(1));
+          if (!studentBookIsMobile.matches) bookElement.addEventListener('click', event => {
             const bounds = bookElement.getBoundingClientRect();
             turnStudentPage(event.clientX < bounds.left + bounds.width / 2 ? -1 : 1);
           });
