@@ -777,6 +777,7 @@
     .student-book-stage { position: relative; }
     .student-page-count { position: absolute; z-index: 5; bottom: clamp(8px, 2%, 18px); left: 50%; box-sizing: border-box; width: 68px; transform: translateX(-50%); padding: 6px 10px; border: 1px solid rgba(255, 255, 255, .28); background: rgba(0, 0, 0, .52); color: rgba(255, 255, 255, .88); font-size: clamp(10px, 1vw, 12px); font-variant-numeric: tabular-nums; line-height: 1; text-align: center; white-space: nowrap; backdrop-filter: blur(2px); pointer-events: none; }
     .student-book-navigation { display: none; }
+    .student-mobile-page { display: none; }
     .page-meta, .page-footer { display: flex; justify-content: space-between; gap: 16px; align-items: center; font-size: clamp(8px, .8vw, 12px); }
     .page-meta { padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
     .page-footer { padding-top: 12px; border-top: 1px solid var(--ink); }
@@ -805,11 +806,14 @@
       .book-stage { width: min(100%, 420px); max-height: calc(100% - 44px); aspect-ratio: 2480 / 3508; }
       .student-dialog { box-sizing: border-box; width: min(940px, calc(100vw - 24px)); padding: 12px; }
       .student-dialog .student-book-stage { width: min(100%, calc((90svh - 48px) * .707)); max-width: 100%; max-height: calc(90svh - 48px); aspect-ratio: 2480 / 3508; }
+      .student-book-stage.is-mobile-book #student-book { display: none; }
+      .student-mobile-page { position: absolute; inset: 0; display: grid; place-items: center; background: #fff; }
+      .student-mobile-page img { display: block; width: 100%; height: 100%; object-fit: contain; }
       .student-book-navigation { position: absolute; z-index: 6; right: 8px; bottom: 8px; left: 8px; display: flex; justify-content: space-between; pointer-events: none; }
       .student-book-navigation button { min-width: 44px; min-height: 44px; padding: 8px 12px; border: 1px solid rgba(255,255,255,.55); border-radius: 0; background: rgba(0,0,0,.62); color: #fff; font: inherit; font-size: 15px; touch-action: manipulation; pointer-events: auto; }
       .student-book-navigation button:disabled { opacity: .4; }
       .student-book-navigation button:focus-visible { outline: 2px solid var(--db-blue); outline-offset: 2px; }
-      .student-page-count { width: auto; min-width: 48px; }
+      .student-page-count { bottom: 18px; z-index: 7; width: auto; min-width: 34px; padding: 8px 10px; background: rgba(0,0,0,.72); font-size: 14px; }
       .page { padding: clamp(14px, 5vw, 24px); }
       .page-copy { max-width: 100%; }
       .page-columns { gap: 14px; }
@@ -6380,6 +6384,9 @@
           dialog.innerHTML = `<h3 class="sr-only" id="student-modal-title">${escapeHtml(r.name)} 작품</h3>
             <div class="book-shell">
               <div class="book-stage student-book-stage">
+                <div class="student-mobile-page">
+                  <img id="student-mobile-image" alt="${escapeHtml(r.name)} 작품 1쪽" decoding="async">
+                </div>
                 <div class="book" id="student-book" tabindex="0" aria-label="${escapeHtml(r.name)} A4 세로 작품 4페이지. 모바일에서는 한 페이지씩 넘길 수 있습니다.">
                   ${Array.from({ length: 4 }, (_, pageIndex) => {
                     const image = r.pages?.[pageIndex];
@@ -6406,8 +6413,34 @@
           const bookElement = $('#student-book');
           const pageCount = bookElement.querySelectorAll('.page').length;
           const studentBookIsMobile = matchMedia('(max-width: 700px)');
+          const bookStage = $('.student-book-stage');
           const previousStudentPage = $('#student-page-prev');
           const nextStudentPage = $('#student-page-next');
+          const pageCountLabel = $('#student-page-count');
+          if (studentBookIsMobile.matches) {
+            bookStage.classList.add('is-mobile-book');
+            let currentPage = 0;
+            const mobileImage = $('#student-mobile-image');
+            const setMobilePage = pageIndex => {
+              currentPage = Math.max(0, Math.min(pageCount - 1, pageIndex));
+              const imagePath = r.pages?.[currentPage];
+              mobileImage.alt = `${r.name} 작품 ${currentPage + 1}쪽`;
+              mobileImage.hidden = !imagePath;
+              if (imagePath) mobileImage.src = imagePath;
+              pageCountLabel.textContent = String(currentPage + 1).padStart(2, '0');
+              previousStudentPage.disabled = currentPage === 0;
+              nextStudentPage.disabled = currentPage === pageCount - 1;
+              $('#student-book-status').textContent = `A4 세로 작품 ${currentPage + 1}페이지 / 전체 ${pageCount}페이지`;
+            };
+            previousStudentPage.addEventListener('click', () => setMobilePage(currentPage - 1));
+            nextStudentPage.addEventListener('click', () => setMobilePage(currentPage + 1));
+            mobileImage.addEventListener('error', () => {
+              mobileImage.hidden = true;
+              $('#student-book-status').textContent = `작품 ${currentPage + 1}페이지 이미지를 불러오지 못했습니다.`;
+            });
+            setMobilePage(0);
+            return;
+          }
           const updateStudentControls = pageIndex => {
             const current = Number.isInteger(pageIndex) ? pageIndex : studentFlip.getCurrentPageIndex();
             const spreadStart = Math.floor(current / 2) * 2;
