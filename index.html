@@ -1106,11 +1106,18 @@
       .student-thumb { width: min(100%, 180px); }
       .student-meta { font-size: 13px; }
       .portal.collaboration-open .portal-content { padding: 10px calc(var(--rail-width) + 10px) 40px; }
-      .collab-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .collab-card { min-height: 150px; }
+      .collab-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+      .collab-card { display: grid; grid-template-columns: minmax(92px, 30%) minmax(0, 1fr); align-items: start; gap: 0 12px; min-height: 0; padding: 10px; border: 1px solid var(--ink); background: var(--paper); }
+      .collab-photo { grid-row: 1; aspect-ratio: 1; }
+      .collab-card-info { gap: 8px; padding: 0; }
+      .collab-card h4 { font-size: clamp(18px, 5vw, 22px); }
+      .collab-card-type { margin-top: 4px; font-size: 11px; }
       .collab-location { align-items: flex-start; gap: 6px; }
       .collab-location a { min-width: 0; overflow-wrap: anywhere; }
       .collab-note { align-items: flex-start; flex-direction: column; gap: 8px; }
+      .collab-location { flex-direction: column; gap: 4px; min-height: 0; padding: 7px 0 0; font-size: 11px; }
+      .collab-contact { align-items: flex-start; flex-direction: column; gap: 4px; font-size: 11px; }
+      .collab-contact-links { gap: 5px 10px; }
       .puzzle-letter { height: 65px; font-size: 32px; }
       .puzzle-slot { height: 50px; }
       .film-placeholder { min-height: 300px; padding: 20px; }
