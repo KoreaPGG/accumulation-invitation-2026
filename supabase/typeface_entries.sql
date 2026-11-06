@@ -2901,6 +2901,9 @@ insert into public.typeface_blocked_terms (term) values
 (E'tranny')
 (E'twat')
 (E'wank')
+(E'sibal')
+(E'hollyshit')
+(E'ashole')
 on conflict (term) do nothing;
 
 alter table public.typeface_entries enable row level security;
