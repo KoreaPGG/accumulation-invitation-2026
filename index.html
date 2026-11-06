@@ -4305,6 +4305,19 @@
     let active = -1, lastFocus, previousOverflow;
     let savedScroll = 0;
     let typefaceRefreshTimer = null;
+    let pageTurnSound = null;
+
+    function playPageTurnSound() {
+      if (!pageTurnSound) {
+        pageTurnSound = new Audio('assets/sound%20effect/book.mp3');
+        pageTurnSound.preload = 'auto';
+        pageTurnSound.volume = 0.45;
+      }
+      pageTurnSound.currentTime = 0;
+      pageTurnSound.play().catch(error => {
+        console.warn('도록 페이지 넘김 효과음을 재생하지 못했습니다.', error);
+      });
+    }
 
     const chapterIndex = $('#chapter-index');
     const chapterIndexToggle = $('#chapter-index-toggle');
@@ -5368,7 +5381,10 @@
         });
 
         catalogueFlip.on('init', event => updatePageControls(event.data.page));
-        catalogueFlip.on('flip', event => updatePageControls(event.data));
+        catalogueFlip.on('flip', event => {
+          updatePageControls(event.data);
+          playPageTurnSound();
+        });
         catalogueFlip.loadFromHTML(bookElement.querySelectorAll('.page'));
         updatePageControls(0);
         $('#prev-page').onclick = () => catalogueFlip.flipPrev('bottom');
@@ -6422,7 +6438,9 @@
             let currentPage = 0;
             const mobileImage = $('#student-mobile-image');
             const setMobilePage = pageIndex => {
-              currentPage = Math.max(0, Math.min(pageCount - 1, pageIndex));
+              const nextPage = Math.max(0, Math.min(pageCount - 1, pageIndex));
+              if (nextPage !== currentPage) playPageTurnSound();
+              currentPage = nextPage;
               const imagePath = r.pages?.[currentPage];
               mobileImage.alt = `${r.name} 작품 ${currentPage + 1}쪽`;
               mobileImage.hidden = !imagePath;
@@ -6482,6 +6500,7 @@
           studentFlip.on('flip', event => {
             updateStudentControls(event.data);
             loadBookSpread(studentPageImages, event.data);
+            playPageTurnSound();
           });
           studentFlip.loadFromHTML(bookElement.querySelectorAll('.page'));
           updateStudentControls(0);
@@ -6586,6 +6605,7 @@
           venueFlip.on('flip', event => {
             updateVenueBookControls(event.data);
             loadBookSpread(venuePageImages, event.data);
+            playPageTurnSound();
           });
           venueFlip.loadFromHTML(venueBook.querySelectorAll('.page'));
           updateVenueBookControls(0);
