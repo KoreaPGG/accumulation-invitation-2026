@@ -35,26 +35,79 @@ immutable
 as $$
   with normalized as (
     select regexp_replace(
-      normalize(lower(coalesce(input_sentence, '')), NFKC),
+      translate(
+        normalize(lower(coalesce(input_sentence, '')), NFKC),
+        'аеорсхуіјкмтвн$@!015',
+        'aeopcxyijkmtbhsaiois'
+      ),
+      '[^[:alnum:]]+', ' ', 'g'
+    ) as separated,
+    regexp_replace(
+      translate(
+        normalize(lower(coalesce(input_sentence, '')), NFKC),
+        'аеорсхуіјкмтвн$@!015',
+        'aeopcxyijkmtbhsaiois'
+      ),
       '[^[:alnum:]]', '', 'g'
-    ) as sentence
-  )
-  select exists (
-    select 1
-    from normalized
-    cross join unnest(array[
+    ) as compact
+  ),
+  blocked_terms as (
+    select
+      regexp_replace(
+        translate(
+          normalize(lower(term), NFKC),
+          'аеорсхуіјкмтвн$@!015',
+          'aeopcxyijkmtbhsaiois'
+        ),
+        '[^[:alnum:]]+', ' ', 'g'
+      ) as separated,
+      regexp_replace(
+        translate(
+          normalize(lower(term), NFKC),
+          'аеорсхуіјкмтвн$@!015',
+          'aeopcxyijkmtbhsaiois'
+        ),
+        '[^[:alnum:]]', '', 'g'
+      ) as compact
+    from unnest(array[
       '씨발', '시발', '씨팔', '시팔', '씹할', '씹팔', 'ㅅㅂ', 'ㅆㅂ',
       '좆', '좃', '조까', '존나', '졸라', '병신', '븅신', '빙신',
       '개새끼', '개새', '씹새끼', '씹새', '지랄', '염병',
       '개년', '개놈', '미친년', '미친놈',
-      'fuck', 'fcuk', 'fuk', 'fck', 'phuck', 'fucker', 'fucking',
-      'shit', 'shitty', 'bullshit', 'bitch', 'bitches', 'bitching',
-      'bastard', 'asshole', 'dumbass', 'motherfucker', 'dickhead'
-    ]::text[]) as blocked(term)
-    where normalized.sentence like '%' || regexp_replace(
-      normalize(lower(blocked.term), NFKC),
-      '[^[:alnum:]]', '', 'g'
-    ) || '%'
+      'fuck', 'fcuk', 'fuk', 'fck', 'phuck', 'fucking', 'fucked', 'fucker', 'fuckers',
+      'motherfucker', 'motherfuckers', 'shit', 'shitty', 'bullshit',
+      'horseshit', 'ass', 'asshole', 'assholes', 'bitch', 'bitches',
+      'bitchy', 'bastard', 'bastards', 'damn', 'goddamn', 'hell', 'crap',
+      'dick', 'dickhead', 'dicks', 'pussy', 'prick', 'cock', 'cocksucker',
+      'cunt', 'twat', 'wanker', 'arse', 'arsehole', 'whore', 'whores',
+      'slut', 'sluts', 'slutty', 'hooker', 'prostitute', 'porn', 'porno',
+      'pornography', 'xxx', 'hentai', 'nudes', 'naked', 'blowjob', 'handjob',
+      'cum', 'cumshot', 'orgasm', 'masturbation', 'masturbate', 'dildo',
+      'anal', 'erotic', 'horny', 'sexting', 'idiot', 'moron', 'stupid',
+      'dumbass', 'imbecile', 'loser', 'retard', 'retarded', 'scumbag',
+      'douchebag', 'dipshit', 'shithead', 'jackass', 'asswipe', 'freak',
+      'trash', 'garbage', 'worthless', 'pathetic', 'ugly', 'fatass',
+      'nigger', 'nigga', 'faggot', 'fag', 'dyke', 'kike', 'spic', 'chink',
+      'gook', 'wetback', 'cracker', 'tranny', 'shemale', 'kill yourself',
+      'kys', 'go die', 'die', 'murder', 'rape', 'rapist', 'molest',
+      'molester', 'genocide', 'hang yourself', 'shoot yourself', 'f*ck',
+      'f**k', 'fuсk', 'sh1t', 'sh!t', 'b!tch', 'a$$', '@sshole', 'fck',
+      'fk', 'fuk', 'fuq', 'phuck', 'biatch', 'btch', 'b1tch', 'azz',
+      'a55', 'stfu', 'wtf', 'gtfo', 'lmfao'
+    ]::text[]) as terms(term)
+  )
+  select exists (
+    select 1
+    from normalized
+    cross join blocked_terms
+    where normalized.separated ~ (
+        '(^|[^[:alnum:]])' ||
+        regexp_replace(blocked_terms.separated, '[[:space:]]+', '[[:space:]]+', 'g') ||
+        '($|[^[:alnum:]])'
+      )
+      or normalized.compact ~ (
+        '(^|[^[:alnum:]])' || blocked_terms.compact || '($|[^[:alnum:]])'
+      )
   );
 $$;
 
@@ -111,3 +164,5 @@ where public.typeface_sentence_has_blocked_terms(sentence);
 revoke select, delete on public.typeface_entries from anon, authenticated;
 grant select (id, sentence, created_at) on public.typeface_entries to anon, authenticated;
 grant insert on public.typeface_entries to anon, authenticated;
+
+notify pgrst, 'reload schema';

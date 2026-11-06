@@ -1238,18 +1238,52 @@
       '좆', '좃', '조까', '존나', '졸라', '병신', '븅신', '빙신',
       '개새끼', '개새', '씹새끼', '씹새', '지랄', '염병',
       '개년', '개놈', '미친년', '미친놈',
-      'fuck', 'fcuk', 'fuk', 'fck', 'phuck', 'fucker', 'fucking',
-      'shit', 'shitty', 'bullshit',
-      'bitch', 'bitches', 'bitching', 'bastard', 'asshole',
-      'dumbass', 'motherfucker', 'dickhead'
+      'fuck', 'fcuk', 'fuk', 'fck', 'phuck', 'fucking', 'fucked', 'fucker', 'fuckers',
+      'motherfucker', 'motherfuckers', 'shit', 'shitty', 'bullshit',
+      'horseshit', 'ass', 'asshole', 'assholes', 'bitch', 'bitches',
+      'bitchy', 'bastard', 'bastards', 'damn', 'goddamn', 'hell', 'crap',
+      'dick', 'dickhead', 'dicks', 'pussy', 'prick', 'cock', 'cocksucker',
+      'cunt', 'twat', 'wanker', 'arse', 'arsehole', 'whore', 'whores',
+      'slut', 'sluts', 'slutty', 'hooker', 'prostitute', 'porn', 'porno',
+      'pornography', 'xxx', 'hentai', 'nudes', 'naked', 'blowjob', 'handjob',
+      'cum', 'cumshot', 'orgasm', 'masturbation', 'masturbate', 'dildo',
+      'anal', 'erotic', 'horny', 'sexting', 'idiot', 'moron', 'stupid',
+      'dumbass', 'imbecile', 'loser', 'retard', 'retarded', 'scumbag',
+      'douchebag', 'dipshit', 'shithead', 'jackass', 'asswipe', 'freak',
+      'trash', 'garbage', 'worthless', 'pathetic', 'ugly', 'fatass',
+      'nigger', 'nigga', 'faggot', 'fag', 'dyke', 'kike', 'spic', 'chink',
+      'gook', 'wetback', 'cracker', 'tranny', 'shemale', 'kill yourself',
+      'kys', 'go die', 'die', 'murder', 'rape', 'rapist', 'molest',
+      'molester', 'genocide', 'hang yourself', 'shoot yourself', 'f*ck',
+      'f**k', 'fuсk', 'sh1t', 'sh!t', 'b!tch', 'a$$', '@sshole', 'fck',
+      'fk', 'fuk', 'fuq', 'phuck', 'biatch', 'btch', 'b1tch', 'azz',
+      'a55', 'stfu', 'wtf', 'gtfo', 'lmfao'
     ];
-    const normalizeTypefaceText = text =>
-      text.normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+    const normalizeTypefaceText = text => text
+      .normalize('NFKC')
+      .toLowerCase()
+      .replace(/[аеорсхуіјкмтвн]/g, character => ({
+        а: 'a', е: 'e', о: 'o', р: 'p', с: 'c', х: 'x', у: 'y',
+        і: 'i', ј: 'j', к: 'k', м: 'm', т: 't', в: 'b', н: 'h'
+      })[character])
+      .replace(/[$@!015]/g, character => ({
+        '$': 's', '@': 'a', '!': 'i', '0': 'o', '1': 'i', '5': 's'
+      })[character]);
     const containsBlockedTypefaceTerm = text => {
       const normalized = normalizeTypefaceText(text);
-      return typefaceBlockedTerms.some(term =>
-        normalized.includes(normalizeTypefaceText(term))
-      );
+      const separated = normalized.replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+      const compact = normalized.replace(/[^\p{L}\p{N}]/gu, '');
+      return typefaceBlockedTerms.some(term => {
+        const normalizedTerm = normalizeTypefaceText(term).trim();
+        const separatedTerm = normalizedTerm.replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+        const compactTerm = normalizedTerm.replace(/[^\p{L}\p{N}]/gu, '');
+        const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const termPattern = escapeRegExp(separatedTerm).replace(/\s+/g, '\\s+');
+        const hasWordBoundary = (value, pattern) =>
+          new RegExp(`(^|[^\\p{L}\\p{N}])${pattern}($|[^\\p{L}\\p{N}])`, 'u').test(value);
+        return hasWordBoundary(separated, termPattern) ||
+          hasWordBoundary(compact, escapeRegExp(compactTerm));
+      });
     };
 
     const names = ['KVCD', 'COMMITTEE', 'LOGO', 'COLOR', 'TYPEFACE', 'POSTER', 'FILM', 'STUDENTS', 'CATALOGUE', 'PARTNERSHIP', 'EXHIBITION', 'PLAY'];
@@ -3256,6 +3290,7 @@
           }
           const error = new Error(`${action} (${response.status}): ${detail.message || '알 수 없는 오류'}`);
           error.code = detail.code;
+          error.status = response.status;
           throw error;
         };
 
@@ -3313,7 +3348,7 @@
             const ownerToken = createRandomHex(32);
             const ownerTokenHash = await hashOwnerToken(ownerToken);
             saveOwnedTokens({ ...ownedTokens, [id]: ownerTokenHash });
-            const response = await fetch(endpoint, {
+            let response = await fetch(endpoint, {
               method: 'POST',
               headers: {
                 apikey: typefaceSupabaseKey,
@@ -3322,11 +3357,36 @@
               },
               body: JSON.stringify({ id, sentence, owner_token_hash: ownerTokenHash })
             });
-            await requireSuccess(response, '공용 기록 저장 실패');
+            let legacySave = false;
+            if (!response.ok) {
+              const errorBody = await response.clone().text();
+              if (!/owner_token_hash.*schema cache|could not find.*owner_token_hash/i.test(errorBody)) {
+                await requireSuccess(response, '공용 기록 저장 실패');
+              }
+              const nextTokens = { ...ownedTokens };
+              delete nextTokens[id];
+              saveOwnedTokens(nextTokens);
+              response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                  apikey: typefaceSupabaseKey,
+                  'Content-Type': 'application/json',
+                  Prefer: 'return=minimal'
+                },
+                body: JSON.stringify({ sentence })
+              });
+              await requireSuccess(response, '공용 기록 저장 실패');
+              legacySave = true;
+            }
             await loadSentences();
+            if (legacySave) {
+              status.textContent = '문장을 등록했습니다. 현재 Supabase 설정에서는 이 문장의 개별 삭제를 사용할 수 없습니다.';
+            }
           } catch (error) {
             console.error('서체 공용 기록 저장 실패:', error);
-            if (error.code === 'P0001' && error.message.includes('TYPEFACE_BLOCKED_TERM')) {
+            if (/owner_token_hash.*schema cache|could not find.*owner_token_hash/i.test(error.message)) {
+              status.textContent = 'Supabase 설정 SQL이 반영되지 않았습니다. 같은 프로젝트의 SQL Editor에서 supabase/typeface_entries.sql을 실행하고, 완료 후 잠시 기다렸다 다시 시도해 주세요.';
+            } else if (error.code === 'P0001' && error.message.includes('TYPEFACE_BLOCKED_TERM')) {
               status.textContent = '비속어나 모욕적인 표현은 등록할 수 없습니다. 다른 문장으로 입력해 주세요.';
             } else {
               status.textContent = error.code === 'PGRST205'
