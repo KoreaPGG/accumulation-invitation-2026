@@ -499,8 +499,8 @@
     .student-dialog::backdrop { background: rgba(0,0,0,.55); }
     .student-dialog, .student-dialog * { font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif !important; }
     .student-dialog .book-shell { height: auto; overflow: hidden; }
-    .student-dialog .student-book-stage { width: min(100%, 960px); max-width: 100%; aspect-ratio: 4960 / 3508; }
-    .student-work-image { display: block; width: 100%; height: 100%; min-height: 0; object-fit: cover; background: transparent; }
+    .student-dialog .student-book-stage { width: min(100%, 960px, calc((90svh - 48px) * 1.414)); max-width: 100%; max-height: calc(90svh - 48px); aspect-ratio: 4960 / 3508; }
+    .student-work-image { display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; object-position: center; background: transparent; }
     .student-work-placeholder { display: grid; width: 100%; height: 100%; margin: 0; place-items: center; color: #777; font-size: 14px; text-align: center; }
     .type-canvas { min-height: 340px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--db-blue); color: var(--white); padding: 30px; font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; font-size: clamp(56px, 12vw, 200px); line-height: .82; letter-spacing: var(--tracking-en); white-space: nowrap; word-break: normal; overflow-wrap: anywhere; text-align: center; border: 1px solid var(--ink); }
     .type-input { background: none; border: 0; border-bottom: 2px solid var(--ink); padding: 12px 0; min-width: 200px; width: 100%; font-size: 20px; }
@@ -626,8 +626,11 @@
     .portal.poster-open .subline { flex: 0 0 auto; padding: 0; font-size: clamp(10px, 1.4vh, 14px); }
     .motion-range { display: block; width: 100%; accent-color: var(--db-blue); margin: 20px 0; }
     .portal.poster-open .poster-deck { display: grid; flex: 1 1 0; min-height: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-items: center; align-items: center; gap: clamp(8px, 2vw, 24px); width: min(100%, 1100px); margin: 0 auto; }
-    .portal.poster-open .poster-deck button { display: grid; place-items: center; width: 100%; height: 100%; min-height: 0; padding: 0; overflow: hidden; background: transparent; border: 1px solid var(--ink); box-shadow: none; }
-    .portal.poster-open .poster-deck img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; }
+    .portal.poster-open .poster-deck button { display: grid; place-items: center; width: min(100%, 62svh); height: auto; max-height: 100%; aspect-ratio: 2480 / 3507; min-height: 0; padding: 0; overflow: visible; background: transparent; border: 1px solid var(--ink); box-shadow: none; }
+    .portal.poster-open .poster-deck img { display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; object-position: center; }
+    .poster-mobile-controls { display: none; }
+    .poster-mobile-controls button { min-width: 42px; height: 38px; border: 1px solid var(--ink); font-size: 20px; }
+    .poster-mobile-count { min-width: 56px; font-size: 12px; text-align: center; }
     @media (hover: hover) and (pointer: fine) {
       .portal.poster-open .poster-deck img { cursor: none; }
     }
@@ -756,8 +759,7 @@
     #student-book { width: 100%; height: 100%; cursor: pointer; }
     #student-book:focus-visible { outline: 2px solid var(--db-blue); outline-offset: -2px; }
     #student-book .page { padding: 0; }
-    .student-work-image { width: 100%; height: 100%; object-fit: contain; }
-    #student-book .student-work-image { object-fit: contain; }
+    #student-book .student-work-image { width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; object-position: center; }
     .student-book-stage { position: relative; }
     .student-page-count { position: absolute; z-index: 5; bottom: clamp(8px, 2%, 18px); left: 50%; box-sizing: border-box; width: 68px; transform: translateX(-50%); padding: 6px 10px; border: 1px solid rgba(255, 255, 255, .28); background: rgba(0, 0, 0, .52); color: rgba(255, 255, 255, .88); font-size: clamp(10px, 1vw, 12px); font-variant-numeric: tabular-nums; line-height: 1; text-align: center; white-space: nowrap; backdrop-filter: blur(2px); pointer-events: none; }
     .page-meta, .page-footer { display: flex; justify-content: space-between; gap: 16px; align-items: center; font-size: clamp(8px, .8vw, 12px); }
@@ -787,7 +789,7 @@
       .portal.catalogue-open .portal-content { padding: 4px calc(var(--rail-width) + 2px) 6px; }
       .book-stage { width: min(100%, 420px); max-height: calc(100% - 44px); aspect-ratio: 2480 / 3508; }
       .student-dialog { box-sizing: border-box; width: min(940px, calc(100vw - 24px)); padding: 12px; }
-      .student-dialog .student-book-stage { width: min(100%, calc((90svh - 48px) * .707)); max-width: 100%; aspect-ratio: 2480 / 3508; }
+      .student-dialog .student-book-stage { width: min(100%, calc((90svh - 48px) * .707)); max-width: 100%; max-height: calc(90svh - 48px); aspect-ratio: 2480 / 3508; }
       .page { padding: clamp(14px, 5vw, 24px); }
       .page-copy { max-width: 100%; }
       .page-columns { gap: 14px; }
@@ -1082,6 +1084,14 @@
       .color-option-meta > span { min-width: 0; overflow-wrap: anywhere; }
       .color-option-name, .color-option[aria-pressed="true"] .color-option-name { font-size: clamp(24px, 8vw, 44px); }
       .color-option-value { font-size: clamp(18px, 5vw, 26px); }
+      .portal.poster-open .portal-content { padding: 8px calc(var(--rail-width) + 10px) 12px; }
+      .portal.poster-open .portal-title { font-size: clamp(22px, 7vw, 34px) !important; }
+      .portal.poster-open .poster-deck { display: grid; flex: 1 1 auto; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); gap: 0; width: 100%; min-height: 0; touch-action: pan-y; }
+      .portal.poster-open .poster-deck button { display: none; width: 100%; height: 100%; max-height: none; aspect-ratio: auto; overflow: hidden; }
+      .portal.poster-open .poster-deck button.is-active { display: grid; }
+      .portal.poster-open .poster-deck img { width: auto; height: auto; max-width: 100%; max-height: 100%; }
+      .portal.poster-open .poster-mobile-controls { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; width: 100%; }
+      .portal.poster-open .poster-mobile-controls button:disabled { opacity: .35; cursor: default; }
       .poster-experience { grid-template-columns: 1fr; gap: 10px; }
       .portal.venue-open { display: block; overflow: auto; }
       .portal.venue-open .portal-header { position: sticky; top: 0; border-bottom: 1px solid var(--ink); }
@@ -1437,13 +1447,18 @@
              </div>`,
 
       () => `<div class="poster-deck">
-               <button data-poster="assets/graduation-poster.webp" aria-label="졸업전시 포스터 1 확대">
+               <button class="is-active" data-poster="assets/graduation-poster.webp" aria-label="졸업전시 포스터 1 확대">
                  <img src="assets/graduation-poster.webp" alt="2026 계명대학교 시각디자인과 졸업전시 포스터 1">
                </button>
                <button data-poster="assets/graduation-poster2.webp" aria-label="졸업전시 포스터 2 확대">
                  <img src="assets/graduation-poster2.webp" alt="2026 계명대학교 시각디자인과 졸업전시 포스터 2">
                </button>
-             </div>`,
+             </div>
+             <nav class="poster-mobile-controls" aria-label="포스터 넘기기">
+               <button id="poster-prev" type="button" aria-label="이전 포스터">←</button>
+               <span class="poster-mobile-count title-en" id="poster-mobile-count" aria-live="polite">01 / 02</span>
+               <button id="poster-next" type="button" aria-label="다음 포스터">→</button>
+             </nav>`,
 
       () => intro('TIME<br>IN MOTION.', '시간의 흐름을 문장의 축적으로.', '04 / MOTION STUDY') +
             `<div class="film-stage">
@@ -2803,7 +2818,42 @@
 
       if (i === 5) {
         const lens = $('.poster-lens');
-        $$('[data-poster]').forEach(button => {
+        const posterDeck = $('.poster-deck');
+        const posterButtons = $$('[data-poster]');
+        const previousButton = $('#poster-prev');
+        const nextButton = $('#poster-next');
+        const posterCount = $('#poster-mobile-count');
+        let currentPoster = 0;
+        let touchStart = null;
+        let suppressPosterClick = false;
+        const selectPoster = index => {
+          currentPoster = Math.max(0, Math.min(index, posterButtons.length - 1));
+          posterButtons.forEach((button, buttonIndex) => {
+            button.classList.toggle('is-active', buttonIndex === currentPoster);
+          });
+          posterCount.textContent = `${String(currentPoster + 1).padStart(2, '0')} / ${String(posterButtons.length).padStart(2, '0')}`;
+          previousButton.disabled = currentPoster === 0;
+          nextButton.disabled = currentPoster === posterButtons.length - 1;
+        };
+        selectPoster(currentPoster);
+        previousButton.onclick = () => selectPoster(currentPoster - 1);
+        nextButton.onclick = () => selectPoster(currentPoster + 1);
+        posterDeck.addEventListener('pointerdown', event => {
+          if (event.pointerType !== 'touch') return;
+          touchStart = { x: event.clientX, y: event.clientY };
+        });
+        posterDeck.addEventListener('pointerup', event => {
+          if (!touchStart || event.pointerType !== 'touch') return;
+          const deltaX = event.clientX - touchStart.x;
+          const deltaY = event.clientY - touchStart.y;
+          touchStart = null;
+          if (Math.abs(deltaX) < 40 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+          selectPoster(currentPoster + (deltaX < 0 ? 1 : -1));
+          suppressPosterClick = true;
+          setTimeout(() => { suppressPosterClick = false; }, 0);
+        });
+        posterDeck.addEventListener('pointercancel', () => { touchStart = null; });
+        posterButtons.forEach((button, index) => {
           const image = button.querySelector('img');
           const updateLens = event => {
             if (event.pointerType === 'touch') return;
@@ -2821,6 +2871,8 @@
           button.addEventListener('pointermove', updateLens);
           button.addEventListener('pointerleave', () => lens.classList.remove('visible'));
           button.onclick = () => {
+            if (suppressPosterClick) return;
+            selectPoster(index);
             lens.classList.remove('visible');
             resetZoomMedia();
             $('#zoom-image').src = button.dataset.poster;
