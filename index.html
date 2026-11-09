@@ -6268,6 +6268,11 @@
           }
         };
 
+        typeInput.addEventListener('keydown', event => {
+          if (event.key !== 'Enter') return;
+          event.preventDefault();
+          stackButton.click();
+        });
         stackButton.onclick = async () => {
           if (!ownerStorageReady) {
             status.textContent = '이 브라우저에서 문장 소유 정보를 저장할 수 없어 등록할 수 없습니다.';
