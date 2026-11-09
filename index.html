@@ -156,6 +156,26 @@
       color: var(--white);
     }
 
+    .scroll-cue {
+      position: absolute;
+      bottom: max(24px, calc(env(safe-area-inset-bottom) + 18px));
+      left: 50%;
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      color: var(--white);
+      font-size: 14px;
+      line-height: 1;
+      transform: translateX(-50%);
+      animation: scroll-cue-bob 1.4s ease-in-out infinite;
+    }
+
+    @keyframes scroll-cue-bob {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, 7px); }
+    }
+
     .logo-stack {
       width: 100vw;
       height: min(100svh, calc(100vw * 799 / 3558));
@@ -1194,6 +1214,7 @@
     <div class="stage">
       <div class="entry">
         <h1 class="hero-title title-en" tabindex="-1">"WHAT HAVE WE ACCUMULATED?<br>AND SO... WHAT WILL WE ACCUMULATE?"</h1>
+        <span class="scroll-cue" aria-hidden="true">↓</span>
       </div>
       <div class="logo-stack" aria-label="ACCUMULATION 콘텐츠 메뉴"></div>
     </div>
