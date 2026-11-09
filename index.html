@@ -259,9 +259,8 @@
     .glyph-caption-ko { font-size: clamp(9px, 1vw, 16px); line-height: 1.35; letter-spacing: 0; word-break: normal; }
     @media (max-width: 640px) { .glyph-caption { gap: 3px; } }
     @media (max-width: 700px) {
-      .glyph-caption-en, .glyph-caption-ko { white-space: nowrap; }
-      .glyph-caption-en { font-size: clamp(6px, 1.6vw, 10px); }
-      .glyph-caption-ko { font-size: clamp(6px, 1.65vw, 10px); }
+      .glyph-caption-en { display: none; }
+      .glyph-caption-ko { font-size: clamp(8px, 2.7vw, 12px); font-weight: 500; white-space: nowrap; }
     }
 
     .glyph.is-active .glyph-letter,
@@ -4159,7 +4158,7 @@
       : sectionSlugs.findIndex(slug => '#' + slug === location.hash);
     const korean = ['KVCD', '졸준위원 소개', '로고', '컬러', '서체', '포스터', '영상', '졸업생', '온라인 도록', '파트너십', '전시장', '게임'];
     const glyphTitles = ['KVCD', 'COMMITTEE', 'LOGO', 'COLOR', 'TYPEFACE', 'POSTER', 'VIDEO', 'GRADUATES', 'ARTWORKS', 'PARTNERSHIP', 'VENUE', 'WORDLE'];
-    const glyphKoreanTitles = ['역대 졸업 전시 포스터', '졸업준비위원회', '로고', '색상', '서체', '포스터', '영상', '졸업생', '작품', '파트너십', '전시장', '워들'];
+    const glyphKoreanTitles = ['역대 졸업 전시', '졸업준비위원회', '로고', '색상', '서체', '포스터', '영상', '졸업생', '작품', '파트너십', '전시장', '워들'];
     const mapping = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const letters = 'accumulation'.split('');
