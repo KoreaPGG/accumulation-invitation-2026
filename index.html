@@ -1083,6 +1083,7 @@
        ========================================================= */
     @media(max-width: 700px) {
       .journey { height: 360vh; }
+      .stage { height: 100dvh; }
       .entry { padding-inline: 8px; }
       .entry .hero-title { font-size: min(4.4vw, 22px) !important; line-height: 1.05; letter-spacing: -.1em; white-space: nowrap; }
       .portal-header { padding-inline: calc(var(--rail-width) + 10px); }
@@ -1138,7 +1139,7 @@
       .chapter-menu-mark { width: 15px; }
       .chapter-index-list { grid-template-columns: 1fr; max-height: calc(86svh - 150px); }
       .chapter-index-item { min-height: 62px; }
-      .logo-stack { top: auto; bottom: 0; transform: translateX(-50%); width: min(100vw, calc(100svh * .4985)); height: min(100svh, calc(100vw * 2.006)); grid-auto-flow: column; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(6, minmax(0, 1fr)); }
+      .logo-stack { top: auto; bottom: 0; transform: translateX(-50%); width: min(100vw, calc(100dvh * .4985)); height: min(100dvh, calc(100vw * 2.006)); grid-auto-flow: column; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(6, minmax(0, 1fr)); }
       .glyph { font-size: min(25.3vw, 18.9svh); }
       .role-grid { grid-template-columns: repeat(2, 1fr); }
       .role-card { min-height: 150px; padding: 18px; }
@@ -1151,7 +1152,7 @@
       .color-option-name, .color-option[aria-pressed="true"] .color-option-name { font-size: clamp(24px, 8vw, 44px); }
       .color-option-value { font-size: clamp(18px, 5vw, 26px); }
       @media (orientation: landscape) {
-        .logo-stack { width: min(100vw, calc(100svh * 1.994)); height: min(100svh, calc(100vw * .5015)); grid-auto-flow: row; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); }
+        .logo-stack { width: min(100vw, calc(100dvh * 1.994)); height: min(100dvh, calc(100vw * .5015)); grid-auto-flow: row; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); }
       }
       .portal.poster-open .portal-content { padding: 8px calc(var(--rail-width) + 10px) 12px; }
       .portal.poster-open .portal-title { font-size: clamp(22px, 7vw, 34px) !important; }
