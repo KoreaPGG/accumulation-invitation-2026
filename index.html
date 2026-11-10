@@ -1138,8 +1138,8 @@
       .chapter-menu-mark { width: 15px; }
       .chapter-index-list { grid-template-columns: 1fr; max-height: calc(86svh - 150px); }
       .chapter-index-item { min-height: 62px; }
-      .logo-stack { width: 100vw; height: min(100svh, calc(100vw * 799 / 3558)); grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); }
-      .glyph { font-size: min(25.3vw, 113.5svh); }
+      .logo-stack { width: min(100vw, calc(100svh * 799 / 3558 * 2)); height: min(100svh, calc(100vw * 3558 / 799 / 2)); grid-auto-flow: column; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(6, minmax(0, 1fr)); }
+      .glyph { font-size: min(25.3vw, 18.9svh); }
       .role-grid { grid-template-columns: repeat(2, 1fr); }
       .role-card { min-height: 150px; padding: 18px; }
       .portal.color-open .portal-content { padding: 8px calc(var(--rail-width) + 10px); }
