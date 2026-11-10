@@ -4401,12 +4401,9 @@
 
       () => `<h2 class="sr-only" id="portal-title">서체</h2>
         <label class="sr-only" for="type-input">서체 문구</label>
-         <input class="type-input title-en" id="type-input" lang="en" maxlength="35" placeholder="영어 문장을 입력하세요">
+         <input class="type-input title-en" id="type-input" lang="en" maxlength="35" placeholder="영어 문장을 입력하고 Enter를 누르세요">
          <div class="type-canvas font-doltop" id="type-preview"></div>
-             <div class="controls">
-               <label class="range-wrap">간격 <input id="spacing" type="range" min="-8" max="8" value="-6"></label>
-               <button class="control" id="type-invert">색상 반전</button>
-             </div>`,
+         `,
 
       () => `<div class="poster-deck">
                <button class="is-active" data-poster="assets/graduation-poster.webp" aria-label="졸업전시 포스터 1 확대">
@@ -5299,7 +5296,6 @@
       if (i === 1) {
         const preview = $('#type-preview');
         const typeInput = $('#type-input');
-        const spacing = $('#spacing');
         const updatePreview = () => {
           const value = typeInput.value;
           const sanitized = value.replace(/\p{Script=Hangul}/gu, '');
@@ -5310,20 +5306,13 @@
             typeInput.setSelectionRange(cursor, cursor);
           }
           preview.textContent = typeInput.value;
-          preview.style.letterSpacing = spacing.value / 100 + 'em';
         };
         typeInput.addEventListener('beforeinput', event => {
           if (event.data && /^\p{Script=Hangul}+$/u.test(event.data)) event.preventDefault();
         });
         typeInput.addEventListener('input', updatePreview);
         typeInput.addEventListener('compositionend', updatePreview);
-        spacing.oninput = updatePreview;
         updatePreview();
-        $('#type-invert').onclick = () => {
-          preview.classList.toggle('inverted');
-          preview.style.background = preview.classList.contains('inverted') ? 'var(--red)' : 'var(--ink)';
-          preview.style.color = preview.classList.contains('inverted') ? 'var(--ink)' : 'var(--red)';
-        };
       }
 
       if (i === 3) {
@@ -5579,11 +5568,7 @@
              </div>`,
              
       () => legacyPanels[1]() + 
-            `<div class="controls">
-               <button class="control" id="type-stack">이 문장 쌓기</button>
-               <button class="control" id="type-clear">입력 지우기</button>
-             </div>
-             <p class="type-status" id="type-status" role="status" aria-live="polite">공용 기록을 불러오는 중…</p>
+            `<p class="type-status" id="type-status" role="status" aria-live="polite">공용 기록을 불러오는 중…</p>
                <div class="type-layers" aria-live="polite"></div>
                <dialog class="type-nickname-dialog" id="type-nickname-dialog" aria-labelledby="type-nickname-title">
                  <form id="type-nickname-form">
@@ -6076,7 +6061,6 @@
         const preview = $('#type-preview');
         const typeInput = $('#type-input');
         const status = $('#type-status');
-        const stackButton = $('#type-stack');
         const nicknameDialog = $('#type-nickname-dialog');
         const nicknameForm = $('#type-nickname-form');
         const nicknameField = $('#type-nickname');
@@ -6096,7 +6080,6 @@
         } catch (error) {
           console.error('서체 문장 소유 정보 불러오기 실패:', error);
           status.textContent = '이 브라우저에서 문장 소유 정보를 사용할 수 없어 새 문장을 등록할 수 없습니다.';
-          stackButton.disabled = true;
         }
 
         const createRandomHex = byteLength => {
@@ -6322,12 +6305,9 @@
           }
         };
 
-        typeInput.addEventListener('keydown', event => {
-          if (event.key !== 'Enter') return;
-          event.preventDefault();
-          stackButton.click();
-        });
-        stackButton.onclick = async () => {
+        let isSubmitting = false;
+        const submitSentence = async () => {
+          if (isSubmitting) return;
           if (!ownerStorageReady) {
             status.textContent = '이 브라우저에서 문장 소유 정보를 저장할 수 없어 등록할 수 없습니다.';
             return;
@@ -6343,10 +6323,12 @@
             typeInput.focus();
             return;
           }
+          isSubmitting = true;
           const nickname = await requestNickname();
-          if (!nickname) return;
-          if (!window.confirm('문장을 등록하시겠습니까?')) return;
-          stackButton.disabled = true;
+          if (!nickname || !window.confirm('문장을 등록하시겠습니까?')) {
+            isSubmitting = false;
+            return;
+          }
           status.textContent = '문장을 공용 방명록에 저장하는 중…';
           let pendingEntryId;
           try {
@@ -6416,15 +6398,15 @@
                 : '저장하지 못했습니다. Supabase 연결과 접근 정책을 확인해 주세요.';
             }
           } finally {
-            stackButton.disabled = false;
+            isSubmitting = false;
           }
         };
 
-        $('#type-clear').onclick = () => {
-          typeInput.value = '';
-          typeInput.dispatchEvent(new Event('input', { bubbles: true }));
-          typeInput.focus();
-        };
+        typeInput.addEventListener('keydown', event => {
+          if (event.key !== 'Enter' || event.isComposing) return;
+          event.preventDefault();
+          void submitSentence();
+        });
         loadSentences().catch(showLoadError);
         typefaceRefreshTimer = setInterval(
           () => loadSentences(true).catch(showLoadError),
