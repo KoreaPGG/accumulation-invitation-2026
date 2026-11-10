@@ -1151,7 +1151,7 @@
       .color-option-name, .color-option[aria-pressed="true"] .color-option-name { font-size: clamp(24px, 8vw, 44px); }
       .color-option-value { font-size: clamp(18px, 5vw, 26px); }
       @media (orientation: landscape) {
-        .logo-stack { width: min(100vw, calc(100svh * 4.486)); height: min(100svh, calc(100vw * .2229)); grid-auto-flow: row; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); }
+        .logo-stack { width: min(100vw, calc(100svh * 1.994)); height: min(100svh, calc(100vw * .5015)); grid-auto-flow: row; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); }
       }
       .portal.poster-open .portal-content { padding: 8px calc(var(--rail-width) + 10px) 12px; }
       .portal.poster-open .portal-title { font-size: clamp(22px, 7vw, 34px) !important; }
@@ -4206,6 +4206,13 @@
     const liftedGlyphs = glyph => {
       const index = glyphs.indexOf(glyph);
       if (matchMedia('(max-width: 700px)').matches) {
+        if (matchMedia('(orientation: landscape)').matches) {
+          const columnCount = 4;
+          const column = index % columnCount;
+          return glyphs.filter((_, candidateIndex) =>
+            candidateIndex < index && candidateIndex % columnCount === column
+          );
+        }
         const columnStart = index < 6 ? 0 : 6;
         return glyphs.slice(columnStart, index);
       }
@@ -4306,7 +4313,10 @@
       const stagger = 0.066;
       const duration = 0.16;
       const landscapeMobile = mobile && matchMedia('(orientation: landscape)').matches;
-      const dropOrder = mobile && !landscapeMobile ? mobileDropOrder : desktopDropOrder;
+      const landscapeDropOrder = [8, 9, 10, 11, 4, 5, 6, 7, 0, 1, 2, 3];
+      const dropOrder = landscapeMobile
+        ? landscapeDropOrder
+        : mobile ? mobileDropOrder : desktopDropOrder;
       $('.entry').style.opacity = String(Math.max(0, 1 - p * 12));
 
       glyphs.forEach((glyph, index) => {
