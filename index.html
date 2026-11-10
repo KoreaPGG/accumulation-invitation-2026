@@ -4273,25 +4273,24 @@
       if (event.pointerType === 'touch') touchGlyphTap = null;
     });
     const desktopDropOrder = [6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5];
-    const mobileDropOrder = [5, 11, 4, 10, 3, 9, 2, 8, 1, 7, 0, 6];
+    const mobileDropOrder = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11];
     let raf = false;
 
-    function fallingState(progress, distance, direction, fromBelow) {
-      const origin = fromBelow ? 1 : -1;
-      if (progress <= 0) return { y: origin * distance, rotation: direction * 12 };
+    function fallingState(progress, distance, direction) {
+      if (progress <= 0) return { y: -distance, rotation: direction * 12 };
       if (progress >= 1) return { y: 0, rotation: 0 };
 
       if (progress < 0.72) {
         const phase = progress / 0.72;
         return {
-          y: origin * distance * (1 - phase * phase),
+          y: -distance * (1 - phase * phase),
           rotation: direction * 12 * (1 - phase * phase)
         };
       }
 
       const settle = (progress - 0.72) / 0.28;
       return {
-        y: origin * Math.abs(Math.sin(settle * Math.PI * 2)) * 22 * (1 - settle),
+        y: -Math.abs(Math.sin(settle * Math.PI * 2)) * 22 * (1 - settle),
         rotation: direction * Math.sin(settle * Math.PI * 2) * 2 * (1 - settle)
       };
     }
@@ -4300,9 +4299,9 @@
       const max = $('.journey').offsetHeight - innerHeight;
       const p = Math.max(0, Math.min(1, scrollY / Math.max(1, max)));
       const mobile = matchMedia('(max-width: 700px)').matches;
-      const start = mobile ? 0.025 : 0.08;
-      const stagger = mobile ? 0.055 : 0.066;
-      const duration = mobile ? 0.13 : 0.16;
+      const start = 0.08;
+      const stagger = 0.066;
+      const duration = 0.16;
       const dropOrder = mobile ? mobileDropOrder : desktopDropOrder;
       $('.entry').style.opacity = String(Math.max(0, 1 - p * 12));
 
@@ -4320,7 +4319,7 @@
           const distance = mobile
             ? glyph.offsetTop + glyph.offsetHeight + 50
             : stack.offsetTop + row * cellHeight + cellHeight + 50;
-          const state = fallingState(progress, distance, index % 2 ? 1 : -1, mobile);
+          const state = fallingState(progress, distance, index % 2 ? 1 : -1);
           glyph.style.transform = `translate3d(0, ${state.y}px, 0) rotate(${state.rotation}deg)`;
         }
 
