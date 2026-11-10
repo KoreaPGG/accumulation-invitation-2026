@@ -506,7 +506,17 @@
     .color-option[aria-pressed="true"] .color-option-name { font-size: clamp(38px, 7vw, 112px); }
     .color-option:hover:not([aria-pressed="true"]) { flex-grow: 1.2; }
     .color-option:focus-visible { outline: 3px solid var(--db-blue); outline-offset: -5px; }
-    
+
+    @media (min-width: 701px) and (max-width: 900px) {
+      .portal.color-open .portal-content { padding: 8px calc(var(--rail-width) + 10px); }
+      .color-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 6px; }
+      .color-option, .color-option[aria-pressed="true"] { min-height: 0; padding: clamp(12px, 3vw, 20px); }
+      .color-option:hover:not([aria-pressed="true"]) { flex-grow: 1; }
+      .color-option-meta { flex-wrap: wrap; gap: 4px; font-size: 9px; line-height: 1.2; }
+      .color-option-meta > span { min-width: 0; overflow-wrap: anywhere; }
+      .color-option-name, .color-option[aria-pressed="true"] .color-option-name { font-size: clamp(24px, 6vw, 44px); }
+      .color-option-value { font-size: clamp(18px, 4vw, 26px); }
+    }
     .logo-lab { height: clamp(340px, 40vw, 560px); position: relative; container-type: inline-size; background: var(--ink); overflow: hidden; user-select: none; -webkit-user-select: none; }
     .logo-lab * { user-select: none; -webkit-user-select: none; }
     .lab-layout { position: absolute; top: 50%; left: 50%; display: grid; width: 100%; aspect-ratio: 3558 / 799; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: min(var(--type-unit), .15vw); transform: translate(-50%, -50%); }
@@ -5999,7 +6009,7 @@
         const options = $$('.color-option');
         options.forEach(option => option.onclick = event => {
           options.forEach(item => item.setAttribute('aria-pressed', String(item === option)));
-          if (!matchMedia('(max-width: 700px)').matches) return;
+          if (!matchMedia('(max-width: 900px)').matches) return;
 
           clearColorRipple();
           const previousColor = portal.dataset.colorBackground || '#FF5349';
