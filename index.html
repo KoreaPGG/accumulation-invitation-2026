@@ -265,7 +265,7 @@
     .glyph-caption-ko { font-size: clamp(9px, 1vw, 16px); line-height: 1.35; letter-spacing: 0; word-break: normal; }
     @media (max-width: 640px) { .glyph-caption { gap: 3px; } }
     @media (max-width: 700px) {
-      .glyph-caption-en { display: none; }
+      .glyph-caption-en { font-size: clamp(8px, 2.3vw, 11px); white-space: nowrap; }
       .glyph-caption-ko { font-size: clamp(8px, 2.7vw, 12px); font-weight: 500; white-space: nowrap; }
     }
 
@@ -4200,6 +4200,10 @@
     ).join('');
     
     const glyphs = $$('.glyph');
+    const pairedGlyph = glyph => {
+      if (matchMedia('(max-width: 700px)').matches) return null;
+      return glyphs[glyphs.indexOf(glyph) - 6] ?? null;
+    };
     const outlines = {"a":"M50 107C50 165 105 217 171 217H379V223H50V440H594C656 440 708 395 708 336V104C708 45 656 0 594 0H171C105 0 50 45 50 107Z","c":"M50 336V105C50 47 101 0 164 0H708V217H379V223H708V440H164C101 440 50 393 50 336Z","u":"M263 0H708V440H382V223H376V440H50V220C50 101 146 0 263 0Z","m":"M589 440H168C103 440 50 393 50 335V0H265V217H271V0H487V217H493V0H708V335C708 393 654 440 589 440Z","l":"M164 0H708V217H376V440H50V104C50 47 101 0 164 0Z","t":"M50 223H708V440H50ZM271 107C271 48 320 0 380 0C439 0 488 48 488 107C488 168 439 217 380 217C320 217 271 168 271 107Z","i":"M707 333C707 391 653 440 587 440H170C104 440 50 391 50 333C50 273 104 223 170 223H587C653 223 707 273 707 333ZM50 0H708V217H50Z","o":"M263 0H495C612 0 708 99 708 220C708 341 612 440 495 440H263C146 440 50 341 50 220C50 99 146 0 263 0ZM195 223H563V217H195Z","n":"M589 440H168C103 440 50 393 50 335V0H376V217H382V0H708V335C708 393 654 440 589 440Z"};
     glyphs.forEach(glyph => {
       glyph.querySelector('.glyph-letter').innerHTML =
@@ -4215,23 +4219,21 @@
       const glyphToDismiss = selectedTouchGlyph;
       touchGlyphDismissTimer = setTimeout(() => {
         if (selectedTouchGlyph !== glyphToDismiss) return;
-        const selectedIndex = glyphs.indexOf(glyphToDismiss);
         glyphToDismiss.classList.remove('is-active');
-        glyphs[selectedIndex - 6]?.classList.remove('is-lifted');
+        pairedGlyph(glyphToDismiss)?.classList.remove('is-lifted');
         selectedTouchGlyph = null;
         touchGlyphDismissTimer = null;
       }, 5000);
     };
-    glyphs.forEach((glyph, index) => {
-      const upperGlyph = index >= 6 ? glyphs[index - 6] : null;
+    glyphs.forEach(glyph => {
       const activate = () => {
         glyph.classList.add('is-active');
-        upperGlyph?.classList.add('is-lifted');
+        pairedGlyph(glyph)?.classList.add('is-lifted');
       };
       const deactivate = (force = false) => {
         if (!force && glyph.matches(':hover, :focus-visible')) return;
         glyph.classList.remove('is-active');
-        upperGlyph?.classList.remove('is-lifted');
+        pairedGlyph(glyph)?.classList.remove('is-lifted');
         if (touchGlyphDeactivate === clearTouchActivation) touchGlyphDeactivate = null;
       };
       const clearTouchActivation = () => deactivate(true);
@@ -4783,13 +4785,12 @@
 
         if (selectedTouchGlyph) {
           clearTimeout(touchGlyphDismissTimer);
-          const previousIndex = glyphs.indexOf(selectedTouchGlyph);
           selectedTouchGlyph.classList.remove('is-active');
-          glyphs[previousIndex - 6]?.classList.remove('is-lifted');
+          pairedGlyph(selectedTouchGlyph)?.classList.remove('is-lifted');
         }
         selectedTouchGlyph = b;
         b.classList.add('is-active');
-        glyphs[glyphs.indexOf(b) - 6]?.classList.add('is-lifted');
+        pairedGlyph(b)?.classList.add('is-lifted');
         scheduleTouchGlyphDismiss();
         return;
       }
