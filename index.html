@@ -589,10 +589,10 @@
     }
     .portal.type-open .type-input::placeholder { color: #777; }
     .portal.type-open .type-input:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
-    .portal.type-open .type-canvas { flex: 1 1 0; min-height: 120px; padding: clamp(10px, 2vh, 20px); font-size: clamp(44px, 12vh, 132px); }
+    .portal.type-open .type-canvas { flex: 0 0 auto; width: 100%; min-height: clamp(72px, 14vh, 160px); padding: clamp(6px, 1vh, 12px) clamp(10px, 2vw, 20px); font-size: clamp(44px, 12vh, 132px); line-height: .9; white-space: normal; overflow-wrap: anywhere; }
     .portal.type-open .controls { flex: 0 0 auto; min-height: 36px; margin: 0; gap: 12px; }
     .type-status { flex: 0 0 auto; margin: -3px 0 0; color: #555; font-size: 12px; }
-    .portal.type-open .type-layers { flex: 0 1 auto; min-height: 0; max-height: min(22vh, 180px); margin: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; }
+    .portal.type-open .type-layers { flex: 0 1 auto; min-height: 0; max-height: min(40vh, 360px); margin: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; }
     .portal.type-open .type-layers:empty { display: none; }
     
     .poster-experience { display: grid; grid-template-columns: 1fr 1fr; gap: 45px; margin-top: 30px; align-items: center; }
@@ -1206,7 +1206,7 @@
       .close { font-size: 12px; padding: 10px; }
       .stack-row { padding: 17px; }
       .type-input { min-width: 0; }
-      .portal.type-open .type-canvas { white-space: normal; overflow-wrap: anywhere; font-size: clamp(32px, 10vw, 64px); }
+      .portal.type-open .type-canvas { min-height: clamp(52px, calc(9vw + 16px), 82px); font-size: clamp(32px, 10vw, 64px); }
       .venue-student-name { overflow-wrap: anywhere; white-space: normal; }
     }
 
@@ -4491,7 +4491,6 @@
              </div>`
     ];
 
-    const typeMobileViewport = matchMedia('(max-width: 700px)');
     let filmCleanup = null;
     let colorRippleElement = null, colorRippleAnimation = null;
     let posterTimer = null, layerObserver = null, layerRevealTimer = null, layerRevealListener = null, bookTimer = null, filmTimer = null, catalogueFlip = null, studentFlip = null, venueFlip = null, archiveResizeObserver = null;
@@ -5312,12 +5311,7 @@
           }
           preview.textContent = typeInput.value;
           preview.style.letterSpacing = spacing.value / 100 + 'em';
-          preview.style.whiteSpace = typeMobileViewport.matches ? 'normal' : 'nowrap';
-          if (!typeMobileViewport.matches && Number(spacing.value) > -6 && preview.scrollWidth > preview.clientWidth) {
-            preview.style.whiteSpace = 'normal';
-          }
         };
-        typeMobileViewport.onchange = updatePreview;
         typeInput.addEventListener('beforeinput', event => {
           if (event.data && /^\p{Script=Hangul}+$/u.test(event.data)) event.preventDefault();
         });
