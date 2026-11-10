@@ -507,7 +507,7 @@
     .color-option:hover:not([aria-pressed="true"]) { flex-grow: 1.2; }
     .color-option:focus-visible { outline: 3px solid var(--db-blue); outline-offset: -5px; }
 
-    @media (min-width: 701px) and (max-width: 900px) {
+    @media (min-width: 701px) and (max-width: 1024px) {
       .portal.color-open .portal-content { padding: 8px calc(var(--rail-width) + 10px); }
       .color-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 6px; }
       .color-option, .color-option[aria-pressed="true"] { min-height: 0; padding: clamp(12px, 3vw, 20px); }
@@ -6009,7 +6009,7 @@
         const options = $$('.color-option');
         options.forEach(option => option.onclick = event => {
           options.forEach(item => item.setAttribute('aria-pressed', String(item === option)));
-          if (!matchMedia('(max-width: 900px)').matches) return;
+          if (!matchMedia('(max-width: 1024px)').matches) return;
 
           clearColorRipple();
           const previousColor = portal.dataset.colorBackground || '#FF5349';
