@@ -1138,7 +1138,7 @@
       .chapter-menu-mark { width: 15px; }
       .chapter-index-list { grid-template-columns: 1fr; max-height: calc(86svh - 150px); }
       .chapter-index-item { min-height: 62px; }
-      .logo-stack { width: min(100vw, calc(100svh * 799 / 3558 * 2)); height: min(100svh, calc(100vw * 3558 / 799 / 2)); grid-auto-flow: column; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(6, minmax(0, 1fr)); }
+      .logo-stack { width: min(100vw, calc(100svh * .4985)); height: min(100svh, calc(100vw * 2.006)); grid-auto-flow: column; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(6, minmax(0, 1fr)); }
       .glyph { font-size: min(25.3vw, 18.9svh); }
       .role-grid { grid-template-columns: repeat(2, 1fr); }
       .role-card { min-height: 150px; padding: 18px; }
@@ -1150,6 +1150,9 @@
       .color-option-meta > span { min-width: 0; overflow-wrap: anywhere; }
       .color-option-name, .color-option[aria-pressed="true"] .color-option-name { font-size: clamp(24px, 8vw, 44px); }
       .color-option-value { font-size: clamp(18px, 5vw, 26px); }
+      @media (orientation: landscape) {
+        .logo-stack { width: min(100vw, calc(100svh * 4.486)); height: min(100svh, calc(100vw * .2229)); grid-auto-flow: row; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); }
+      }
       .portal.poster-open .portal-content { padding: 8px calc(var(--rail-width) + 10px) 12px; }
       .portal.poster-open .portal-title { font-size: clamp(22px, 7vw, 34px) !important; }
       .portal.poster-open .poster-deck { display: grid; flex: 1 1 auto; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); gap: 0; width: 100%; min-height: 0; touch-action: pan-y; }
@@ -4302,7 +4305,8 @@
       const start = 0.08;
       const stagger = 0.066;
       const duration = 0.16;
-      const dropOrder = mobile ? mobileDropOrder : desktopDropOrder;
+      const landscapeMobile = mobile && matchMedia('(orientation: landscape)').matches;
+      const dropOrder = mobile && !landscapeMobile ? mobileDropOrder : desktopDropOrder;
       $('.entry').style.opacity = String(Math.max(0, 1 - p * 12));
 
       glyphs.forEach((glyph, index) => {
