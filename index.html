@@ -504,7 +504,7 @@
     .color-option-meta { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; }
     .color-option-name { font-size: clamp(22px, 2.8vw, 42px); font-weight: 400; transition: font-size .45s cubic-bezier(.16, 1, .3, 1); }
     .color-option-value { font-size: clamp(18px, 2vw, 30px); font-weight: 400; }
-    .color-option[aria-pressed="true"] { flex-grow: 3.2; box-shadow: inset 0 0 0 2px var(--option-ink); }
+    .color-option[aria-pressed="true"] { flex-grow: 3.2; box-shadow: inset 0 0 0 1px var(--option-ink); }
     .color-option[aria-pressed="true"] .color-option-name { font-size: clamp(38px, 7vw, 112px); }
     .color-option:hover:not([aria-pressed="true"]) { flex-grow: 1.2; }
     .color-option:focus-visible { outline: 3px solid var(--db-blue); outline-offset: -5px; }
@@ -609,7 +609,7 @@
     .portal.video-open .portal-content { display: flex; flex: 1 1 auto; width: 100%; max-width: none; height: 0; min-height: 0; margin: 0; padding: 0 var(--rail-width); overflow: hidden; }
     .portal.video-open .portal-content > .layer { flex: 1; min-width: 0; min-height: 0; opacity: 1; transform: none; transition: none; }
     .film-experience { position: relative; isolation: isolate; width: 100%; height: 100%; min-height: 0; overflow: hidden; background: #000007; }
-    .film-art { position: absolute; z-index: -1; width: 64%; height: 140%; top: -17%; right: -2%; pointer-events: none; transform: translate3d(var(--film-x,0px),var(--film-y,0px),0); transition: transform .9s cubic-bezier(.2,.7,.2,1), opacity .6s; }
+    .film-art { position: absolute; z-index: -1; width: 64%; height: 140%; top: -17%; right: -2%; pointer-events: none; transform: translate3d(var(--film-x,0px),var(--film-y,0px),0); transition: top .85s cubic-bezier(.16,1,.3,1), right .85s cubic-bezier(.16,1,.3,1), width .85s cubic-bezier(.16,1,.3,1), height .85s cubic-bezier(.16,1,.3,1), transform .85s cubic-bezier(.16,1,.3,1), opacity .4s; }
     .film-art img { display: block; width: 100%; height: 100%; object-fit: contain; animation: film-rise 1.4s cubic-bezier(.16,1,.3,1) both; }
     .film-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg,#000007 0%,transparent 28%), linear-gradient(0deg,#000007 0%,transparent 18%); }
     .film-intro { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; height: 100%; padding: 36px clamp(22px,4.2vw,80px) 100px; transition: opacity .35s, transform .6s; }
@@ -627,15 +627,16 @@
     .film-launch-label strong { font-size: 13px; font-weight: 400; letter-spacing: .07em; }
     .film-launch-label small { font-size: 10px; letter-spacing: .02em; opacity: .65; }
     .film-colophon { display: flex; justify-content: space-between; gap: 16px; position: absolute; right: clamp(22px,4.2vw,80px); left: clamp(22px,4.2vw,80px); bottom: 24px; padding-top: 14px; border-top: 1px solid rgba(240,238,233,.25); color: rgba(240,238,233,.6); font-size: 9px; letter-spacing: .06em; line-height: 1.4; transition: opacity .35s; }
-    .film-screen { position: absolute; z-index: 3; inset: 0; display: flex; align-items: center; justify-content: center; padding: 50px 24px 18px; background: rgba(0,0,7,.88); opacity: 0; visibility: hidden; transform: translateY(8%); transition: opacity .5s, transform .7s cubic-bezier(.16,1,.3,1), visibility .5s; }
+    .film-screen { position: absolute; z-index: 3; inset: 2% 1% 2% 45%; display: flex; align-items: center; justify-content: center; padding: 0; background: linear-gradient(90deg,rgba(0,0,7,.34),rgba(0,0,7,.04) 28%); opacity: 0; visibility: hidden; transform: translateX(5%); transition: opacity .5s, transform .7s cubic-bezier(.16,1,.3,1), visibility .5s; }
     .film-screen[hidden] { display: none; }
-    .film-screen video { display: block; width: 100%; height: 100%; max-width: 1200px; min-height: 0; object-fit: contain; background: transparent; }
-    .film-return { position: absolute; top: 16px; right: 24px; z-index: 1; padding: 7px 0; border: 0; background: none; color: #F0EEE9; font-size: 12px; letter-spacing: 0; cursor: pointer; }
+    .film-screen video { display: block; width: 100%; height: 100%; max-width: none; min-height: 0; object-fit: contain; background: transparent; opacity: 0; transform: scale(.88); transition: opacity .4s, transform .85s cubic-bezier(.16,1,.3,1); }
+    .film-return { position: absolute; top: 4px; right: 12px; z-index: 1; padding: 7px 0; border: 0; background: none; color: #F0EEE9; font-size: 12px; letter-spacing: 0; cursor: pointer; }
     .film-return:hover { color: #FF5349; }
     .film-experience.is-watching .film-screen { opacity: 1; visibility: visible; transform: none; }
-    .film-experience.is-watching .film-intro { opacity: 0; transform: translateY(-24px); pointer-events: none; }
+    .film-experience.is-watching .film-screen video { opacity: 1; transform: scale(1); }
+    .film-experience.is-watching .film-intro { opacity: 0; transform: translateX(-24px); pointer-events: none; }
     .film-experience.is-watching .film-colophon { opacity: 0; }
-    .film-experience.is-watching .film-art { opacity: .25; transform: scale(1.06); }
+    .film-experience.is-watching .film-art { top: 2%; right: 1%; width: 54%; height: 96%; opacity: 0; transform: translate3d(0,0,0); }
     .film-notice { position: absolute; z-index: 5; left: 24px; right: 24px; bottom: 20px; margin: 0; color: #F0EEE9; font-size: 13px; text-align: center; }
     .film-notice:empty { display: none; }
     @keyframes film-rise { from { opacity: 0; transform: translateY(18%) rotate(-5deg); } to { opacity: 1; transform: none; } }
@@ -653,7 +654,11 @@
       .film-launch-label strong { font-size: 11px; }
       .film-colophon { left: 18px; right: 18px; bottom: 18px; font-size: 7px; }
       .film-colophon span:last-child { max-width: 130px; text-align: right; }
-      .film-screen { padding: 56px 10px 12px; }
+      .film-screen { inset: 0; padding: 56px 10px 12px; background: rgba(0,0,7,.88); transform: translateY(8%); }
+      .film-experience.is-watching .film-screen video { opacity: 1; transform: none; transition: none; }
+      .film-experience.is-watching .film-art { opacity: .18; transform: scale(1.06); }
+      .film-return { top: 16px; right: 12px; font-size: 12px; }
+      .film-experience.is-watching .film-intro { opacity: 0; transform: translateY(-24px); }
     }
     @media (max-height: 570px) and (min-width: 641px) {
       .film-intro { padding-block: 20px 65px; }
@@ -5487,19 +5492,23 @@
     ];
     const committeeGroups = [
       { title: '운영진', members: [{ name: '유가인', role: '졸준위원장' }, { name: '최정욱', role: '부총괄' }] },
-      { title: '디자인팀', members: [{ name: '여로건', role: '팀장' }, { name: '김설', role: '팀원' }, { name: '이규림', role: '팀원' }, { name: '황해욱', role: '팀원' }, { name: '우진하', role: '팀원' }] },
+      { title: '디자인팀', members: [{ name: '여로건', role: '팀장' }, { name: '김설', role: '팀원' }, { name: '이규림', role: '팀원' }] },
       { title: '웹개발팀', members: [{ name: '박광균', role: '팀장' }, { name: '박용하', role: '팀원' }] },
       { title: '기획팀', members: [{ name: '하민규', role: '팀장' }] },
       { title: '홍보팀', members: [{ name: '장문경', role: '팀장' }] },
       { title: '총무팀', members: [{ name: '최민규', role: '팀장' }] }
     ];
+    const specialThanks = {
+      title: 'Special Thanks to',
+      members: [{ name: '우진하', role: '' }, { name: '황해욱', role: '' }]
+    };
     
     const renderCommitteePerson = (member, department, tier, order = 0) => {
       const profile = studentRecords.find(student => student.name === member.name);
       return `<article class="committee-person committee-person-${tier}" style="--committee-order:${order}">
         ${profile?.thumbnail ? `<img class="committee-photo" src="${escapeHtml(profile.thumbnail)}" alt="${escapeHtml(member.name)} 프로필 사진" loading="lazy" decoding="async">` : '<div class="committee-photo-placeholder">사진 준비 중</div>'}
         <h2>${escapeHtml(member.name)}</h2>
-        <p>${department ? `${escapeHtml(department)} · ` : ''}${escapeHtml(member.role)}</p>
+        ${department || member.role ? `<p>${department ? `${escapeHtml(department)} · ` : ''}${escapeHtml(member.role)}</p>` : ''}
       </article>`;
     };
 
@@ -5551,6 +5560,7 @@
                  <div class="committee-single-row" aria-label="각 팀 한 명씩 배치된 팀">
                    ${committeeGroups.slice(3).map((group, departmentIndex) => renderCommitteeDepartment(group, departmentIndex + 2)).join('')}
                  </div>
+                 ${renderCommitteeDepartment(specialThanks, 6)}
                </div>
              </section>`,
              
@@ -5599,7 +5609,7 @@
                <div class="film-colophon"><span class="title-en">2026 / ACCUMULATION</span><span>계명대학교 시각디자인 졸업전시</span></div>
                <div class="film-screen" id="film-screen" hidden>
                  <button class="film-return" id="film-return" type="button" aria-label="영상 닫기">돌아가기 ↙</button>
-                 <video id="exhibition-film" controls playsinline preload="none" aria-label="ACCUMULATION 메인 모션 포스터 영상" tabindex="0">
+                 <video id="exhibition-film" controls playsinline preload="metadata" aria-label="ACCUMULATION 메인 모션 포스터 영상" tabindex="0">
                    <source src="assets/optimized/exhibition-film.mp4" type="video/mp4">
                    브라우저가 MP4 영상을 지원하지 않습니다.
                  </video>
@@ -5720,29 +5730,39 @@
         const video = $('#exhibition-film');
         const screen = $('#film-screen');
         const launch = $('#film-launch');
-        const intro = $('.film-intro');
         const notice = $('#film-notice');
         const controller = new AbortController();
         let hideTimer;
+        const seekFilmToFiveSeconds = () => {
+          if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
+            video.currentTime = Math.min(5, video.duration);
+          }
+        };
+        video.addEventListener('loadedmetadata', seekFilmToFiveSeconds, {signal:controller.signal});
+        seekFilmToFiveSeconds();
         const showFilm = async () => {
           clearTimeout(hideTimer);
           notice.textContent = '';
+          seekFilmToFiveSeconds();
           screen.hidden = false;
           screen.inert = false;
           void screen.offsetWidth;
           stage.classList.add('is-watching');
-          intro.inert = true;
           launch.setAttribute('aria-expanded', 'true');
           video.focus({preventScroll:true});
-          try { await video.play(); } catch {
-            if (stage.classList.contains('is-watching') && !controller.signal.aborted) notice.textContent = '영상의 재생 버튼을 눌러주세요.';
+          try {
+            await video.play();
+          } catch {
+            if (stage.classList.contains('is-watching') && !controller.signal.aborted) {
+              notice.textContent = '영상의 재생 버튼을 눌러주세요.';
+            }
           }
         };
         const hideFilm = () => {
           video.pause();
+          video.currentTime = 5;
           stage.classList.remove('is-watching');
           screen.inert = true;
-          intro.inert = false;
           notice.textContent = '';
           launch.setAttribute('aria-expanded', 'false');
           launch.focus({preventScroll:true});
@@ -5755,7 +5775,9 @@
             event.preventDefault(); event.stopPropagation(); hideFilm();
           }
         }, {signal:controller.signal});
-        video.addEventListener('playing', () => { notice.textContent = ''; }, {signal:controller.signal});
+        video.addEventListener('playing', () => {
+          notice.textContent = '';
+        }, {signal:controller.signal});
         video.addEventListener('error', () => { notice.textContent = '영상을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.'; }, {signal:controller.signal});
         if (!reduced && matchMedia('(hover: hover) and (pointer: fine)').matches) {
           stage.addEventListener('pointermove', event => {
