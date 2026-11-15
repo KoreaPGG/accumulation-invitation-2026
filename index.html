@@ -759,6 +759,7 @@
     .student-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
     .student-placeholder { display: grid; width: 100%; height: 100%; place-items: center; color: #666; font-size: 13px; }
     .student-meta { padding: 12px 0 0; font-size: 15px; line-height: 1.4; }
+    .student-meta small { display: block; margin-top: 4px; color: #666; font-size: 10px; line-height: 1.3; }
     .committee-page { display: grid; width: 100%; height: auto; min-height: 0; gap: clamp(20px, 3vw, 32px); }
     .committee-page-heading { display: flex; align-items: end; justify-content: space-between; gap: var(--committee-space-sm); margin: 0; padding: 0 0 14px; border-bottom: 1px solid var(--ink); }
     .committee-page-heading h1 { margin: 0; font-size: clamp(30px, 3.6vw, 44px); font-weight: 400; line-height: .95; letter-spacing: 0; }
@@ -887,7 +888,7 @@
     .venue-map-tools { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex: 0 0 auto; margin-bottom: 6px; font-size: 12px; }
     .venue-map-tools p { margin: 0; }
     .venue-map-viewport { display: grid; container-type: size; flex: 1 1 auto; min-height: 0; place-items: center; overflow: hidden; background: #fff; }
-    .venue-map-art { position: relative; width: min(100cqw, calc(100cqh * .956413)); height: min(100cqh, calc(100cqw * 1.045573)); max-width: 100%; max-height: 100%; aspect-ratio: 768 / 803; }
+    .venue-map-art { position: relative; width: min(100cqw, calc(100cqh * 1.241379)); height: min(100cqh, calc(100cqw * .805556)); max-width: 100%; max-height: 100%; aspect-ratio: 4608 / 3712; }
     .venue-map-art > img { display: block; width: 100%; height: 100%; object-fit: contain; }
     .venue-booths { position: absolute; inset: 0; }
     .venue-booth { position: absolute; left: var(--booth-x); top: var(--booth-y); width: clamp(14px, 1.7vw, 22px); aspect-ratio: 1; display: grid; place-items: center; padding: 0; border: 1px solid transparent; background: transparent; color: transparent; font-size: 0; line-height: 1; transform: translate(-50%, -50%); transition: background .16s, outline-color .16s; }
@@ -912,6 +913,7 @@
     .venue-selected p { margin: 0 0 5px; font-size: 12px; }
     .venue-selected h3 { margin: 0; font-size: 18px; font-weight: 400; }
     .venue-selected strong { display: block; margin-top: 3px; color: var(--db-blue); font-size: 12px; font-weight: 400; }
+    .venue-selected-dismiss { display: none; }
     .venue-book-panel { display: grid; grid-template-rows: auto minmax(0, 1fr); min-width: 0; min-height: 0; gap: 6px; border-top: 1px solid var(--ink); padding-top: 6px; }
     .venue-book-heading { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; gap: 8px; }
     .venue-book-heading h4 { margin: 0; font-size: 11px; font-weight: 400; }
@@ -1170,22 +1172,24 @@
       .poster-experience { grid-template-columns: 1fr; gap: 10px; }
       .portal.venue-open { display: flex; flex-direction: column; overflow: visible; }
       .portal.venue-open .portal-header { position: relative; top: auto; flex: 0 0 auto; border-bottom: 1px solid var(--ink); }
-      .portal.venue-open .portal-content { box-sizing: border-box; display: block; flex: 1 1 auto; height: 0; min-height: 0; overflow-x: hidden; overflow-y: auto; padding: 10px 14px 32px; }
+      .portal.venue-open .portal-content { box-sizing: border-box; display: block; flex: 1 1 auto; height: 0; min-height: 0; overflow-x: hidden; overflow-y: auto; padding: 10px 14px 12px; }
       .portal.venue-open .portal-content { padding-inline: calc(var(--rail-width) + 10px); }
       .venue-explorer { grid-template-columns: minmax(0, 1fr); gap: 16px; height: auto; min-height: 0; }
       .venue-map-column { min-height: 0; }
       .venue-map-tools { align-items: center; margin-bottom: 6px; font-size: 11px; }
-      .venue-map-viewport { flex: 0 0 auto; height: min(65svh, 480px); min-height: min(360px, 55svh); }
-      .venue-side { grid-template-rows: auto minmax(180px, 38svh) auto minmax(260px, 45svh); gap: 10px; min-height: 0; }
-      .venue-results { grid-template-columns: repeat(3, minmax(0, 1fr)); overflow-y: auto; }
+      .venue-map-viewport { flex: 0 0 auto; height: auto; min-height: 0; aspect-ratio: 4608 / 3712; }
+      .venue-side { grid-template-rows: auto minmax(180px, 38svh) auto; gap: 4px; min-height: 0; }
+      .venue-results { grid-template-columns: repeat(3, minmax(0, 1fr)); overflow-y: auto; border-bottom: 0; }
       .venue-student { gap: 2px; padding: 1px 2px; font-size: 10px; }
       .venue-student-index { font-size: 9px; }
-      .venue-booth { width: 24px; font-size: 8px; touch-action: manipulation; }
+      .venue-booth { width: clamp(10px, 3vw, 12px); font-size: 8px; touch-action: manipulation; }
       .venue-selected h3 { font-size: 15px; }
       .venue-selected strong { font-size: 10px; }
-      .venue-book-panel { min-height: 0; gap: 6px; padding-top: 6px; }
-      .venue-book-stage { height: calc(45svh - 36px); }
-      .venue-book-heading h4 { font-size: 10px; }
+      .venue-selected:not(.has-selection) { display: none; }
+      .venue-selected.has-selection { position: fixed; z-index: 20; right: calc(var(--rail-width) + 10px); bottom: max(12px, env(safe-area-inset-bottom)); left: calc(var(--rail-width) + 10px); grid-template-columns: 48px minmax(0, 1fr); gap: 10px; min-height: 0; padding: 10px 38px 10px 10px; border: 1px solid var(--ink); background: var(--paper); box-shadow: 0 4px 18px rgba(0, 0, 0, .2); }
+      .venue-selected.has-selection img, .venue-selected.has-selection .venue-selected-placeholder { width: 48px; }
+      .venue-selected-dismiss { position: absolute; top: 6px; right: 6px; display: grid; width: 28px; height: 28px; place-items: center; padding: 0; border: 1px solid var(--ink); background: transparent; font-size: 18px; line-height: 1; }
+      .venue-book-panel { display: none; }
       .motion-sheet { width: min(78vw, 340px); }
       .student-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 14px; }
       .student-thumb { width: min(100%, 180px); }
@@ -5461,34 +5465,48 @@
     };
     
     const studentPhotos = [
-      '권주은', '김규리', '김락영', '김설', '김성훈', '김소현', '김승찬', '김예경', '김은혜',
-      '김채원', '김하늘', '김현진', '김효은', '류벼리', '문채원', '박광균', '박민주', '박소영',
-      '박수빈', '박수진', '박예경', '박용하', '박진희', '성세진', '성아진', '신세희', '어진희',
-      '여로건', '우경민', '우진하', '유가인', '윤호연', '이규림', '이규빈', '이동현', '이예진',
-      '이윤주', '이천일', '임정빈', '장문경', '장혜진', '전가람', '정유진', '정재서', '조민식',
-      '조홍비', '최민규', '최은우', '최정욱', '하민규', '황수빈', '황해욱'
+      '권주은', '김락영', '김설', '김성훈', '김은혜', '김채원', '김하늘', '류벼리', '문채원', '박민주',
+      '박수진', '성세진', '성아진', '어진희', '이규림', '이윤주', '임정빈', '장문경', '전가람', '최정욱',
+      '조흥비', '정유진', '김효은', '김승찬', '조민식', '박소영', '우진하', '김현진', '박예경', '이예진',
+      '김규리', '김소현', '김예경', '박광균', '박용하', '박진희', '여로건', '우경민', '유가인', '이규빈',
+      '이동현', '이천일', '최민규', '최은우', '하민규', '윤호연', '정재서', '장혜진', '박수빈', '신세희',
+      '황수빈', '황해욱'
     ];
 
+    const studentAssetNames = { '조흥비': '조홍비' };
+    const studentCategoryRanges = [
+      { start: 1, end: 22, name: '브랜딩&출판' },
+      { start: 23, end: 27, name: '브랜딩/출판&타입페이스' },
+      { start: 28, end: 30, name: '브랜딩&일러스트' },
+      { start: 31, end: 45, name: '브랜딩&UXUI' },
+      { start: 46, end: 52, name: 'VARIOUS' }
+    ];
+    const categoryForStudent = number => studentCategoryRanges.find(({ start, end }) => number >= start && number <= end)?.name;
     const rgbThumbnailNames = new Set(['박용하', '유가인']);
-    const previewStudents = studentPhotos.map(name => ({
+    const previewStudents = studentPhotos.map((name, index) => {
+      const assetName = studentAssetNames[name] || name;
+      return {
         name,
+        category: categoryForStudent(index + 1),
         project: '작품 자료 준비 중',
         medium: '매체 정보 준비 중',
-        thumbnail: `${assetPath('assets', 'optimized', 'students', `${name}.webp`)}${rgbThumbnailNames.has(name) ? '?v=rgb-20261019' : ''}`,
-        pages: [1, 2, 3, 4].map(page => assetPath('assets', 'optimized', 'graduates', name, `${page}.webp`)),
+        thumbnail: `${assetPath('assets', 'optimized', 'students', `${assetName}.webp`)}${rgbThumbnailNames.has(name) ? '?v=rgb-20261019' : ''}`,
+        pages: [1, 2, 3, 4].map(page => assetPath('assets', 'optimized', 'graduates', assetName, `${page}.webp`)),
         description: '작품 자료 준비 중'
-      }));
+      };
+    });
     
-    const studentRecords = exhibitionData.students.length ? exhibitionData.students : previewStudents;
+    const studentRecords = (exhibitionData.students.length ? exhibitionData.students : previewStudents)
+      .map((student, index) => ({ ...student, category: categoryForStudent(index + 1) }));
     const venueBoothPositions = [
-      [44.6,59.0],[47.8,59.0],[51.0,59.0],[54.2,59.0],[57.4,59.0],
-      [58.6,53.2],[58.6,50.2],[58.6,47.4],[58.6,42.2],[58.6,39.3],[58.6,36.4],
-      [57.8,32.4],[54.6,32.4],[51.4,32.4],[48.2,32.4],[45.0,32.4],
-      [42.5,36.0],[42.5,38.9],[42.5,41.8],[40.8,41.8],[40.8,38.9],[40.8,36.0],
-      [37.4,32.4],[34.4,32.4],
-      [30.9,34.1],[30.9,36.9],[30.9,39.9],[29.2,39.9],[29.2,36.9],[29.2,34.0],
-      [20.5,34.5],[20.5,37.4],[20.5,40.3],[20.5,43.2],[20.5,46.1],[20.5,48.9],[20.5,51.9],[20.5,54.8],[20.5,57.7],[20.5,60.6],[20.5,63.4],[20.5,66.3],[20.5,69.2],
-      [23.4,72.7],[26.4,72.7],[24.8,74.3],[20.5,77.5],[20.5,80.4],[23.4,83.9],[26.4,83.9],[29.7,80.4],[29.7,77.5]
+      [50.2,60.9],[50.3,66.7],[50.4,72.5],[50.5,78.3],[50.4,84.1],
+      [57.6,87.7],[63.3,87.7],[68.9,87.7],[74.6,87.7],[80.4,87.7],[86.0,87.7],
+      [91.6,84.1],[91.6,78.3],[91.6,72.5],[91.6,66.7],[91.6,60.9],
+      [87.6,57.7],[81.9,57.9],[75.6,57.9],[75.7,50.3],[82.0,50.2],[87.6,50.2],
+      [91.5,44.7],[91.5,38.8],
+      [87.7,34.3],[82.2,34.3],[75.7,34.3],[75.6,26.5],[82.0,26.5],[87.7,26.5],
+      [91.6,13.1],[86.6,13.1],[81.4,13.1],[76.2,13.1],[71.2,13.1],[66.1,13.1],[60.9,13.0],[55.9,13.1],[50.8,13.1],[45.7,13.1],[40.6,13.1],[35.5,13.1],[30.4,13.1],
+      [26.9,17.9],[26.9,22.7],[20.3,20.8],[17.1,27.9],[11.8,28.1],[7.7,23.7],[7.6,17.9],[11.3,13.1],[17.2,13.1]
     ];
     const committeeGroups = [
       { title: '운영진', members: [{ name: '유가인', role: '졸준위원장' }, { name: '최정욱', role: '부총괄' }] },
@@ -5626,6 +5644,7 @@
                     </div>
                     <div class="student-meta">
                       <span>${escapeHtml(r.name)}</span>
+                      <small>${escapeHtml(r.category)}</small>
                     </div>
                   </button>`
                ).join('')}
@@ -6558,6 +6577,8 @@
         const clearVenueSelection = () => {
           selectedIndex = -1;
           selectedName.textContent = '';
+          selectedPanel.classList.remove('has-selection');
+          selectedPanel.classList.remove('is-dismissed');
           venueButtons.forEach(button => {
             button.classList.remove('selected');
             if (button.classList.contains('venue-student')) button.setAttribute('aria-pressed', 'false');
@@ -6575,13 +6596,15 @@
           const student = studentRecords[index];
           if (!student) return;
           selectedIndex = index;
+          selectedPanel.classList.add('has-selection');
           selectedName.textContent = student.name;
           venueButtons.forEach(button => {
             const selected = Number(button.dataset.venueStudent) === index;
             button.classList.toggle('selected', selected);
             if (button.classList.contains('venue-student')) button.setAttribute('aria-pressed', String(selected));
           });
-          selectedPanel.innerHTML = `${student.thumbnail ? `<img src="${escapeHtml(student.thumbnail)}" alt="${escapeHtml(student.name)} 프로필 사진" loading="lazy" decoding="async">` : '<span class="venue-selected-placeholder">사진 준비 중</span>'}<div><p>선택한 학생</p><h3>${escapeHtml(student.name)}</h3><strong>${String(index + 1).padStart(2, '0')}번 부스</strong></div>`;
+          selectedPanel.classList.remove('is-dismissed');
+          selectedPanel.innerHTML = `${student.thumbnail ? `<img src="${escapeHtml(student.thumbnail)}" alt="${escapeHtml(student.name)} 프로필 사진" loading="lazy" decoding="async">` : '<span class="venue-selected-placeholder">사진 준비 중</span>'}<div><p>선택한 학생</p><h3>${escapeHtml(student.name)}</h3><strong>${String(index + 1).padStart(2, '0')}번 부스 · ${escapeHtml(student.category)}</strong></div><button type="button" class="venue-selected-dismiss" aria-label="선택한 학생 정보 닫기">×</button>`;
           const pageImages = Array.from({ length: 4 }, (_, pageIndex) => student.pages?.[pageIndex]);
           venueFlip?.destroy();
           venueFlip = null;
@@ -6598,40 +6621,45 @@
             venueBookStatus.textContent = `${student.name} 도록 ${spreadStart + 1}쪽과 ${spreadEnd}쪽`;
           };
 
-          if (!window.St?.PageFlip) {
-            venuePageCount.textContent = '도록 준비 중';
-            venueBookStatus.textContent = '도록 넘김 기능을 불러오지 못했습니다.';
-            return;
+          if (matchMedia('(min-width: 701px)').matches) {
+            if (!window.St?.PageFlip) {
+              venuePageCount.textContent = '도록 준비 중';
+              venueBookStatus.textContent = '도록 넘김 기능을 불러오지 못했습니다.';
+              return;
+            }
+
+            venueFlip = new St.PageFlip(venueBook, {
+              width: 2480,
+              height: 3508,
+              size: 'stretch',
+              minWidth: 130,
+              maxWidth: 1400,
+              minHeight: 184,
+              maxHeight: 2000,
+              drawShadow: true,
+              maxShadowOpacity: .24,
+              showCover: false,
+              usePortrait: false,
+              autoSize: false,
+              mobileScrollSupport: false,
+              flippingTime: 900
+            });
+
+            venueFlip.on('init', event => updateVenueBookControls(event.data.page));
+            venueFlip.on('flip', event => {
+              updateVenueBookControls(event.data);
+              loadBookSpread(venuePageImages, event.data);
+            });
+            venueFlip.loadFromHTML(venueBook.querySelectorAll('.page'));
+            updateVenueBookControls(0);
+            loadBookSpread(venuePageImages, 0);
           }
-
-          venueFlip = new St.PageFlip(venueBook, {
-            width: 2480,
-            height: 3508,
-            size: 'stretch',
-            minWidth: 130,
-            maxWidth: 1400,
-            minHeight: 184,
-            maxHeight: 2000,
-            drawShadow: true,
-            maxShadowOpacity: .24,
-            showCover: false,
-            usePortrait: false,
-            autoSize: false,
-            mobileScrollSupport: false,
-            flippingTime: 900
-          });
-
-          venueFlip.on('init', event => updateVenueBookControls(event.data.page));
-          venueFlip.on('flip', event => {
-            updateVenueBookControls(event.data);
-            loadBookSpread(venuePageImages, event.data);
-          });
-          venueFlip.loadFromHTML(venueBook.querySelectorAll('.page'));
-          updateVenueBookControls(0);
-          loadBookSpread(venuePageImages, 0);
         };
 
         venueButtons.forEach(button => button.addEventListener('click', () => selectVenueStudent(Number(button.dataset.venueStudent))));
+        selectedPanel.addEventListener('click', event => {
+          if (event.target.closest('.venue-selected-dismiss')) clearVenueSelection();
+        }, { passive: true });
         searchInput.addEventListener('input', () => {
           const query = searchInput.value.trim().toLocaleLowerCase('ko');
           let matchCount = 0;
