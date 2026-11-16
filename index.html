@@ -6472,7 +6472,7 @@
         $$('[data-student]').forEach(b => b.onclick = () => {
           const r = studentRecords[+b.dataset.student];
           const dialog = $('#student-modal');
-          const studentBookIsMobile = matchMedia('(max-width: 700px), (pointer: coarse)');
+          const studentBookIsMobile = matchMedia('(max-width: 700px)');
           dialog.classList.toggle('is-mobile-book', studentBookIsMobile.matches);
           studentFlip?.destroy();
           studentFlip = null;
