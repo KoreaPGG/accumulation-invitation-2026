@@ -1188,7 +1188,7 @@
       .venue-selected h3 { font-size: 15px; }
       .venue-selected strong { font-size: 10px; }
       .venue-selected:not(.has-selection) { display: none; }
-      .venue-selected.has-selection { position: fixed; z-index: 20; right: calc(var(--rail-width) + 10px); bottom: max(12px, env(safe-area-inset-bottom)); left: calc(var(--rail-width) + 10px); grid-template-columns: 48px minmax(0, 1fr); gap: 10px; min-height: 0; padding: 10px 38px 10px 10px; border: 1px solid var(--ink); background: var(--paper); box-shadow: 0 4px 18px rgba(0, 0, 0, .2); }
+      .venue-selected.has-selection { position: fixed; z-index: 20; right: calc(var(--rail-width) + 10px); bottom: max(0px, env(safe-area-inset-bottom)); left: calc(var(--rail-width) + 10px); grid-template-columns: 48px minmax(0, 1fr); gap: 10px; min-height: 0; padding: 10px 38px 10px 10px; border: 1px solid var(--ink); background: var(--paper); box-shadow: 0 4px 18px rgba(0, 0, 0, .2); }
       .venue-selected.has-selection img, .venue-selected.has-selection .venue-selected-placeholder { width: 48px; }
       .venue-selected-dismiss { position: absolute; top: 6px; right: 6px; display: grid; width: 28px; height: 28px; place-items: center; padding: 0; border: 1px solid var(--ink); background: transparent; font-size: 18px; line-height: 1; }
       .venue-book-panel { display: none; }
@@ -5520,7 +5520,7 @@
     ];
     const specialThanks = {
       title: 'Special Thanks to',
-      members: [{ name: '우진하', role: '' }, { name: '황해욱', role: '' }]
+      members: [{ name: '우진하', role: '타입페이스' }, { name: '황해욱', role: '영상' }]
     };
     
     const renderCommitteePerson = (member, department, tier, order = 0) => {
@@ -6574,7 +6574,22 @@
         let venueBook = $('#venue-book');
         const venuePageCount = $('#venue-page-count');
         const venueBookStatus = $('#venue-book-status');
+        const venuePortal = selectedPanel.closest('.portal');
+        const selectedPanelParent = selectedPanel.parentNode;
+        const selectedPanelNextSibling = selectedPanel.nextSibling;
+        const venueMobileQuery = matchMedia('(max-width: 700px)');
         let selectedIndex = -1;
+
+        const syncSelectedPanelPlacement = () => {
+          if (venueMobileQuery.matches && selectedPanel.parentNode !== venuePortal) {
+            venuePortal.append(selectedPanel);
+          } else if (!venueMobileQuery.matches && selectedPanel.parentNode !== selectedPanelParent) {
+            selectedPanelParent.insertBefore(
+              selectedPanel,
+              selectedPanelNextSibling?.parentNode === selectedPanelParent ? selectedPanelNextSibling : null
+            );
+          }
+        };
 
         const clearVenueSelection = () => {
           selectedIndex = -1;
@@ -6582,6 +6597,7 @@
           venueBookStage.classList.remove('has-selection');
           selectedPanel.classList.remove('has-selection');
           selectedPanel.classList.remove('is-dismissed');
+          syncSelectedPanelPlacement();
           venueButtons.forEach(button => {
             button.classList.remove('selected');
             if (button.classList.contains('venue-student')) button.setAttribute('aria-pressed', 'false');
@@ -6599,6 +6615,7 @@
           const student = studentRecords[index];
           if (!student) return;
           selectedIndex = index;
+          syncSelectedPanelPlacement();
           venueBookStage.classList.add('has-selection');
           selectedPanel.classList.add('has-selection');
           selectedName.textContent = student.name;
@@ -6660,6 +6677,7 @@
           }
         };
 
+        venueMobileQuery.addEventListener('change', syncSelectedPanelPlacement);
         venueButtons.forEach(button => button.addEventListener('click', () => selectVenueStudent(Number(button.dataset.venueStudent))));
         selectedPanel.addEventListener('click', event => {
           if (event.target.closest('.venue-selected-dismiss')) clearVenueSelection();
