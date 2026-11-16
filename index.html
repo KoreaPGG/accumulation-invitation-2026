@@ -530,13 +530,13 @@
     .logo-lab.is-floating .lab-letter { transition: none; will-change: transform; }
     .logo-lab.is-floating .lab-letter:active { cursor: grabbing; }
     .portal .logo-lab .lab-letter, .portal .logo-lab .lab-letter text { font-family: "Doltop", sans-serif !important; font-weight: 400; }
-    .student-dialog { position: relative; width: min(940px, calc(100vw - 32px)); max-height: 90svh; padding: 0; border: 0; background: var(--paper); color: var(--ink); overflow: hidden; }
+    .student-dialog { position: fixed; inset: 0; margin: auto; width: min(940px, calc(100vw - 32px)); max-height: 90dvh; padding: 0; border: 0; background: var(--paper); color: var(--ink); overflow: hidden; }
     .student-dialog::backdrop { background: rgba(0,0,0,.55); }
     .student-dialog, .student-dialog * { font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif !important; }
     .student-dialog .book-shell { height: auto; overflow: hidden; }
     .student-dialog .student-book-stage { width: min(100%, 960px, calc((90svh - 48px) * 1.414)); max-width: 100%; max-height: calc(90svh - 48px); aspect-ratio: 4960 / 3508; }
-    .student-dialog.is-mobile-book { box-sizing: border-box; width: min(calc((90svh - 24px) * .707 + 24px), calc(100vw - 24px)); padding: 12px; }
-    .student-dialog.is-mobile-book .student-book-stage { width: min(calc(100vw - 48px), calc((90svh - 48px) * .707)); max-width: 100%; max-height: calc(90svh - 48px); aspect-ratio: 2480 / 3508; }
+    .student-dialog.is-mobile-book { box-sizing: border-box; width: min(calc((90dvh - 24px) * .707 + 24px), calc(100vw - 24px)); padding: 12px; }
+    .student-dialog.is-mobile-book .student-book-stage { width: min(calc(100vw - 48px), calc((90dvh - 48px) * .707)); height: auto; max-width: 100%; max-height: calc(90dvh - 48px); flex: 0 0 auto; aspect-ratio: 2480 / 3508; }
     .student-dialog.is-mobile-book .student-book-navigation { position: absolute; z-index: 6; right: 8px; bottom: 8px; left: 8px; display: flex; justify-content: space-between; pointer-events: none; }
     .student-dialog.is-mobile-book .student-book-navigation button { min-width: 44px; min-height: 44px; padding: 8px 12px; border: 1px solid rgba(255,255,255,.55); border-radius: 0; background: rgba(0,0,0,.62); color: #fff; font: inherit; font-size: 15px; touch-action: manipulation; pointer-events: auto; }
     .student-dialog.is-mobile-book .student-book-navigation button:disabled { opacity: .4; }
