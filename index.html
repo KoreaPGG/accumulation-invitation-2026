@@ -1006,8 +1006,8 @@
     .venue-student.selected { color: var(--db-blue); }
     .venue-student.selected .venue-student-index { color: inherit; }
     .venue-empty { grid-column: 1 / -1; margin: 0; padding: 18px 0; font-size: 13px; }
-    .venue-selected { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; align-items: center; min-height: 96px; }
-    .venue-selected img, .venue-selected-placeholder { width: 72px; aspect-ratio: 3 / 4; object-fit: cover; background: rgba(0,0,0,.08); }
+    .venue-selected { display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 12px; align-items: center; min-height: 134px; }
+    .venue-selected img, .venue-selected-placeholder { width: 100px; aspect-ratio: 3 / 4; object-fit: cover; background: rgba(0,0,0,.08); }
     .venue-selected-placeholder { display: grid; place-items: center; font-size: 10px; text-align: center; }
     .venue-selected p { margin: 0 0 5px; font-size: 12px; }
     .venue-selected h3 { margin: 0; font-size: 18px; font-weight: 400; }
@@ -1289,8 +1289,8 @@
       .venue-selected h3 { font-size: 15px; }
       .venue-selected strong { font-size: 10px; }
       .venue-selected:not(.has-selection) { display: none; }
-      .venue-selected.has-selection { position: fixed; z-index: 20; right: calc(var(--rail-width) + 10px); bottom: max(0px, env(safe-area-inset-bottom)); left: calc(var(--rail-width) + 10px); grid-template-columns: 48px minmax(0, 1fr); gap: 10px; min-height: 0; padding: 10px 38px 10px 10px; border: 1px solid var(--ink); background: var(--paper); box-shadow: 0 4px 18px rgba(0, 0, 0, .2); }
-      .venue-selected.has-selection img, .venue-selected.has-selection .venue-selected-placeholder { width: 48px; }
+      .venue-selected.has-selection { position: fixed; z-index: 20; right: calc(var(--rail-width) + 10px); bottom: max(0px, env(safe-area-inset-bottom)); left: calc(var(--rail-width) + 10px); grid-template-columns: 64px minmax(0, 1fr); gap: 10px; min-height: 0; padding: 10px 38px 10px 10px; border: 1px solid var(--ink); background: var(--paper); box-shadow: 0 4px 18px rgba(0, 0, 0, .2); }
+      .venue-selected.has-selection img, .venue-selected.has-selection .venue-selected-placeholder { width: 64px; }
       .venue-selected-dismiss { position: absolute; top: 6px; right: 6px; display: grid; width: 28px; height: 28px; place-items: center; padding: 0; border: 1px solid var(--ink); background: transparent; font-size: 18px; line-height: 1; }
       .venue-book-panel { display: none; }
       .motion-sheet { width: min(78vw, 340px); }
