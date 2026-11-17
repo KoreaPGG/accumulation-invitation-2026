@@ -5615,7 +5615,7 @@
           drawShadow: !isMobileCatalogue,
           maxShadowOpacity: isMobileCatalogue ? 0 : .24,
           autoSize: false,
-          mobileScrollSupport: false,
+          mobileScrollSupport: isMobileCatalogue,
           flippingTime: isMobileCatalogue ? 320 : 450
         });
         const activeCatalogueFlip = catalogueFlip;
