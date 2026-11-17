@@ -5667,39 +5667,28 @@
           queuedPageTurns += direction;
           if (catalogueFlip.getState() === 'read') performQueuedPageTurn();
         };
-        const catalogueStudentPageRanges = new Map();
-        cataloguePages.forEach((page, pageIndex) => {
-          if (!page.studentName) return;
-          const range = catalogueStudentPageRanges.get(page.studentName);
-          if (range) range.end = pageIndex;
-          else catalogueStudentPageRanges.set(page.studentName, { start: pageIndex, end: pageIndex });
-        });
         const catalogueContents = [
-          { title: '학과, 교수진 소개', range: '10–11쪽', pageIndex: 9 },
-          { title: '인사말', range: '12–13쪽', pageIndex: 11 },
-          { title: '전시 주제, 스토리', range: '14–15쪽', pageIndex: 13 },
+          { title: '학과 소개', range: '10–11쪽', pageIndex: 9 },
+          { title: '학장 인사말', range: '12–13쪽', pageIndex: 11 },
+          { title: '전시 소개', range: '14–15쪽', pageIndex: 13 },
           { title: '교수진', range: '16–17쪽', pageIndex: 15 },
           { title: '졸업전시준비위원회', range: '18–19쪽', pageIndex: 17 },
           { title: '졸업생', range: '20–25쪽', pageIndex: 19 },
           { title: 'Contents', range: '26–29쪽', pageIndex: 25 },
           { title: '형성', range: '30–31쪽', pageIndex: 29 },
-          { title: '압축', range: '60–61쪽', pageIndex: 59 },
-          { title: '지속', range: '86–87쪽', pageIndex: 85 },
-          { title: '발전', range: '104–105쪽', pageIndex: 103 },
+          { title: '압축', range: '84–85쪽', pageIndex: 83 },
+          { title: '지속', range: '138–139쪽', pageIndex: 137 },
+          { title: '발전', range: '192–193쪽', pageIndex: 191 },
           { title: 'Ending Graphic', range: '246–249쪽', pageIndex: 245 },
-          { title: 'Typeface(돌탑체)', range: '250–251쪽', pageIndex: 249 },
+          { title: 'Typeface Accumulation', range: '250–251쪽', pageIndex: 249 },
           { title: 'Closing Notes', range: '252–257쪽', pageIndex: 251 },
           { title: '졸준위 인사말', range: '258–259쪽', pageIndex: 257 },
           { title: '판권지', range: '260–261쪽', pageIndex: 259 }
-        ].concat(studentRecords.map(student => {
-          const range = catalogueStudentPageRanges.get(student.name);
-          if (!range) throw new Error(`No catalogue pages found for ${student.name}`);
-          return {
-            title: student.name,
-            range: `${range.start + 1}–${range.end + 1}쪽`,
-            pageIndex: range.start
-          };
-        })).sort((first, second) => first.pageIndex - second.pageIndex);
+        ].concat(catalogueStudentContents.map(({ title, startPage }) => ({
+          title,
+          range: `${startPage}–${startPage + 3}쪽`,
+          pageIndex: startPage - 1
+        }))).sort((first, second) => first.pageIndex - second.pageIndex);
         const catalogueContentsList = $('#catalogue-contents-list');
         const catalogueContentsToggle = $('#catalogue-contents-toggle');
         let currentCatalogueSectionTitle = '목차';
@@ -5858,21 +5847,75 @@
         }));
       }
     ).flat();
-    const catalogueFrontSpreadsBeforeStudent = new Map([
-      ['류벼리', 43],
-      ['어진희', 70],
-      ['장문경', 97]
+    const catalogueStudentContents = [
+      { title: '권주은', startPage: 32 },
+      { title: '김규리', startPage: 36 },
+      { title: '김락영', startPage: 40 },
+      { title: '김설', startPage: 44 },
+      { title: '김성훈', startPage: 48 },
+      { title: '김소현', startPage: 52 },
+      { title: '김승찬', startPage: 56 },
+      { title: '김예경', startPage: 60 },
+      { title: '김은혜', startPage: 64 },
+      { title: '김채원', startPage: 68 },
+      { title: '김하늘', startPage: 72 },
+      { title: '김현진', startPage: 76 },
+      { title: '김효은', startPage: 80 },
+      { title: '류벼리', startPage: 86 },
+      { title: '문채원', startPage: 90 },
+      { title: '박광균', startPage: 94 },
+      { title: '박민주', startPage: 98 },
+      { title: '박소영', startPage: 102 },
+      { title: '박수빈', startPage: 106 },
+      { title: '박수진', startPage: 110 },
+      { title: '박예경', startPage: 114 },
+      { title: '박용하', startPage: 118 },
+      { title: '박진희', startPage: 122 },
+      { title: '성세진', startPage: 126 },
+      { title: '성아진', startPage: 130 },
+      { title: '신세희', startPage: 134 },
+      { title: '어진희', startPage: 140 },
+      { title: '여로건', startPage: 144 },
+      { title: '우경민', startPage: 148 },
+      { title: '우진하', startPage: 152 },
+      { title: '유가인', startPage: 156 },
+      { title: '윤호연', startPage: 160 },
+      { title: '이규림', startPage: 164 },
+      { title: '이규빈', startPage: 168 },
+      { title: '이동현', startPage: 172 },
+      { title: '이예진', startPage: 176 },
+      { title: '이윤주', startPage: 180 },
+      { title: '이천일', startPage: 184 },
+      { title: '임정빈', startPage: 188 },
+      { title: '장문경', startPage: 194 },
+      { title: '장혜진', startPage: 198 },
+      { title: '전가람', startPage: 202 },
+      { title: '정유진', startPage: 206 },
+      { title: '정재서', startPage: 210 },
+      { title: '조민식', startPage: 214 },
+      { title: '조홍비', startPage: 218 },
+      { title: '최민규', startPage: 222 },
+      { title: '최은우', startPage: 226 },
+      { title: '최정욱', startPage: 230 },
+      { title: '하민규', startPage: 234 },
+      { title: '황수빈', startPage: 238 },
+      { title: '황해욱', startPage: 242 }
+    ];
+    const catalogueSectionSpreadsBeforeStudent = new Map([
+      [86, 84],
+      [140, 138],
+      [194, 192]
     ]);
     const cataloguePages = [
       { alt: '온라인 도록 앞표지' },
       ...catalogueSpreadPages(2, 16),
-      ...studentRecords.flatMap(student => {
-        const frontSpread = catalogueFrontSpreadsBeforeStudent.get(student.name);
+      ...catalogueStudentContents.flatMap(({ title, startPage }) => {
+        const frontSpread = catalogueSectionSpreadsBeforeStudent.get(startPage);
         return [
           ...(frontSpread ? catalogueSpreadPages(frontSpread, frontSpread) : []),
-          ...student.pages.map((_, index) => ({
-            alt: `${student.name} 도록 ${index + 1}쪽`,
-            studentName: student.name
+          ...Array.from({ length: 4 }, (_, index) => ({
+            alt: `${title} 도록 ${index + 1}쪽`,
+            studentName: title
           }))
         ];
       }),
