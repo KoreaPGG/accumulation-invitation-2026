@@ -5589,6 +5589,13 @@
           queuedPageTurns += direction;
           if (catalogueFlip.getState() === 'read') performQueuedPageTurn();
         };
+        const catalogueStudentPageRanges = new Map();
+        cataloguePages.forEach((page, pageIndex) => {
+          if (!page.studentName) return;
+          const range = catalogueStudentPageRanges.get(page.studentName);
+          if (range) range.end = pageIndex;
+          else catalogueStudentPageRanges.set(page.studentName, { start: pageIndex, end: pageIndex });
+        });
         const catalogueContents = [
           { title: '학과, 교수진 소개', range: '10–11쪽', pageIndex: 9 },
           { title: '인사말', range: '12–13쪽', pageIndex: 11 },
@@ -5606,21 +5613,24 @@
           { title: 'Closing Notes', range: '252–257쪽', pageIndex: 251 },
           { title: '졸준위 인사말', range: '258–259쪽', pageIndex: 257 },
           { title: '판권지', range: '260–261쪽', pageIndex: 259 }
-        ];
+        ].concat(studentRecords.map(student => {
+          const range = catalogueStudentPageRanges.get(student.name);
+          if (!range) throw new Error(`No catalogue pages found for ${student.name}`);
+          return {
+            title: student.name,
+            range: `${range.start + 1}–${range.end + 1}쪽`,
+            pageIndex: range.start
+          };
+        })).sort((first, second) => first.pageIndex - second.pageIndex);
         const catalogueContentsList = $('#catalogue-contents-list');
         const catalogueContentsToggle = $('#catalogue-contents-toggle');
         let currentCatalogueSectionTitle = '목차';
         const updateCatalogueContentsToggle = pageIndex => {
           if (Number.isInteger(pageIndex)) {
-            const pageTitle = cataloguePages[pageIndex]?.sectionTitle;
-            if (pageTitle) {
-              currentCatalogueSectionTitle = pageTitle;
-            } else {
-              currentCatalogueSectionTitle = '목차';
-              for (const entry of catalogueContents) {
-                if (entry.pageIndex > pageIndex) break;
-                currentCatalogueSectionTitle = entry.title;
-              }
+            currentCatalogueSectionTitle = '목차';
+            for (const entry of catalogueContents) {
+              if (entry.pageIndex > pageIndex) break;
+              currentCatalogueSectionTitle = entry.title;
             }
             catalogueContentsToggle.firstElementChild.textContent = currentCatalogueSectionTitle;
           }
@@ -5769,15 +5779,11 @@
       ...studentRecords.flatMap(student => {
         const frontSpread = catalogueFrontSpreadsBeforeStudent.get(student.name);
         return [
-          ...(frontSpread ? catalogueSpreadPages('front', frontSpread, frontSpread).map(page => ({
-            ...page,
-            sectionTitle: '졸업생'
-          })) : []),
+          ...(frontSpread ? catalogueSpreadPages('front', frontSpread, frontSpread) : []),
           ...student.pages.map((src, index) => ({
             src,
             alt: `${student.name} 도록 ${index + 1}쪽`,
-            studentName: student.name,
-            sectionTitle: '졸업생'
+            studentName: student.name
           }))
         ];
       }),
