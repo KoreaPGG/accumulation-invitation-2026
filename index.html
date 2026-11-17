@@ -5666,8 +5666,7 @@
           }
 
           queuedPageTurns -= direction;
-          if (isMobileCatalogue) catalogueFlip.turnToPage(target);
-          else if (direction > 0) catalogueFlip.flipNext('bottom');
+          if (direction > 0) catalogueFlip.flipNext('bottom');
           else catalogueFlip.flipPrev('bottom');
           if (isMobileCatalogue && queuedPageTurns) scheduleQueuedPageTurn();
         };
