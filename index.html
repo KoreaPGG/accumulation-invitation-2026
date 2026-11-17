@@ -930,6 +930,7 @@
     @media(max-width: 700px) {
       .portal.catalogue-open .portal-content { padding: 4px calc(var(--rail-width) + 2px) 6px; }
       .book-stage { width: min(100%, 420px); max-height: calc(100% - 92px); aspect-ratio: 2480 / 3508; }
+      #catalogue-book { touch-action: pan-y pinch-zoom !important; }
       .catalogue-book-controls { width: min(100%, 420px); }
       .catalogue-book-controls { grid-template-columns: minmax(0, 1fr); }
       #catalogue-book .page, #catalogue-book .page-cover { padding: 0; }
@@ -5747,19 +5748,58 @@
         loadCatalogueWindow(0);
         $('#prev-page').onclick = () => requestPageTurn(-1);
         $('#next-page').onclick = () => requestPageTurn(1);
-        bookStage.addEventListener('click', event => {
-          if (!isMobileCatalogue) return;
-          const bounds = bookStage.getBoundingClientRect();
-          const edgeWidth = Math.min(64, bounds.width * .18);
-          const cornerHeight = bounds.height * .2;
-          const offset = event.clientX - bounds.left;
-          const verticalOffset = event.clientY - bounds.top;
-          const isPageFlipCorner =
-            (offset <= edgeWidth || offset >= bounds.width - edgeWidth) &&
-            (verticalOffset < cornerHeight || verticalOffset > bounds.height - cornerHeight);
-          if (isPageFlipCorner) return;
-          requestPageTurn(offset < bounds.width / 2 ? -1 : 1);
-        });
+        if (isMobileCatalogue) {
+          const activeTouchPointers = new Set();
+          let mobileTapCandidate = null;
+          let suppressMobileClickUntil = 0;
+          const requestMobilePageTurn = clientX => {
+            const bounds = bookStage.getBoundingClientRect();
+            requestPageTurn(clientX < bounds.left + bounds.width / 2 ? -1 : 1);
+          };
+          bookStage.addEventListener('pointerdown', event => {
+            if (event.pointerType !== 'touch') return;
+            activeTouchPointers.add(event.pointerId);
+            if (activeTouchPointers.size !== 1) {
+              mobileTapCandidate = null;
+              suppressMobileClickUntil = performance.now() + 700;
+              return;
+            }
+            mobileTapCandidate = {
+              pointerId: event.pointerId,
+              startX: event.clientX,
+              startY: event.clientY
+            };
+          });
+          bookStage.addEventListener('pointermove', event => {
+            if (mobileTapCandidate?.pointerId !== event.pointerId) return;
+            if (Math.hypot(event.clientX - mobileTapCandidate.startX, event.clientY - mobileTapCandidate.startY) > 12) {
+              mobileTapCandidate = null;
+              suppressMobileClickUntil = performance.now() + 700;
+            }
+          });
+          bookStage.addEventListener('pointerup', event => {
+            if (event.pointerType !== 'touch') return;
+            activeTouchPointers.delete(event.pointerId);
+            if (mobileTapCandidate?.pointerId !== event.pointerId) return;
+            const start = mobileTapCandidate;
+            mobileTapCandidate = null;
+            suppressMobileClickUntil = performance.now() + 700;
+            if (
+              activeTouchPointers.size ||
+              Math.hypot(event.clientX - start.startX, event.clientY - start.startY) > 12
+            ) return;
+            requestMobilePageTurn(event.clientX);
+          });
+          bookStage.addEventListener('pointercancel', event => {
+            activeTouchPointers.delete(event.pointerId);
+            if (mobileTapCandidate?.pointerId === event.pointerId) mobileTapCandidate = null;
+            suppressMobileClickUntil = performance.now() + 700;
+          });
+          bookStage.addEventListener('click', event => {
+            if (event.pointerType === 'touch' || performance.now() < suppressMobileClickUntil) return;
+            requestMobilePageTurn(event.clientX);
+          });
+        }
       }
 
     }
