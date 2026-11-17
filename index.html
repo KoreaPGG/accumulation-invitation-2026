@@ -892,6 +892,8 @@
     .book-stage { width: min(960px, calc(100vw - 180px)); max-width: 960px; height: auto; max-height: calc(100% - 44px); flex-shrink: 0; aspect-ratio: 4960 / 3508; position: relative; margin: 0 auto; overflow: hidden; }
     .portal.catalogue-open .book-stage { width: min(100%, 960px, calc(141.4svh - 235px)); max-width: 100%; }
     .book { width: 100%; height: 100%; }
+    .catalogue-overlay-navigation { display: none; }
+    .catalogue-page-image { display: block; width: 100%; height: 100%; object-fit: contain; }
     .page { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; padding: 0; border: 0; background: #ffffff !important; color: #000000; }
     #catalogue-book .page-cover { box-sizing: border-box; padding: clamp(24px, 5%, 72px); }
     #student-book { width: 100%; height: 100%; cursor: pointer; }
@@ -923,10 +925,32 @@
     .page-list li { display: grid; grid-template-columns: 48px 1fr; gap: 12px; padding-top: 10px; border-top: 1px solid var(--ink); font-size: clamp(11px, 1.2vw, 16px); }
     .page-photo { width: 100%; height: 100%; object-fit: contain; }
     .book-controls { display: flex; justify-content: center; gap: 15px; align-items: center; flex: 0 0 auto; margin-top: 10px; }
+    .catalogue-book-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px 15px; width: min(100%, 720px); }
+    .catalogue-page-navigation { grid-column: 2; display: flex; align-items: center; justify-content: center; gap: 15px; }
+    .catalogue-contents { position: relative; grid-column: 3; justify-self: end; width: clamp(150px, 20vw, 220px); }
+    .catalogue-contents-toggle { display: flex; width: 100%; min-height: 36px; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--ink); padding: 8px 10px; background: var(--white); text-align: left; cursor: pointer; font-size: 13px; letter-spacing: normal; }
+    .catalogue-contents-toggle span:last-child { transition: transform .18s ease; }
+    .catalogue-contents-toggle[aria-expanded="true"] span:last-child { transform: rotate(180deg); }
+    .catalogue-contents-list { position: absolute; z-index: 20; right: 0; bottom: calc(100% + 8px); left: 0; max-height: min(40svh, 320px); overflow-y: auto; border: 1px solid var(--ink); background: var(--white); box-shadow: 0 4px 16px rgba(0, 0, 0, .18); }
+    .catalogue-contents-list[hidden] { display: none; }
+    .catalogue-contents-option { display: grid; width: 100%; min-height: 40px; grid-template-columns: auto auto minmax(0, 1fr); align-items: center; gap: 8px; border: 0; padding: 8px 10px; background: var(--white); text-align: left; cursor: pointer; font-size: 13px; letter-spacing: normal; }
+    .catalogue-contents-option:hover, .catalogue-contents-option:focus-visible { background: var(--ink); color: var(--red); }
+    .catalogue-contents-range { white-space: nowrap; font-size: 12px; }
 
     @media(max-width: 700px) {
       .portal.catalogue-open .portal-content { padding: 4px calc(var(--rail-width) + 2px) 6px; }
-      .book-stage { width: min(100%, 420px); max-height: calc(100% - 44px); aspect-ratio: 2480 / 3508; }
+      .book-stage { width: min(100%, 420px); max-height: calc(100% - 92px); aspect-ratio: 2480 / 3508; }
+      .catalogue-book-controls { width: min(100%, 420px); }
+      .catalogue-book-controls { grid-template-columns: minmax(0, 1fr); }
+      #catalogue-book .page, #catalogue-book .page-cover { padding: 0; }
+      .catalogue-page-navigation, .catalogue-contents { grid-column: 1; justify-self: center; }
+      .catalogue-page-navigation { display: none; }
+      .catalogue-contents { width: min(100%, 300px); }
+      .catalogue-overlay-navigation { position: absolute; z-index: 6; right: 8px; bottom: 8px; left: 8px; display: flex; align-items: center; justify-content: space-between; pointer-events: none; }
+      .catalogue-overlay-navigation button { min-width: 44px; min-height: 44px; padding: 8px 12px; border: 1px solid rgba(255,255,255,.55); border-radius: 0; background: rgba(0,0,0,.62); color: #fff; font: inherit; font-size: 15px; touch-action: manipulation; pointer-events: auto; }
+      .catalogue-overlay-navigation button:disabled { opacity: .4; }
+      .catalogue-overlay-navigation button:focus-visible { outline: 2px solid var(--db-blue); outline-offset: 2px; }
+      .catalogue-overlay-page-count { min-width: 34px; padding: 8px 10px; background: rgba(0,0,0,.72); color: rgba(255,255,255,.88); font-size: 14px; line-height: 1; text-align: center; font-variant-numeric: tabular-nums; pointer-events: none; }
       .student-dialog { box-sizing: border-box; width: min(940px, calc(100vw - 24px)); padding: 12px; }
       .student-dialog .student-book-stage { width: min(100%, calc((90svh - 48px) * .707)); max-width: 100%; max-height: calc(90svh - 48px); aspect-ratio: 2480 / 3508; }
       .student-book-navigation { position: absolute; z-index: 6; right: 8px; bottom: 8px; left: 8px; display: flex; justify-content: space-between; pointer-events: none; }
@@ -950,6 +974,8 @@
     .collab-photo-label { display: grid; gap: 8px; justify-items: center; color: rgba(0, 0, 0, .62); font-size: 11px; text-align: center; }
     .collab-photo-label strong { color: var(--ink); font-size: clamp(28px, 4vw, 48px); font-weight: 400; }
     .collab-photo img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+    .collab-category--logos .collab-photo { background-color: #fff; background-image: none; }
+    .collab-category--logos .collab-photo img { inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
     .collab-card-info { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: 12px; padding: 12px 0 0; }
     .collab-card h4 { margin: 0; font-size: clamp(18px, 2vw, 26px); font-weight: 400; overflow-wrap: anywhere; }
     .collab-card-type { margin: 6px 0 0; font-size: 12px; }
@@ -4314,9 +4340,9 @@
     const sectionFromHash = () => location.hash === '#partnership'
       ? names.indexOf('PARTNERSHIP')
       : sectionSlugs.findIndex(slug => '#' + slug === location.hash);
-    const korean = ['KVCD', '졸준위원 소개', '로고', '컬러', '서체', '포스터', '영상', '졸업생', '온라인 도록', '파트너십', '전시장', '게임'];
-    const glyphTitles = ['KVCD', 'COMMITTEE', 'LOGO', 'COLOR', 'TYPEFACE', 'POSTER', 'VIDEO', 'GRADUATES', 'ARTWORKS', 'PARTNERSHIP', 'VENUE', 'GAME'];
-    const glyphKoreanTitles = ['역대 졸업 전시', '졸업준비위원회', '로고', '색상', '서체', '포스터', '영상', '졸업생', '작품', '파트너십', '전시장', '게임'];
+    const korean = ['KVCD', '졸준위원 소개', '로고', '컬러', '서체', '포스터', '영상', '졸업생', '온라인도록', '파트너십', '전시장', '게임'];
+    const glyphTitles = ['KVCD', 'COMMITTEE', 'LOGO', 'COLOR', 'TYPEFACE', 'POSTER', 'VIDEO', 'GRADUATES', 'CATALOGUE', 'PARTNERSHIP', 'VENUE', 'GAME'];
+    const glyphKoreanTitles = ['역대 졸업 전시', '졸업준비위원회', '로고', '색상', '서체', '포스터', '영상', '졸업생', '온라인도록', '파트너십', '전시장', '게임'];
     const mapping = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const letters = 'accumulation'.split('');
@@ -4569,13 +4595,24 @@
       () => `<div class="book-shell">
                <div class="book-stage">
                    <div class="book" id="catalogue-book" aria-label="A4 세로 양면 2026 온라인 도록"></div>
+                   <nav class="catalogue-overlay-navigation" aria-label="온라인 도록 페이지 이동">
+                     <button type="button" id="catalogue-overlay-prev-page" aria-label="이전 도록 페이지" disabled>←</button>
+                     <span class="catalogue-overlay-page-count title-en" id="catalogue-overlay-page-count" aria-hidden="true">01 / 258</span>
+                     <button type="button" id="catalogue-overlay-next-page" aria-label="다음 도록 페이지">→</button>
+                   </nav>
                </div>
-               <div class="book-controls">
-                 <button class="control" id="prev-page" aria-label="이전 도록 페이지">이전</button>
-                 <span id="page-count" class="title-en" aria-live="polite">01 / 264</span>
-                 <button class="control" id="next-page" aria-label="다음 도록 페이지">다음</button>
+               <div class="book-controls catalogue-book-controls">
+                 <div class="catalogue-page-navigation">
+                   <button class="control" id="prev-page" aria-label="이전 도록 페이지">이전</button>
+                   <span id="page-count" class="title-en" aria-live="polite">01 / 258</span>
+                   <button class="control" id="next-page" aria-label="다음 도록 페이지">다음</button>
+                 </div>
+                 <div class="catalogue-contents">
+                   <button class="catalogue-contents-toggle" id="catalogue-contents-toggle" type="button" aria-label="목차 열기" aria-expanded="false" aria-controls="catalogue-contents-list"><span>목차</span><span aria-hidden="true">⌄</span></button>
+                   <div class="catalogue-contents-list" id="catalogue-contents-list" role="listbox" aria-label="온라인 도록 목차" hidden></div>
+                 </div>
                </div>
-               <p class="sr-only" id="book-status" aria-live="polite">A4 세로 온라인 도록, 전체 264페이지</p>
+               <p class="sr-only" id="book-status" aria-live="polite">A4 세로 온라인 도록, 전체 258페이지</p>
              </div>`,
 
       () => `<div class="venue-explorer">
@@ -4583,7 +4620,7 @@
                  <div class="venue-map-tools"><p>대구경북디자인진흥원 · 4F</p><p id="venue-selected-name" aria-live="polite"></p></div>
                  <div class="venue-map-viewport">
                    <div class="venue-map-art" id="venue-map-art">
-                     <img src="${assetPath('assets', '전시장.webp')}?v=3" alt="4층 전시장 평면도">
+                     <img src="${assetPath('assets', '전시장.webp')}?v=4" alt="4층 전시장 평면도">
                      <div class="venue-booths" id="venue-booths" aria-label="학생 부스 위치">
                        ${studentRecords.map((student, index) => {
                          const [x, y] = venueBoothPositions[index] || [50, 50];
@@ -5490,16 +5527,22 @@
 
       if (i === 5) {
         const bookElement = $('#catalogue-book');
-        const totalPageCount = 264;
-        bookElement.innerHTML = Array.from({ length: totalPageCount }, (_, index) => {
+        const totalPageCount = cataloguePages.length;
+        const overlayPreviousPage = $('#catalogue-overlay-prev-page');
+        const overlayNextPage = $('#catalogue-overlay-next-page');
+        bookElement.innerHTML = cataloguePages.map(({ src, alt }, index) => {
           const isCover = index === 0 || index === totalPageCount - 1;
-          return `<article class="page${isCover ? ' page-cover' : ''}"${isCover ? ' data-density="hard"' : ''}></article>`;
+          return `<article class="page"${isCover ? ' data-density="hard"' : ''}><img class="catalogue-page-image" src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" decoding="async"></article>`;
         }).join('');
         const updatePageControls = pageIndex => {
-          const current = Number.isInteger(pageIndex) ? pageIndex : pageFlip.getCurrentPageIndex();
-          $('#page-count').textContent = `${String(current + 1).padStart(2, '0')} / ${String(totalPageCount).padStart(2, '0')}`;
+          const current = Number.isInteger(pageIndex) ? pageIndex : catalogueFlip.getCurrentPageIndex();
+          const pageCountText = `${String(current + 1).padStart(2, '0')} / ${String(totalPageCount).padStart(2, '0')}`;
+          $('#page-count').textContent = pageCountText;
+          $('#catalogue-overlay-page-count').textContent = pageCountText;
           $('#prev-page').disabled = current <= 0;
           $('#next-page').disabled = current >= totalPageCount - 1;
+          overlayPreviousPage.disabled = current <= 0;
+          overlayNextPage.disabled = current >= totalPageCount - 1;
           $('#book-status').textContent = `A4 세로 온라인 도록 ${current + 1}페이지 / 전체 ${totalPageCount}페이지`;
         };
 
@@ -5507,6 +5550,8 @@
           $('#book-status').textContent = '온라인 도록 넘김 기능을 불러오지 못했습니다.';
           $('#prev-page').disabled = true;
           $('#next-page').disabled = true;
+          overlayPreviousPage.disabled = true;
+          overlayNextPage.disabled = true;
           return;
         }
 
@@ -5514,7 +5559,7 @@
           width: 2480,
           height: 3508,
           size: 'stretch',
-          minWidth: 110,
+          minWidth: matchMedia('(max-width: 700px)').matches ? 240 : 360,
           maxWidth: 1400,
           minHeight: 156,
           maxHeight: 2000,
@@ -5524,17 +5569,99 @@
           usePortrait: true,
           autoSize: false,
           mobileScrollSupport: false,
-          flippingTime: 900
+          flippingTime: 450
         });
+
+        let queuedPageTurns = 0;
+        let pendingPageJump = null;
+        let queuedPageTurnFrame = 0;
+        const performQueuedPageTurn = () => {
+          queuedPageTurnFrame = 0;
+          if (catalogueFlip.getState() !== 'read') return;
+          if (pendingPageJump !== null) {
+            const pageIndex = pendingPageJump;
+            pendingPageJump = null;
+            catalogueFlip.turnToPage(pageIndex);
+            return;
+          }
+          if (!queuedPageTurns) return;
+
+          const direction = Math.sign(queuedPageTurns);
+          const current = catalogueFlip.getCurrentPageIndex();
+          if ((direction < 0 && current <= 0) || (direction > 0 && current >= totalPageCount - 1)) {
+            queuedPageTurns = 0;
+            return;
+          }
+
+          queuedPageTurns -= direction;
+          if (direction > 0) catalogueFlip.flipNext('bottom');
+          else catalogueFlip.flipPrev('bottom');
+        };
+        const scheduleQueuedPageTurn = () => {
+          if (!queuedPageTurnFrame) queuedPageTurnFrame = requestAnimationFrame(performQueuedPageTurn);
+        };
+        const requestPageTurn = direction => {
+          pendingPageJump = null;
+          queuedPageTurns += direction;
+          if (catalogueFlip.getState() === 'read') performQueuedPageTurn();
+        };
+        const catalogueContents = [
+          { title: '학과, 교수진 소개', range: '10–11쪽', pageIndex: 9 },
+          { title: '인사말', range: '12–13쪽', pageIndex: 11 },
+          { title: '전시 주제, 스토리', range: '14–15쪽', pageIndex: 13 },
+          { title: '교수진', range: '16–17쪽', pageIndex: 15 },
+          { title: '졸업전시준비위원회', range: '18–19쪽', pageIndex: 17 },
+          { title: '졸업생', range: '20–25쪽', pageIndex: 19 },
+          { title: 'Contents', range: '26–29쪽', pageIndex: 25 },
+          { title: '형성', range: '30–31쪽', pageIndex: 29 },
+          { title: '압축', range: '60–61쪽', pageIndex: 59 },
+          { title: '지속', range: '86–87쪽', pageIndex: 85 },
+          { title: '발전', range: '104–105쪽', pageIndex: 103 },
+          { title: 'Ending Graphic', range: '246–249쪽', pageIndex: 245 },
+          { title: 'Typeface(돌탑체)', range: '250–251쪽', pageIndex: 249 },
+          { title: 'Closing Notes', range: '252–257쪽', pageIndex: 251 },
+          { title: '졸준위 인사말', range: '258–259쪽', pageIndex: 257 },
+          { title: '판권지', range: '260–261쪽', pageIndex: 259 }
+        ];
+        const catalogueContentsList = $('#catalogue-contents-list');
+        const catalogueContentsToggle = $('#catalogue-contents-toggle');
+        catalogueContentsList.innerHTML = catalogueContents.map(entry =>
+          `<button class="catalogue-contents-option" type="button" role="option" aria-label="${escapeHtml(entry.range)} — ${escapeHtml(entry.title)}" data-page-index="${entry.pageIndex}">
+             <span class="catalogue-contents-range title-en">${escapeHtml(entry.range)}</span>
+             <span aria-hidden="true">—</span>
+             <span>${escapeHtml(entry.title)}</span>
+           </button>`
+        ).join('');
+        const setCatalogueContentsOpen = open => {
+          catalogueContentsList.hidden = !open;
+          catalogueContentsToggle.setAttribute('aria-expanded', String(open));
+          catalogueContentsToggle.setAttribute('aria-label', open ? '목차 닫기' : '목차 열기');
+        };
+        catalogueContentsToggle.onclick = () => setCatalogueContentsOpen(catalogueContentsList.hidden);
+        catalogueContentsList.onclick = event => {
+          const option = event.target instanceof Element ? event.target.closest('[data-page-index]') : null;
+          if (!option) return;
+          const pageIndex = Number(option.dataset.pageIndex);
+          setCatalogueContentsOpen(false);
+          queuedPageTurns = 0;
+          pendingPageJump = pageIndex;
+          if (catalogueFlip.getState() === 'read') performQueuedPageTurn();
+          else scheduleQueuedPageTurn();
+        };
 
         catalogueFlip.on('init', event => updatePageControls(event.data.page));
         catalogueFlip.on('flip', event => {
           updatePageControls(event.data);
         });
+        catalogueFlip.on('changeState', event => {
+          if (event.data === 'read') scheduleQueuedPageTurn();
+        });
         catalogueFlip.loadFromHTML(bookElement.querySelectorAll('.page'));
         updatePageControls(0);
-        $('#prev-page').onclick = () => catalogueFlip.flipPrev('bottom');
-        $('#next-page').onclick = () => catalogueFlip.flipNext('bottom');
+        $('#prev-page').onclick = () => requestPageTurn(-1);
+        $('#next-page').onclick = () => requestPageTurn(1);
+        overlayPreviousPage.onclick = () => requestPageTurn(-1);
+        overlayNextPage.onclick = () => requestPageTurn(1);
       }
 
     }
@@ -5613,6 +5740,38 @@
     
     const studentRecords = (exhibitionData.students.length ? exhibitionData.students : previewStudents)
       .map((student, index) => ({ ...student, category: categoryForStudent(index + 1) }));
+    const catalogueSpreadPages = (section, start, end) => Array.from(
+      { length: end - start + 1 },
+      (_, index) => {
+        const spread = String(start + index).padStart(3, '0');
+        return ['left', 'right'].map(side => ({
+          src: assetPath('assets', 'catalogue-pages', `${section}-${spread}-${side}.webp`),
+          alt: `도록 ${spread} 펼침 ${side === 'left' ? '왼쪽' : '오른쪽'} 페이지`
+        }));
+      }
+    ).flat();
+    const catalogueFrontSpreadsBeforeStudent = new Map([
+      ['류벼리', 43],
+      ['어진희', 70],
+      ['장문경', 97]
+    ]);
+    const cataloguePages = [
+      { src: assetPath('assets', 'catalogue-pages', 'front-cover.webp'), alt: '온라인 도록 앞표지' },
+      ...catalogueSpreadPages('front', 2, 16),
+      ...studentRecords.flatMap(student => {
+        const frontSpread = catalogueFrontSpreadsBeforeStudent.get(student.name);
+        return [
+          ...(frontSpread ? catalogueSpreadPages('front', frontSpread, frontSpread) : []),
+          ...student.pages.map((src, index) => ({
+            src,
+            alt: `${student.name} 도록 ${index + 1}쪽`,
+            studentName: student.name
+          }))
+        ];
+      }),
+      ...catalogueSpreadPages('back', 124, 132),
+      { src: assetPath('assets', 'catalogue-pages', 'back-cover.webp'), alt: '온라인 도록 뒷표지' }
+    ];
     const venueBoothPositions = [
       [50.11,60.89],[50.46,66.67],[50.50,72.44],[50.50,78.31],[50.46,84.09],
       [57.62,87.82],[63.30,87.82],[68.96,87.82],[74.71,87.82],[80.44,87.78],[85.77,87.78],
@@ -5776,8 +5935,9 @@
               {name:'산돌구름',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '산돌구름.webp'),location:'서울특별시 성동구 아차산로17길 49',instagram:'https://www.instagram.com/sandollcloud/'},
               {name:'직지소프트',type:'폰트 협업',image:assetPath('assets', 'COLLABORATION', '직지소프트.webp'),location:'서울특별시 중구 수표로 48-7',phone:'02-546-9412',instagram:'https://www.instagram.com/jikjifont.archive/'}
             ]},
-            {title:'포토부스 협업',english:'PHOTO BOOTH',partners:[
-              {name:'빈티스트',type:'포토부스 협업',image:assetPath('assets', 'COLLABORATION', '빈티스트.webp'),location:'대구광역시 중구 경상감영길 207'}
+            {title:'협업 파트너',english:'PARTNERS',logoImages:true,partners:[
+              {name:'빈티스트',type:'포토부스 협업',image:assetPath('assets', 'COLLABORATION', '빈티스트-로고-화이트.webp'),location:'대구광역시 중구 경상감영길 207'},
+              {name:'쉐프커넥터',type:'협업 업체',image:assetPath('assets', 'COLLABORATION', '쉐프커넥터-로고-화이트.webp'),location:'서울광역시 서초구 양재천로21길 3',website:'https://www.chefconnector.co.kr/?utm_source=chatgpt.com',map:'https://map.naver.com/p/entry/place/1115318563?placePath=%2Fhome%3Fentry%3Dplt%26from%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202611162333%26locale%3Dko%26svcName%3Dmap_pcv5&searchType=place&lng=127.0391262&lat=37.4757886&c=15.00,0,0,0,dh'}
             ]},
             {title:'매장 협업',english:'LOCAL PARTNERS',partners:[
               {name:'오렌지우드',type:'와인바',image:assetPath('assets', 'COLLABORATION', '오렌지우드.webp'),location:'대구 중구 동인동1가 294-4',phone:'050-71321-9366',instagram:'https://www.instagram.com/orangewood_daegu/'},
@@ -5787,7 +5947,7 @@
               {name:'쿠라쿠라',type:'술집',image:assetPath('assets', 'COLLABORATION', '쿠라쿠라.webp'),location:'대구 달서구 신당동 1799',phone:'0507-1330-8167',instagram:'https://www.instagram.com/kurakura_daegu/'},
               {name:'서당로61',type:'술집',image:assetPath('assets', 'COLLABORATION', '서당로 61.webp'),location:'대구 달서구 서당로7길 61',phone:'0507-1343-1027',instagram:'https://www.instagram.com/seodangro61_daegu/'}
             ]}
-          ].map((group,groupIndex) => `<section class="collab-category" aria-labelledby="collab-category-${groupIndex}">
+          ].map((group,groupIndex) => `<section class="collab-category${group.logoImages ? ' collab-category--logos' : ''}" aria-labelledby="collab-category-${groupIndex}">
             <header class="collab-category-head"><h3 id="collab-category-${groupIndex}">${group.title}</h3><span class="title-en">0${groupIndex+1} / ${group.english}</span></header>
             <ul class="collab-grid">${group.partners.map(partner => `<li class="collab-card">
               <div class="collab-photo"${partner.image ? '' : ` role="img" aria-label="${escapeHtml(partner.name)} 사진 준비 중"`}>
@@ -5799,15 +5959,16 @@
                 <div><h4>${escapeHtml(partner.name)}</h4><p class="collab-card-type">${escapeHtml(partner.type)}</p></div>
                 <div class="collab-location">
                   <span class="collab-location-label title-en">LOCATION</span>
-                  ${partner.location
-                    ? `<a href="https://map.naver.com/p/search/${encodeURIComponent(partner.name)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(partner.name)} 네이버 지도에서 보기">${escapeHtml(partner.location)} ↗</a>`
+                  ${partner.location || partner.map
+                  ? `<a href="${escapeHtml(partner.map || 'https://map.naver.com/p/search/' + encodeURIComponent(partner.name))}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(partner.name)} 네이버 지도에서 보기">${escapeHtml(partner.location || '네이버 지도에서 보기')} ↗</a>`
                     : '<span>위치 정보 준비 중</span>'}
                 </div>
-                ${partner.phone || partner.instagram ? `<div class="collab-contact">
+                ${partner.phone || partner.instagram || partner.website ? `<div class="collab-contact">
                   <span class="collab-location-label title-en">CONTACT</span>
                   <div class="collab-contact-links">
                     ${partner.phone ? `<a href="tel:${escapeHtml(partner.phone)}" aria-label="${escapeHtml(partner.name)} 전화하기">${escapeHtml(partner.phone)}</a>` : ''}
                     ${partner.instagram ? `<a href="${escapeHtml(partner.instagram)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(partner.name)} 인스타그램">${partner.instagram.includes('instagram.com/') ? 'INSTAGRAM ↗' : escapeHtml(partner.instagram)}</a>` : ''}
+                  ${partner.website ? `<a href="${escapeHtml(partner.website)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(partner.name)} 웹사이트">WEBSITE ↗</a>` : ''}
                   </div>
                 </div>` : ''}
               </div>
