@@ -5858,13 +5858,12 @@
     const studentPhotos = [
       '권주은', '김락영', '김설', '김성훈', '김은혜', '김채원', '김하늘', '류벼리', '문채원', '박민주',
       '박수진', '성세진', '성아진', '어진희', '이규림', '이윤주', '임정빈', '장문경', '전가람', '최정욱',
-      '조흥비', '정유진', '김효은', '김승찬', '조민식', '박소영', '우진하', '김현진', '박예경', '이예진',
+      '조홍비', '정유진', '김효은', '김승찬', '조민식', '박소영', '우진하', '김현진', '박예경', '이예진',
       '김규리', '김소현', '김예경', '박광균', '박용하', '박진희', '여로건', '우경민', '유가인', '이규빈',
       '이동현', '이천일', '최민규', '최은우', '하민규', '윤호연', '정재서', '장혜진', '박수빈', '신세희',
       '황수빈', '황해욱'
     ];
 
-    const studentAssetNames = { '조흥비': '조홍비' };
     const studentCategoryRanges = [
       { start: 1, end: 22, name: '브랜딩&출판' },
       { start: 23, end: 27, name: '브랜딩&타입페이스' },
@@ -5875,14 +5874,13 @@
     const categoryForStudent = number => studentCategoryRanges.find(({ start, end }) => number >= start && number <= end)?.name;
     const rgbThumbnailNames = new Set(['박용하', '유가인']);
     const previewStudents = studentPhotos.map((name, index) => {
-      const assetName = studentAssetNames[name] || name;
       return {
         name,
         category: categoryForStudent(index + 1),
         project: '작품 자료 준비 중',
         medium: '매체 정보 준비 중',
-        thumbnail: `${assetPath('assets', 'optimized', 'students', `${assetName}.webp`)}${rgbThumbnailNames.has(name) ? '?v=rgb-20261019' : ''}`,
-        pages: [1, 2, 3, 4].map(page => assetPath('assets', 'optimized', 'graduates', assetName, `${page}.webp`)),
+        thumbnail: `${assetPath('assets', 'optimized', 'students', `${name}.webp`)}${rgbThumbnailNames.has(name) ? '?v=rgb-20261019' : ''}`,
+        pages: [1, 2, 3, 4].map(page => assetPath('assets', 'optimized', 'graduates', name, `${page}.webp`)),
         description: '작품 자료 준비 중'
       };
     });
@@ -6976,6 +6974,7 @@
           const pageCountLabel = $('#student-page-count');
           if (studentBookIsMobile.matches) bookStage.classList.add('is-mobile-book');
           let currentStudentPage = 0;
+          let pendingStudentTurn = 0;
           const updateStudentControls = pageIndex => {
             const current = Number.isInteger(pageIndex) ? pageIndex : studentFlip?.getCurrentPageIndex() ?? currentStudentPage;
             currentStudentPage = current;
@@ -7036,11 +7035,13 @@
           }
 
           const turnStudentPage = direction => {
+            if (!studentBookIsMobile.matches && studentFlip?.getState() !== 'read') {
+              pendingStudentTurn = direction;
+              return;
+            }
             const currentPage = studentBookIsMobile.matches
               ? currentStudentPage
-              : studentFlip?.getState() === 'read'
-                ? studentFlip.getCurrentPageIndex()
-                : -1;
+              : studentFlip.getCurrentPageIndex();
             if ((direction < 0 && currentPage <= 0) || (direction > 0 && currentPage >= pageCount - 1)) return;
             if (studentBookIsMobile.matches) {
               const nextPage = currentPage + direction;
@@ -7053,6 +7054,14 @@
               studentFlip.flipNext('bottom');
             }
           };
+          if (!studentBookIsMobile.matches) {
+            studentFlip.on('changeState', event => {
+              if (event.data !== 'read' || !pendingStudentTurn) return;
+              const direction = pendingStudentTurn;
+              pendingStudentTurn = 0;
+              turnStudentPage(direction);
+            });
+          }
           previousStudentPage.addEventListener('click', () => turnStudentPage(-1));
           nextStudentPage.addEventListener('click', () => turnStudentPage(1));
           if (!studentBookIsMobile.matches) {
