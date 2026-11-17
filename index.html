@@ -5529,14 +5529,17 @@
           const errorMessage = failedCataloguePages.has(current) ? ` · ${current + 1}페이지를 불러오지 못했습니다.` : '';
           $('#book-status').textContent = `A4 세로 온라인 도록 ${current + 1}페이지 / 전체 ${totalPageCount}페이지${errorMessage}`;
         };
-        const loadCataloguePage = pageIndex => {
+        const loadCataloguePage = (pageIndex, prioritize = false) => {
           const image = cataloguePageImages[pageIndex];
           if (!image) return Promise.resolve(false);
           if (image.dataset.pageLoaded === 'true' || (image.complete && image.naturalWidth > 0)) {
             image.dataset.pageLoaded = 'true';
             return Promise.resolve(true);
           }
-          if (cataloguePageLoads.has(pageIndex)) return cataloguePageLoads.get(pageIndex);
+          if (cataloguePageLoads.has(pageIndex)) {
+            if (prioritize) image.fetchPriority = 'high';
+            return cataloguePageLoads.get(pageIndex);
+          }
 
           const loadPromise = new Promise(resolve => {
             const finish = loaded => {
@@ -5553,7 +5556,7 @@
             image.addEventListener('load', () => finish(true), { once: true });
             image.addEventListener('error', () => finish(false), { once: true });
             image.dataset.pageLoading = 'true';
-            image.fetchPriority = Math.abs(pageIndex - catalogueImageWindow) <= 1 ? 'high' : 'low';
+            image.fetchPriority = (prioritize || Math.abs(pageIndex - catalogueImageWindow) <= 1) ? 'high' : 'low';
             image.src = image.dataset.pageSrc;
           });
           cataloguePageLoads.set(pageIndex, loadPromise);
@@ -5637,7 +5640,8 @@
           }
 
           loadingPageTurn = true;
-          await loadCatalogueWindow(target);
+          if (isMobileCatalogue) await loadCataloguePage(target, true);
+          else await loadCatalogueWindow(target);
           loadingPageTurn = false;
           if (catalogueFlip !== activeCatalogueFlip) return;
           if (catalogueFlip.getState() !== 'read' || catalogueFlip.getCurrentPageIndex() !== current) return;
@@ -5659,6 +5663,7 @@
           if (isMobileCatalogue) catalogueFlip.turnToPage(target);
           else if (direction > 0) catalogueFlip.flipNext('bottom');
           else catalogueFlip.flipPrev('bottom');
+          if (isMobileCatalogue && queuedPageTurns) scheduleQueuedPageTurn();
         };
         const scheduleQueuedPageTurn = () => {
           if (!queuedPageTurnFrame) queuedPageTurnFrame = requestAnimationFrame(performQueuedPageTurn);
