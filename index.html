@@ -4577,13 +4577,13 @@
                <div class="book-stage">
                    <div class="book" id="catalogue-book" aria-label="A4 세로 양면 2026 온라인 도록"></div>
                    <div class="catalogue-overlay-navigation" aria-hidden="true">
-                     <span class="catalogue-overlay-page-count title-en" id="catalogue-overlay-page-count" aria-hidden="true">01 / 258</span>
+                     <span class="catalogue-overlay-page-count title-en" id="catalogue-overlay-page-count" aria-hidden="true">01 / 264</span>
                    </div>
                </div>
                <div class="book-controls catalogue-book-controls">
                  <div class="catalogue-page-navigation">
                    <button class="control" id="prev-page" aria-label="이전 도록 페이지">이전</button>
-                   <span id="page-count" class="title-en" aria-live="polite">01 / 258</span>
+                   <span id="page-count" class="title-en" aria-live="polite">01 / 264</span>
                    <button class="control" id="next-page" aria-label="다음 도록 페이지">다음</button>
                  </div>
                  <div class="catalogue-contents">
@@ -4591,7 +4591,7 @@
                    <div class="catalogue-contents-list" id="catalogue-contents-list" role="listbox" aria-label="온라인 도록 목차" hidden></div>
                  </div>
                </div>
-               <p class="sr-only" id="book-status" aria-live="polite">A4 세로 온라인 도록, 전체 258페이지</p>
+               <p class="sr-only" id="book-status" aria-live="polite">A4 세로 온라인 도록, 전체 264페이지</p>
              </div>`,
 
       () => `<div class="venue-explorer">
@@ -5511,8 +5511,13 @@
         const bookStage = bookElement.closest('.book-stage');
         bookElement.innerHTML = cataloguePages.map(({ src, alt }, index) => {
           const isCover = index === 0 || index === totalPageCount - 1;
-          return `<article class="page"${isCover ? ' data-density="hard"' : ''}><img class="catalogue-page-image" src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" decoding="async"></article>`;
+          return `<article class="page"${isCover ? ' data-density="hard"' : ''}><img class="catalogue-page-image" data-page-src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" decoding="async"></article>`;
         }).join('');
+        const cataloguePageImages = [...bookElement.querySelectorAll('.catalogue-page-image')];
+        const cataloguePageLoads = new Map();
+        const failedCataloguePages = new Set();
+        let catalogueImageWindow = 0;
+        let catalogueImageWindowVersion = 0;
         const updatePageControls = pageIndex => {
           const current = Number.isInteger(pageIndex) ? pageIndex : catalogueFlip.getCurrentPageIndex();
           const pageCountText = `${String(current + 1).padStart(2, '0')} / ${String(totalPageCount).padStart(2, '0')}`;
@@ -5520,7 +5525,63 @@
           $('#catalogue-overlay-page-count').textContent = pageCountText;
           $('#prev-page').disabled = current <= 0;
           $('#next-page').disabled = current >= totalPageCount - 1;
-          $('#book-status').textContent = `A4 세로 온라인 도록 ${current + 1}페이지 / 전체 ${totalPageCount}페이지`;
+          const errorMessage = failedCataloguePages.has(current) ? ` · ${current + 1}페이지를 불러오지 못했습니다.` : '';
+          $('#book-status').textContent = `A4 세로 온라인 도록 ${current + 1}페이지 / 전체 ${totalPageCount}페이지${errorMessage}`;
+        };
+        const loadCataloguePage = pageIndex => {
+          const image = cataloguePageImages[pageIndex];
+          if (!image) return Promise.resolve(false);
+          if (image.dataset.pageLoaded === 'true' || (image.complete && image.naturalWidth > 0)) {
+            image.dataset.pageLoaded = 'true';
+            return Promise.resolve(true);
+          }
+          if (cataloguePageLoads.has(pageIndex)) return cataloguePageLoads.get(pageIndex);
+
+          const loadPromise = new Promise(resolve => {
+            const finish = loaded => {
+              image.dataset.pageLoading = 'false';
+              if (loaded) {
+                image.dataset.pageLoaded = 'true';
+                failedCataloguePages.delete(pageIndex);
+              } else {
+                failedCataloguePages.add(pageIndex);
+              }
+              updatePageControls(catalogueFlip?.getCurrentPageIndex() ?? 0);
+              resolve(loaded);
+            };
+            image.addEventListener('load', () => finish(true), { once: true });
+            image.addEventListener('error', () => finish(false), { once: true });
+            image.dataset.pageLoading = 'true';
+            image.fetchPriority = Math.abs(pageIndex - catalogueImageWindow) <= 1 ? 'high' : 'low';
+            image.src = image.dataset.pageSrc;
+          });
+          cataloguePageLoads.set(pageIndex, loadPromise);
+          return loadPromise;
+        };
+        const loadCatalogueWindow = async pageIndex => {
+          const windowVersion = ++catalogueImageWindowVersion;
+          const spreadStart = isMobileCatalogue ? pageIndex : Math.floor(pageIndex / 2) * 2;
+          catalogueImageWindow = spreadStart;
+          const firstPage = Math.max(0, spreadStart - (isMobileCatalogue ? 1 : 2));
+          const lastPage = Math.min(totalPageCount - 1, spreadStart + (isMobileCatalogue ? 2 : 3));
+          await Promise.all(Array.from(
+            { length: lastPage - firstPage + 1 },
+            (_, index) => loadCataloguePage(firstPage + index)
+          ));
+          if (windowVersion !== catalogueImageWindowVersion) return;
+
+          const keepFirstPage = firstPage;
+          const keepLastPage = lastPage;
+          const currentPage = catalogueFlip?.getCurrentPageIndex() ?? pageIndex;
+          cataloguePageImages.forEach((image, index) => {
+            const isInWindow = index >= keepFirstPage && index <= keepLastPage;
+            const isActivePage = index === currentPage || !isMobileCatalogue && index === currentPage + 1;
+            if (isInWindow || isActivePage || image.dataset.pageLoading === 'true') return;
+            if (image.dataset.pageLoaded !== 'true') return;
+            image.removeAttribute('src');
+            image.dataset.pageLoaded = 'false';
+            cataloguePageLoads.delete(index);
+          });
         };
 
         if (!window.St?.PageFlip) {
@@ -5538,39 +5599,64 @@
           maxWidth: 1400,
           minHeight: 156,
           maxHeight: 2000,
-          drawShadow: true,
-          maxShadowOpacity: .24,
           showCover: true,
           usePortrait: true,
           disableFlipByClick: isMobileCatalogue,
+          drawShadow: !isMobileCatalogue,
+          maxShadowOpacity: isMobileCatalogue ? 0 : .24,
           autoSize: false,
           mobileScrollSupport: false,
-          flippingTime: 450
+          flippingTime: isMobileCatalogue ? 320 : 450
         });
+        const activeCatalogueFlip = catalogueFlip;
 
         let queuedPageTurns = 0;
         let pendingPageJump = null;
         let queuedPageTurnFrame = 0;
-        const performQueuedPageTurn = () => {
+        let loadingPageTurn = false;
+        const performQueuedPageTurn = async () => {
           queuedPageTurnFrame = 0;
-          if (catalogueFlip.getState() !== 'read') return;
-          if (pendingPageJump !== null) {
-            const pageIndex = pendingPageJump;
+          if (loadingPageTurn || catalogueFlip !== activeCatalogueFlip || catalogueFlip.getState() !== 'read') return;
+          const jumpIndex = pendingPageJump;
+          const direction = jumpIndex === null ? Math.sign(queuedPageTurns) : 0;
+          if (jumpIndex === null && !direction) return;
+
+          const current = catalogueFlip.getCurrentPageIndex();
+          const target = jumpIndex === null ? current + direction : jumpIndex;
+          if (target < 0 || target >= totalPageCount) {
+            queuedPageTurns = 0;
             pendingPageJump = null;
-            catalogueFlip.turnToPage(pageIndex);
             return;
           }
-          if (!queuedPageTurns) return;
 
-          const direction = Math.sign(queuedPageTurns);
-          const current = catalogueFlip.getCurrentPageIndex();
-          if ((direction < 0 && current <= 0) || (direction > 0 && current >= totalPageCount - 1)) {
+          if (target === current) {
             queuedPageTurns = 0;
+            pendingPageJump = null;
+            return;
+          }
+
+          loadingPageTurn = true;
+          await loadCatalogueWindow(target);
+          loadingPageTurn = false;
+          if (catalogueFlip !== activeCatalogueFlip) return;
+          if (catalogueFlip.getState() !== 'read' || catalogueFlip.getCurrentPageIndex() !== current) return;
+          if (jumpIndex !== null) {
+            if (pendingPageJump !== jumpIndex) {
+              scheduleQueuedPageTurn();
+              return;
+            }
+            pendingPageJump = null;
+            catalogueFlip.turnToPage(jumpIndex);
+            return;
+          }
+          if (pendingPageJump !== null || Math.sign(queuedPageTurns) !== direction) {
+            scheduleQueuedPageTurn();
             return;
           }
 
           queuedPageTurns -= direction;
-          if (direction > 0) catalogueFlip.flipNext('bottom');
+          if (isMobileCatalogue) catalogueFlip.turnToPage(target);
+          else if (direction > 0) catalogueFlip.flipNext('bottom');
           else catalogueFlip.flipPrev('bottom');
         };
         const scheduleQueuedPageTurn = () => {
@@ -5661,6 +5747,7 @@
         catalogueFlip.on('flip', event => {
           updatePageControls(event.data);
           updateCatalogueContentsToggle(event.data);
+          loadCatalogueWindow(event.data);
         });
         catalogueFlip.on('changeState', event => {
           if (event.data === 'read') scheduleQueuedPageTurn();
@@ -5668,6 +5755,7 @@
         catalogueFlip.loadFromHTML(bookElement.querySelectorAll('.page'));
         updatePageControls(0);
         updateCatalogueContentsToggle(0);
+        loadCatalogueWindow(0);
         $('#prev-page').onclick = () => requestPageTurn(-1);
         $('#next-page').onclick = () => requestPageTurn(1);
         bookStage.addEventListener('click', event => {
@@ -5677,9 +5765,11 @@
           const cornerHeight = bounds.height * .2;
           const offset = event.clientX - bounds.left;
           const verticalOffset = event.clientY - bounds.top;
-          if (verticalOffset < cornerHeight || verticalOffset > bounds.height - cornerHeight) return;
-          if (offset <= edgeWidth) requestPageTurn(-1);
-          else if (offset >= bounds.width - edgeWidth) requestPageTurn(1);
+          const isPageFlipCorner =
+            (offset <= edgeWidth || offset >= bounds.width - edgeWidth) &&
+            (verticalOffset < cornerHeight || verticalOffset > bounds.height - cornerHeight);
+          if (isPageFlipCorner) return;
+          requestPageTurn(offset < bounds.width / 2 ? -1 : 1);
         });
       }
 
@@ -5759,12 +5849,11 @@
     
     const studentRecords = (exhibitionData.students.length ? exhibitionData.students : previewStudents)
       .map((student, index) => ({ ...student, category: categoryForStudent(index + 1) }));
-    const catalogueSpreadPages = (section, start, end) => Array.from(
+    const catalogueSpreadPages = (start, end) => Array.from(
       { length: end - start + 1 },
       (_, index) => {
         const spread = String(start + index).padStart(3, '0');
         return ['left', 'right'].map(side => ({
-          src: assetPath('assets', 'catalogue-pages', `${section}-${spread}-${side}.webp`),
           alt: `도록 ${spread} 펼침 ${side === 'left' ? '왼쪽' : '오른쪽'} 페이지`
         }));
       }
@@ -5775,22 +5864,24 @@
       ['장문경', 97]
     ]);
     const cataloguePages = [
-      { src: assetPath('assets', 'catalogue-pages', 'front-cover.webp'), alt: '온라인 도록 앞표지' },
-      ...catalogueSpreadPages('front', 2, 16),
+      { alt: '온라인 도록 앞표지' },
+      ...catalogueSpreadPages(2, 16),
       ...studentRecords.flatMap(student => {
         const frontSpread = catalogueFrontSpreadsBeforeStudent.get(student.name);
         return [
-          ...(frontSpread ? catalogueSpreadPages('front', frontSpread, frontSpread) : []),
-          ...student.pages.map((src, index) => ({
-            src,
+          ...(frontSpread ? catalogueSpreadPages(frontSpread, frontSpread) : []),
+          ...student.pages.map((_, index) => ({
             alt: `${student.name} 도록 ${index + 1}쪽`,
             studentName: student.name
           }))
         ];
       }),
-      ...catalogueSpreadPages('back', 124, 132),
-      { src: assetPath('assets', 'catalogue-pages', 'back-cover.webp'), alt: '온라인 도록 뒷표지' }
-    ];
+      ...catalogueSpreadPages(124, 132),
+      { alt: '온라인 도록 뒷표지' }
+    ].map((page, index) => ({
+      ...page,
+      src: assetPath('assets', 'catalogue-pages', `page-${String(index + 1).padStart(3, '0')}.webp`)
+    }));
     const venueBoothPositions = [
       [50.65,61.80],[51.10,68.02],[51.10,74.23],[51.25,80.44],[51.10,86.68],
       [58.06,90.59],[63.30,90.52],[69.11,90.59],[74.69,90.52],[80.00,90.44],[85.47,90.44],
