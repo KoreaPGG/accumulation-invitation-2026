@@ -779,7 +779,7 @@
     .archive-indicator { display: flex; flex: 0 0 94px; align-items: center; gap: 4px; height: 40px; }
     .archive-indicator-segment { flex: 1 1 0; height: 2px; background: rgba(0, 0, 0, .2); transition: background-color .2s, height .2s; }
     .archive-indicator-segment.is-passed { background: var(--ink); }
-    .archive-indicator-segment.is-current { height: 4px; background: var(--red); }
+    .archive-indicator-segment.is-current { height: 4px; background: var(--ink); }
     .archive-stage { position: relative; display: grid; flex: 1 1 auto; min-height: 0; place-items: center; overflow: hidden; touch-action: pan-y; user-select: none; }
     .archive-card { --archive-card-width: min(42vw, 460px, 44vh); position: absolute; top: calc(50% - 40px); left: 50%; display: block; width: var(--archive-card-width); height: auto; aspect-ratio: 11584 / 16384; padding: 0; overflow: hidden; border: 1px solid var(--ink); background: transparent; box-shadow: none; transform: translate(calc(-50% + var(--drag-offset, 0px)), -50%); transition: transform .72s cubic-bezier(.22, 1, .36, 1); cursor: grab; }
     .archive-card img { display: block; width: 100%; height: 100%; background: var(--paper); object-fit: contain; pointer-events: none; -webkit-user-drag: none; }
