@@ -4767,6 +4767,8 @@
       typefaceRefreshTimer = null;
       filmCleanup?.(); filmCleanup = null;
       $('#student-modal').close();
+      const detachedVenueSelection = $('#venue-selected');
+      if (detachedVenueSelection?.parentElement === portal) detachedVenueSelection.remove();
       archiveResizeObserver?.disconnect();
       archiveResizeObserver = null;
       clearTimeout(bookTimer); bookTimer = null;
