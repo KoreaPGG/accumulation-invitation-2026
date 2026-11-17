@@ -776,7 +776,10 @@
     .archive-caption-year { margin: 0 0 3px; font-size: 11px; line-height: 1.1; }
     .archive-caption-title { margin: 0; font-size: clamp(17px, 2vw, 22px); font-weight: 400; line-height: 1.05; }
     .archive-caption-description { margin: 5px 0 0; font-size: 12px; line-height: 1.25; }
-    .archive-count { min-width: 42px; font-size: 11px; text-align: right; }
+    .archive-indicator { display: flex; flex: 0 0 94px; align-items: center; gap: 4px; height: 40px; }
+    .archive-indicator-segment { flex: 1 1 0; height: 2px; background: rgba(0, 0, 0, .2); transition: background-color .2s, height .2s; }
+    .archive-indicator-segment.is-passed { background: var(--ink); }
+    .archive-indicator-segment.is-current { height: 4px; background: var(--red); }
     .archive-stage { position: relative; display: grid; flex: 1 1 auto; min-height: 0; place-items: center; overflow: hidden; touch-action: pan-y; user-select: none; }
     .archive-card { --archive-card-width: min(42vw, 460px, 44vh); position: absolute; top: calc(50% - 40px); left: 50%; display: block; width: var(--archive-card-width); height: auto; aspect-ratio: 11584 / 16384; padding: 0; overflow: hidden; border: 1px solid var(--ink); background: transparent; box-shadow: none; transform: translate(calc(-50% + var(--drag-offset, 0px)), -50%); transition: transform .72s cubic-bezier(.22, 1, .36, 1); cursor: grab; }
     .archive-card img { display: block; width: 100%; height: 100%; background: var(--paper); object-fit: contain; pointer-events: none; -webkit-user-drag: none; }
@@ -791,13 +794,15 @@
     .archive-stage[data-motion="previous"] .archive-card-current { animation: archive-slide-from-left .82s cubic-bezier(.22, 1, .36, 1) both; }
     @keyframes archive-slide-from-right { from { transform: translate(calc(-50% + 56vw), -50%); } 78% { transform: translate(calc(-50% - 10px), -50%); } to { transform: translate(-50%, -50%); } }
     @keyframes archive-slide-from-left { from { transform: translate(calc(-50% - 56vw), -50%); } 78% { transform: translate(calc(-50% + 10px), -50%); } to { transform: translate(-50%, -50%); } }
+    @media(min-width: 701px) {
+      .archive-card-previous, .archive-card-next { display: none; }
+    }
     .archive-stage.is-dragging { cursor: grabbing; }
     .archive-stage.is-dragging .archive-card { transition: none; }
     .archive-controls { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; min-height: 46px; }
     .archive-nav { display: grid; width: 40px; height: 40px; place-items: center; border: 1px solid var(--ink); background: transparent; font-size: 22px; line-height: 1; }
     .archive-nav:hover:not(:disabled) { background: var(--ink); color: var(--red); }
     .archive-nav:disabled { opacity: .3; cursor: default; }
-    .archive-controls .archive-count { font-size: 11px; }
     @media(max-width: 700px) {
       .portal.archive-open .portal-content { padding: 8px calc(var(--rail-width) + 10px); }
       .archive-heading { min-height: 26px; }
@@ -807,6 +812,7 @@
       .archive-caption-description { margin-top: 3px; font-size: 10px; }
       .archive-card { --archive-card-width: min(62vw, 360px, 44vh); }
       .archive-card-pair { width: min(86vw, 680px, 88vh); }
+      .archive-indicator { flex-basis: 72px; }
     }
     @media(prefers-reduced-motion: reduce) {
       .archive-card { transition: none; animation: none !important; }
@@ -6026,7 +6032,7 @@
                </section>
                <nav class="archive-controls" aria-label="포스터 연도 이동">
                  <button class="archive-nav" id="archive-prev" type="button" aria-label="이전 연도" title="이전 연도">←</button>
-                 <span class="archive-count title-en" aria-hidden="true" id="archive-position">03 / 05</span>
+                 <div class="archive-indicator" id="archive-position" role="progressbar" aria-label="역대 전시 위치" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" aria-valuetext="01 / 05"></div>
                  <button class="archive-nav" id="archive-next" type="button" aria-label="다음 연도" title="다음 연도">→</button>
                </nav>
              </section>`,
@@ -6367,6 +6373,9 @@
           {year:2026,fronts:['assets/graduation-poster.webp','assets/graduation-poster2.webp'],title:'ACCUMULATION',description:'질문과 시도가 쌓여 각자의 다음으로 이어집니다.'}
         ];
         const stage = $('#archive-stage');
+        const archivePosition = $('#archive-position');
+        archivePosition.innerHTML = posters.map(() => '<span class="archive-indicator-segment" aria-hidden="true"></span>').join('');
+        archivePosition.setAttribute('aria-valuemax', String(posters.length));
         let currentIndex = posters.findIndex(poster => poster.year === 2026);
         let pointerId = null;
         let startX = 0;
@@ -6418,7 +6427,12 @@
           $('#archive-caption-year').textContent = poster.year;
           $('#archive-caption-title').textContent = poster.title;
           $('#archive-caption-description').textContent = poster.description;
-          $('#archive-position').textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(posters.length).padStart(2, '0')}`;
+          archivePosition.setAttribute('aria-valuenow', String(currentIndex + 1));
+          archivePosition.setAttribute('aria-valuetext', `${String(currentIndex + 1).padStart(2, '0')} / ${String(posters.length).padStart(2, '0')}`);
+          archivePosition.querySelectorAll('.archive-indicator-segment').forEach((segment, index) => {
+            segment.classList.toggle('is-passed', index < currentIndex);
+            segment.classList.toggle('is-current', index === currentIndex);
+          });
           $('#archive-prev').disabled = currentIndex === 0;
           $('#archive-next').disabled = currentIndex === posters.length - 1;
           updateArchiveCaption();
