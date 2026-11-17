@@ -5609,6 +5609,25 @@
         ];
         const catalogueContentsList = $('#catalogue-contents-list');
         const catalogueContentsToggle = $('#catalogue-contents-toggle');
+        let currentCatalogueSectionTitle = '목차';
+        const updateCatalogueContentsToggle = pageIndex => {
+          if (Number.isInteger(pageIndex)) {
+            const pageTitle = cataloguePages[pageIndex]?.sectionTitle;
+            if (pageTitle) {
+              currentCatalogueSectionTitle = pageTitle;
+            } else {
+              currentCatalogueSectionTitle = '목차';
+              for (const entry of catalogueContents) {
+                if (entry.pageIndex > pageIndex) break;
+                currentCatalogueSectionTitle = entry.title;
+              }
+            }
+            catalogueContentsToggle.firstElementChild.textContent = currentCatalogueSectionTitle;
+          }
+          const action = catalogueContentsList.hidden ? '목차 열기' : '목차 닫기';
+          const title = currentCatalogueSectionTitle === '목차' ? '' : ` — ${currentCatalogueSectionTitle}`;
+          catalogueContentsToggle.setAttribute('aria-label', `${action}${title}`);
+        };
         catalogueContentsList.innerHTML = catalogueContents.map(entry =>
           `<button class="catalogue-contents-option" type="button" role="option" aria-label="${escapeHtml(entry.range)} — ${escapeHtml(entry.title)}" data-page-index="${entry.pageIndex}">
              <span class="catalogue-contents-range title-en">${escapeHtml(entry.range)}</span>
@@ -5619,7 +5638,7 @@
         const setCatalogueContentsOpen = open => {
           catalogueContentsList.hidden = !open;
           catalogueContentsToggle.setAttribute('aria-expanded', String(open));
-          catalogueContentsToggle.setAttribute('aria-label', open ? '목차 닫기' : '목차 열기');
+          updateCatalogueContentsToggle();
         };
         catalogueContentsToggle.onclick = () => setCatalogueContentsOpen(catalogueContentsList.hidden);
         catalogueContentsList.onclick = event => {
@@ -5633,15 +5652,20 @@
           else scheduleQueuedPageTurn();
         };
 
-        catalogueFlip.on('init', event => updatePageControls(event.data.page));
+        catalogueFlip.on('init', event => {
+          updatePageControls(event.data.page);
+          updateCatalogueContentsToggle(event.data.page);
+        });
         catalogueFlip.on('flip', event => {
           updatePageControls(event.data);
+          updateCatalogueContentsToggle(event.data);
         });
         catalogueFlip.on('changeState', event => {
           if (event.data === 'read') scheduleQueuedPageTurn();
         });
         catalogueFlip.loadFromHTML(bookElement.querySelectorAll('.page'));
         updatePageControls(0);
+        updateCatalogueContentsToggle(0);
         $('#prev-page').onclick = () => requestPageTurn(-1);
         $('#next-page').onclick = () => requestPageTurn(1);
         overlayPreviousPage.onclick = () => requestPageTurn(-1);
@@ -5745,11 +5769,15 @@
       ...studentRecords.flatMap(student => {
         const frontSpread = catalogueFrontSpreadsBeforeStudent.get(student.name);
         return [
-          ...(frontSpread ? catalogueSpreadPages('front', frontSpread, frontSpread) : []),
+          ...(frontSpread ? catalogueSpreadPages('front', frontSpread, frontSpread).map(page => ({
+            ...page,
+            sectionTitle: '졸업생'
+          })) : []),
           ...student.pages.map((src, index) => ({
             src,
             alt: `${student.name} 도록 ${index + 1}쪽`,
-            studentName: student.name
+            studentName: student.name,
+            sectionTitle: '졸업생'
           }))
         ];
       }),
