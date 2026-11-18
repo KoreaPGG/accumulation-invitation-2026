@@ -1110,6 +1110,7 @@
     
     .zoom { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 40; display: none; align-items: center; justify-content: center; padding: 50px; }
     .zoom.open { display: flex; }
+    .zoom.catalogue-zoom-open #close-zoom { display: none; }
     .zoom img, .zoom video { max-width: 95%; max-height: 90svh; object-fit: contain; border: 1px solid var(--ink); }
     .zoom-pair { display: flex; max-width: 95vw; max-height: 90svh; align-items: center; justify-content: center; gap: 12px; }
     .zoom-pair[hidden], .zoom-video[hidden], #zoom-image[hidden] { display: none; }
@@ -5008,6 +5009,9 @@
     });
     $('#close-portal').onclick = () => closeSection();
     $('#close-zoom').onclick = closeZoom;
+    $('.zoom').addEventListener('click', event => {
+      if (event.target === event.currentTarget && event.currentTarget.classList.contains('catalogue-zoom-open')) closeZoom();
+    });
 
     async function navigateSection(index, source, update = true) {
       if (chapterTransitioning) return;
@@ -5129,7 +5133,7 @@
 
     function closeZoom() {
       resetZoomMedia();
-      $('.zoom').classList.remove('open');
+      $('.zoom').classList.remove('open', 'catalogue-zoom-open');
       portal.inert = false;
       $('.zoom').setAttribute('aria-label', '확대 보기');
       const returnFocus = zoomReturnFocus;
@@ -5959,7 +5963,7 @@
             zoomImage.hidden = true;
             zoomPair.hidden = false;
           }
-          zoomDialog.classList.add('open');
+          zoomDialog.classList.add('open', 'catalogue-zoom-open');
           portal.inert = true;
           $('#close-zoom').focus();
         };
