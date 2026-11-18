@@ -1110,7 +1110,6 @@
     
     .zoom { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 40; display: none; align-items: center; justify-content: center; padding: 50px; }
     .zoom.open { display: flex; }
-    .zoom.catalogue-zoom-open #close-zoom { display: none; }
     .zoom img, .zoom video { max-width: 95%; max-height: 90svh; object-fit: contain; border: 1px solid var(--ink); }
     .zoom-pair { display: flex; max-width: 95vw; max-height: 90svh; align-items: center; justify-content: center; gap: 12px; }
     .zoom-pair[hidden], .zoom-video[hidden], #zoom-image[hidden] { display: none; }
@@ -1427,7 +1426,6 @@
   </section>
 
   <div class="zoom" role="dialog" aria-modal="true" aria-label="확대 보기" tabindex="-1">
-    <button id="close-zoom">닫기 ×</button>
     <button id="zoom-face-toggle" type="button" aria-pressed="false" hidden>뒷면 보기</button>
     <img id="zoom-image" alt="확대한 전시 포스터">
     <div class="zoom-pair" id="zoom-pair" aria-label="졸업전시 포스터 한 쌍" hidden>
@@ -4357,7 +4355,7 @@
     const sectionFromHash = () => location.hash === '#partnership'
       ? names.indexOf('PARTNERSHIP')
       : sectionSlugs.findIndex(slug => '#' + slug === location.hash);
-    const korean = ['KVCD', '졸준위원 소개', '로고', '컬러', '서체', '포스터', '영상', '졸업생', '온라인도록', '파트너십', '전시장', '게임'];
+    const korean = ['역대 졸업 전시', '졸준위원 소개', '로고', '컬러', '서체', '포스터', '영상', '졸업생', '온라인도록', '파트너십', '전시장', '게임'];
     const glyphTitles = ['KVCD', 'COMMITTEE', 'LOGO', 'COLOR', 'TYPEFACE', 'POSTER', 'VIDEO', 'GRADUATES', 'CATALOGUE', 'PARTNERSHIP', 'VENUE', 'GAME'];
     const glyphKoreanTitles = ['역대 졸업 전시', '졸업준비위원회', '로고', '색상', '서체', '포스터', '영상', '졸업생', '온라인도록', '파트너십', '전시장', '게임'];
     const mapping = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
@@ -4765,7 +4763,7 @@
       archiveResizeObserver = null;
       
       const sectionLabel = i === 6 ? 'VIDEO' : names[i];
-      $('#portal-label').innerHTML = `<span class="title-en">${String(i + 1).padStart(2, '0')} / ${sectionLabel}</span><span>— ${korean[i]}</span>`;
+      $('#portal-label').innerHTML = `<span class="title-en">${String(i + 1).padStart(2, '0')} / ${sectionLabel}</span><span>${i === 0 ? ' - ' : '— '}${korean[i]}</span>`;
       $('.portal-content').innerHTML = panels[i]();
 
       savedScroll = scrollY;
@@ -5008,9 +5006,8 @@
       navigateSection(+b.dataset.section, b);
     });
     $('#close-portal').onclick = () => closeSection();
-    $('#close-zoom').onclick = closeZoom;
     $('.zoom').addEventListener('click', event => {
-      if (event.target === event.currentTarget && event.currentTarget.classList.contains('catalogue-zoom-open')) closeZoom();
+      if (event.target === event.currentTarget) closeZoom();
     });
 
     async function navigateSection(index, source, update = true) {
@@ -5150,9 +5147,14 @@
       }
       if (e.key === 'Tab' && active >= 0) {
         const root = $('.zoom').classList.contains('open') ? $('.zoom') : portal;
-        const focus = [...root.querySelectorAll('button, a, input')].filter(x => !x.disabled && x.offsetParent !== null);
+        const focus = [...root.querySelectorAll('button, a, input, video[controls]')].filter(x => !x.disabled && x.offsetParent !== null);
         const first = focus[0], last = focus[focus.length - 1];
 
+        if (root === $('.zoom') && focus.length === 0) {
+          e.preventDefault();
+          root.focus();
+          return;
+        }
         if (e.shiftKey && document.activeElement === first) {
           e.preventDefault();
           last.focus();
@@ -5965,7 +5967,7 @@
           }
           zoomDialog.classList.add('open', 'catalogue-zoom-open');
           portal.inert = true;
-          $('#close-zoom').focus();
+          zoomDialog.focus();
         };
         updatePageControls(0);
         updateCatalogueContentsToggle(0);
@@ -6607,9 +6609,10 @@
             lens.classList.remove('visible');
             resetZoomMedia();
             $('#zoom-image').src = button.dataset.poster;
+            zoomReturnFocus = button;
             $('.zoom').classList.add('open');
             portal.inert = true;
-            $('#close-zoom').focus();
+            $('.zoom').focus();
           };
         });
       }
@@ -6697,6 +6700,7 @@
           resetZoomMedia();
           if (card.dataset.posterVideo) {
             const video = $('#zoom-video');
+            $('#zoom-image').hidden = true;
             video.src = card.dataset.posterVideo;
             video.hidden = false;
             video.play().catch(() => {});
@@ -6725,9 +6729,10 @@
           } else {
             $('#zoom-image').src = card.dataset.poster;
           }
+          zoomReturnFocus = card;
           $('.zoom').classList.add('open');
           portal.inert = true;
-          $('#close-zoom').focus();
+          $('.zoom').focus();
         };
 
         renderArchive();
