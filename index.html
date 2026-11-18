@@ -5892,13 +5892,10 @@
         project: '작품 자료 준비 중',
         medium: '매체 정보 준비 중',
         thumbnail: `${assetPath('assets', 'optimized', 'students', `${name}.webp`)}${rgbThumbnailNames.has(name) ? '?v=rgb-20261019' : ''}`,
-        pages: [1, 2, 3, 4].map(page => assetPath('assets', 'optimized', 'graduates', name, `${page}.webp`)),
         description: '작품 자료 준비 중'
       };
     });
-    
-    const studentRecords = (exhibitionData.students.length ? exhibitionData.students : previewStudents)
-      .map((student, index) => ({ ...student, category: categoryForStudent(index + 1, student.name) }));
+
     const catalogueSpreadPages = (start, end) => Array.from(
       { length: end - start + 1 },
       (_, index) => {
@@ -5986,6 +5983,25 @@
       ...page,
       src: assetPath('assets', 'catalogue-pages', `page-${String(index + 1).padStart(3, '0')}.webp`)
     }));
+    const catalogueStudentPages = new Map();
+    cataloguePages.forEach(page => {
+      if (!page.studentName) return;
+      const pages = catalogueStudentPages.get(page.studentName) ?? [];
+      pages.push(page.src);
+      catalogueStudentPages.set(page.studentName, pages);
+    });
+    const studentRecords = (exhibitionData.students.length ? exhibitionData.students : previewStudents)
+      .map((student, index) => {
+        const pages = catalogueStudentPages.get(student.name);
+        if (!pages || pages.length !== 4) {
+          throw new Error(`Expected four online catalogue pages for ${student.name}`);
+        }
+        return {
+          ...student,
+          category: categoryForStudent(index + 1, student.name),
+          pages
+        };
+      });
     const venueBoothPositions = [
       [50.65,61.80],[51.10,68.02],[51.10,74.23],[51.25,80.44],[51.10,86.68],
       [58.06,90.59],[63.30,90.52],[69.11,90.59],[74.69,90.52],[80.00,90.44],[85.47,90.44],
