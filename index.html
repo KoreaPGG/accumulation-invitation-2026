@@ -5670,12 +5670,21 @@
 
           loadingPageTurn = true;
           catalogueLoading.hidden = true;
+          const loadingIndicatorTimer = setTimeout(() => {
+            if (!loadingPageTurn || catalogueFlip !== activeCatalogueFlip || !bookElement.isConnected) return;
+            catalogueLoading.textContent = '페이지를 불러오는 중… 잠시만 기다려 주세요.';
+            $('#book-status').textContent = `온라인 도록 ${target + 1}페이지를 불러오는 중입니다.`;
+            catalogueLoading.hidden = false;
+          }, 180);
           const targetLoaded = isMobileCatalogue
             ? await loadCataloguePage(target, true)
             : await loadCatalogueWindow(target);
+          clearTimeout(loadingIndicatorTimer);
           loadingPageTurn = false;
+          catalogueLoading.hidden = true;
           if (catalogueFlip !== activeCatalogueFlip || !bookElement.isConnected) return;
           if (catalogueFlip.getCurrentPageIndex() !== current) return;
+          updatePageControls(current);
           if (targetLoaded === null) {
             scheduleQueuedPageTurn();
             return;
