@@ -5547,6 +5547,12 @@
               : Math.min(totalPageCount - 1, spreadStart + 1)
           };
         };
+        const catalogueVisiblePagesLoaded = pageIndex => {
+          const { first, last } = catalogueVisiblePageRange(pageIndex);
+          return cataloguePageImages.slice(first, last + 1).every(
+            image => image.dataset.pageLoaded === 'true' || (image.complete && image.naturalWidth > 0)
+          );
+        };
         const updatePageControls = pageIndex => {
           const current = Number.isInteger(pageIndex) ? pageIndex : catalogueFlip.getCurrentPageIndex();
           const pageCountText = `${String(current + 1).padStart(2, '0')} / ${String(totalPageCount).padStart(2, '0')}`;
@@ -5639,7 +5645,7 @@
           maxHeight: 2000,
           showCover: true,
           usePortrait: true,
-          disableFlipByClick: isMobileCatalogue,
+          disableFlipByClick: true,
           drawShadow: !isMobileCatalogue,
           maxShadowOpacity: isMobileCatalogue ? 0 : .24,
           autoSize: false,
@@ -5652,6 +5658,7 @@
         let pendingPageJump = null;
         let queuedPageTurnFrame = 0;
         let loadingPageTurn = false;
+        let interceptedDesktopPointerId = null;
         const getCatalogueTurnTarget = (currentPage, direction) => {
           if (isMobileCatalogue) return currentPage + direction;
           if (direction > 0) return currentPage === 0 ? 1 : currentPage + 2;
@@ -5761,8 +5768,30 @@
         };
         if (!isMobileCatalogue) {
           bookStage.addEventListener('pointerdown', event => {
-            if (event.pointerType !== 'mouse' || !(event.target instanceof Node) || !bookElement.contains(event.target)) return;
+            if (event.pointerType !== 'mouse' || event.button !== 0 || !(event.target instanceof Node) || !bookElement.contains(event.target)) return;
+            const bounds = bookStage.getBoundingClientRect();
+            const direction = event.clientX < bounds.left + bounds.width / 2 ? -1 : 1;
+            const target = getCatalogueTurnTarget(catalogueFlip.getCurrentPageIndex(), direction);
+            if (target >= 0 && target < totalPageCount && !catalogueVisiblePagesLoaded(target)) {
+              interceptedDesktopPointerId = event.pointerId;
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              requestPageTurn(direction);
+              return;
+            }
             preloadCatalogueTurn(event.clientX);
+          }, true);
+          bookStage.addEventListener('pointerup', event => {
+            if (event.pointerId !== interceptedDesktopPointerId) return;
+            interceptedDesktopPointerId = null;
+            suppressCatalogueClickUntil = performance.now() + 700;
+          }, true);
+          bookStage.addEventListener('pointercancel', event => {
+            if (event.pointerId === interceptedDesktopPointerId) interceptedDesktopPointerId = null;
+          }, true);
+          bookStage.addEventListener('click', event => {
+            if (!(event.target instanceof Node) || !bookElement.contains(event.target) || performance.now() < suppressCatalogueClickUntil) return;
+            requestPageTurnAt(event.clientX);
           });
         }
         const catalogueContents = [
@@ -5835,11 +5864,7 @@
         catalogueFlip.on('flip', event => {
           updatePageControls(event.data);
           updateCatalogueContentsToggle(event.data);
-          const { first, last } = catalogueVisiblePageRange(event.data);
-          const visiblePagesReady = Array.from(
-            { length: last - first + 1 },
-            (_, index) => cataloguePageImages[first + index]
-          ).every(image => image?.dataset.pageLoaded === 'true' || (image?.complete && image.naturalWidth > 0));
+          const visiblePagesReady = catalogueVisiblePagesLoaded(event.data);
           const loadVersion = ++visibleFlipLoadVersion;
           const windowLoad = loadCatalogueWindow(event.data);
           if (!visiblePagesReady) {
@@ -6101,10 +6126,11 @@
       ...catalogueSpreadPages(124, 132),
       { alt: '온라인 도록 뒷표지' }
     ];
+    const graduateCatalogueImageVersion = 'redacted-fef2588';
     let catalogueOtherPageNumber = 0;
     cataloguePages.forEach(page => {
       page.src = page.studentName
-        ? assetPath('assets', 'optimized', 'graduates', page.studentName, `${page.studentPage}.webp`)
+        ? `${assetPath('assets', 'optimized', 'graduates', page.studentName, `${page.studentPage}.webp`)}?v=${graduateCatalogueImageVersion}`
         : assetPath('assets', 'catalogue-pages', `page-${String(++catalogueOtherPageNumber).padStart(3, '0')}.webp`);
     });
     const catalogueStudentPages = new Map();
