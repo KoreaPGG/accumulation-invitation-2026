@@ -5536,6 +5536,17 @@
         const cataloguePageLoads = new Map();
         const failedCataloguePages = new Set();
         let catalogueImageWindowVersion = 0;
+        const catalogueVisiblePageRange = pageIndex => {
+          const spreadStart = isMobileCatalogue || pageIndex === 0
+            ? pageIndex
+            : pageIndex % 2 === 0 ? pageIndex - 1 : pageIndex;
+          return {
+            first: spreadStart,
+            last: isMobileCatalogue || pageIndex === 0
+              ? spreadStart
+              : Math.min(totalPageCount - 1, spreadStart + 1)
+          };
+        };
         const updatePageControls = pageIndex => {
           const current = Number.isInteger(pageIndex) ? pageIndex : catalogueFlip.getCurrentPageIndex();
           const pageCountText = `${String(current + 1).padStart(2, '0')} / ${String(totalPageCount).padStart(2, '0')}`;
@@ -5583,13 +5594,7 @@
         };
         const loadCatalogueWindow = async pageIndex => {
           const windowVersion = ++catalogueImageWindowVersion;
-          const spreadStart = isMobileCatalogue || pageIndex === 0
-            ? pageIndex
-            : pageIndex % 2 === 0 ? pageIndex - 1 : pageIndex;
-          const visibleFirstPage = spreadStart;
-          const visibleLastPage = isMobileCatalogue || pageIndex === 0
-            ? spreadStart
-            : Math.min(totalPageCount - 1, spreadStart + 1);
+          const { first: visibleFirstPage, last: visibleLastPage } = catalogueVisiblePageRange(pageIndex);
           const visiblePagesLoaded = await Promise.all(Array.from(
             { length: visibleLastPage - visibleFirstPage + 1 },
             (_, index) => loadCataloguePage(visibleFirstPage + index, true)
@@ -5611,7 +5616,7 @@
           });
           const prefetchLastPage = Math.min(totalPageCount - 1, visibleLastPage + 2);
           for (let index = visibleLastPage + 1; index <= prefetchLastPage; index++) {
-            void loadCataloguePage(index);
+            void loadCataloguePage(index, index === visibleLastPage + 1);
           }
           return true;
         };
@@ -5647,6 +5652,11 @@
         let pendingPageJump = null;
         let queuedPageTurnFrame = 0;
         let loadingPageTurn = false;
+        const getCatalogueTurnTarget = (currentPage, direction) => {
+          if (isMobileCatalogue) return currentPage + direction;
+          if (direction > 0) return currentPage === 0 ? 1 : currentPage + 2;
+          return currentPage <= 1 ? currentPage - 1 : currentPage - 2;
+        };
         const performQueuedPageTurn = async () => {
           queuedPageTurnFrame = 0;
           if (loadingPageTurn || catalogueFlip !== activeCatalogueFlip || catalogueFlip.getState() !== 'read') return;
@@ -5655,7 +5665,7 @@
           if (jumpIndex === null && !direction) return;
 
           const current = catalogueFlip.getCurrentPageIndex();
-          const target = jumpIndex === null ? current + direction : jumpIndex;
+          const target = jumpIndex === null ? getCatalogueTurnTarget(current, direction) : jumpIndex;
           if (target < 0 || target >= totalPageCount) {
             queuedPageTurns = 0;
             pendingPageJump = null;
@@ -5675,7 +5685,7 @@
             catalogueLoading.textContent = '페이지를 불러오는 중… 잠시만 기다려 주세요.';
             $('#book-status').textContent = `온라인 도록 ${target + 1}페이지를 불러오는 중입니다.`;
             catalogueLoading.hidden = false;
-          }, 180);
+          }, isMobileCatalogue ? 600 : 300);
           const targetLoaded = isMobileCatalogue
             ? await loadCataloguePage(target, true)
             : await loadCatalogueWindow(target);
@@ -5736,6 +5746,25 @@
           queuedPageTurns += direction;
           if (catalogueFlip.getState() === 'read') performQueuedPageTurn();
         };
+        let suppressCatalogueClickUntil = 0;
+        const requestPageTurnAt = clientX => {
+          const bounds = bookStage.getBoundingClientRect();
+          requestPageTurn(clientX < bounds.left + bounds.width / 2 ? -1 : 1);
+        };
+        const preloadCatalogueTurn = clientX => {
+          const bounds = bookStage.getBoundingClientRect();
+          const direction = clientX < bounds.left + bounds.width / 2 ? -1 : 1;
+          const target = getCatalogueTurnTarget(catalogueFlip.getCurrentPageIndex(), direction);
+          if (target < 0 || target >= totalPageCount) return;
+          const { first, last } = catalogueVisiblePageRange(target);
+          for (let index = first; index <= last; index++) void loadCataloguePage(index, true);
+        };
+        if (!isMobileCatalogue) {
+          bookStage.addEventListener('pointerdown', event => {
+            if (event.pointerType !== 'mouse' || !(event.target instanceof Node) || !bookElement.contains(event.target)) return;
+            preloadCatalogueTurn(event.clientX);
+          });
+        }
         const catalogueContents = [
           { title: '학과 소개', range: '10–11쪽', pageIndex: 9 },
           { title: '학장 인사말', range: '12–13쪽', pageIndex: 11 },
@@ -5802,10 +5831,35 @@
           updatePageControls(event.data.page);
           updateCatalogueContentsToggle(event.data.page);
         });
+        let visibleFlipLoadVersion = 0;
         catalogueFlip.on('flip', event => {
           updatePageControls(event.data);
           updateCatalogueContentsToggle(event.data);
-          loadCatalogueWindow(event.data);
+          const { first, last } = catalogueVisiblePageRange(event.data);
+          const visiblePagesReady = Array.from(
+            { length: last - first + 1 },
+            (_, index) => cataloguePageImages[first + index]
+          ).every(image => image?.dataset.pageLoaded === 'true' || (image?.complete && image.naturalWidth > 0));
+          const loadVersion = ++visibleFlipLoadVersion;
+          const windowLoad = loadCatalogueWindow(event.data);
+          if (!visiblePagesReady) {
+            catalogueLoading.textContent = '페이지를 불러오는 중… 잠시만 기다려 주세요.';
+            $('#book-status').textContent = `온라인 도록 ${event.data + 1}페이지를 불러오는 중입니다.`;
+            catalogueLoading.hidden = false;
+          }
+          windowLoad.then(loaded => {
+            if (loadVersion !== visibleFlipLoadVersion || catalogueFlip !== activeCatalogueFlip || !bookElement.isConnected) return;
+            if (loaded === null) return;
+            if (loaded) {
+              catalogueLoading.hidden = true;
+              updatePageControls(catalogueFlip.getCurrentPageIndex());
+              return;
+            }
+            const currentPage = catalogueFlip.getCurrentPageIndex();
+            catalogueLoading.textContent = `${currentPage + 1}페이지를 불러오지 못했습니다. 다시 시도해 주세요.`;
+            $('#book-status').textContent = `온라인 도록 ${currentPage + 1}페이지를 불러오지 못했습니다.`;
+            catalogueLoading.hidden = false;
+          });
         });
         catalogueFlip.on('changeState', event => {
           if (event.data === 'read') scheduleQueuedPageTurn();
@@ -5835,17 +5889,12 @@
         if (isMobileCatalogue) {
           const activeTouchPointers = new Set();
           let mobileTapCandidate = null;
-          let suppressMobileClickUntil = 0;
-          const requestMobilePageTurn = clientX => {
-            const bounds = bookStage.getBoundingClientRect();
-            requestPageTurn(clientX < bounds.left + bounds.width / 2 ? -1 : 1);
-          };
           bookStage.addEventListener('pointerdown', event => {
             if (event.pointerType !== 'touch') return;
             activeTouchPointers.add(event.pointerId);
             if (activeTouchPointers.size !== 1) {
               mobileTapCandidate = null;
-              suppressMobileClickUntil = performance.now() + 700;
+              suppressCatalogueClickUntil = performance.now() + 700;
               return;
             }
             mobileTapCandidate = {
@@ -5861,7 +5910,7 @@
             if (Math.hypot(deltaX, deltaY) > 12 && Math.abs(deltaY) >= Math.abs(deltaX)) {
               mobileTapCandidate = null;
             }
-            if (Math.hypot(deltaX, deltaY) > 12) suppressMobileClickUntil = performance.now() + 700;
+            if (Math.hypot(deltaX, deltaY) > 12) suppressCatalogueClickUntil = performance.now() + 700;
           });
           bookStage.addEventListener('pointerup', event => {
             if (event.pointerType !== 'touch') return;
@@ -5869,24 +5918,24 @@
             if (mobileTapCandidate?.pointerId !== event.pointerId) return;
             const start = mobileTapCandidate;
             mobileTapCandidate = null;
-            suppressMobileClickUntil = performance.now() + 700;
+            suppressCatalogueClickUntil = performance.now() + 700;
             if (activeTouchPointers.size) return;
             const deltaX = event.clientX - start.startX;
             const deltaY = event.clientY - start.startY;
             if (Math.abs(deltaX) > 24 && Math.abs(deltaX) > Math.abs(deltaY)) {
               requestPageTurn(deltaX < 0 ? 1 : -1);
             } else if (Math.hypot(deltaX, deltaY) <= 12) {
-              requestMobilePageTurn(event.clientX);
+              requestPageTurnAt(event.clientX);
             }
           });
           bookStage.addEventListener('pointercancel', event => {
             activeTouchPointers.delete(event.pointerId);
             if (mobileTapCandidate?.pointerId === event.pointerId) mobileTapCandidate = null;
-            suppressMobileClickUntil = performance.now() + 700;
+            suppressCatalogueClickUntil = performance.now() + 700;
           });
           bookStage.addEventListener('click', event => {
-            if (event.pointerType === 'touch' || performance.now() < suppressMobileClickUntil) return;
-            requestMobilePageTurn(event.clientX);
+            if (event.pointerType === 'touch' || performance.now() < suppressCatalogueClickUntil) return;
+            requestPageTurnAt(event.clientX);
           });
         }
       }
