@@ -5706,7 +5706,17 @@
 
           queuedPageTurns -= direction;
           if (direction > 0) catalogueFlip.flipNext('bottom');
-          else catalogueFlip.flipPrev('bottom');
+          else {
+            const settings = catalogueFlip.getSettings();
+            const disableFlipByClick = settings.disableFlipByClick;
+            // PageFlip's flipPrev corner check assumes a zero left bound, which mobile portrait mode does not have.
+            settings.disableFlipByClick = false;
+            try {
+              catalogueFlip.flipPrev('bottom');
+            } finally {
+              settings.disableFlipByClick = disableFlipByClick;
+            }
+          }
           if (isMobileCatalogue && queuedPageTurns) scheduleQueuedPageTurn();
         };
         const scheduleQueuedPageTurn = () => {
@@ -5837,10 +5847,12 @@
           });
           bookStage.addEventListener('pointermove', event => {
             if (mobileTapCandidate?.pointerId !== event.pointerId) return;
-            if (Math.hypot(event.clientX - mobileTapCandidate.startX, event.clientY - mobileTapCandidate.startY) > 12) {
+            const deltaX = event.clientX - mobileTapCandidate.startX;
+            const deltaY = event.clientY - mobileTapCandidate.startY;
+            if (Math.hypot(deltaX, deltaY) > 12 && Math.abs(deltaY) >= Math.abs(deltaX)) {
               mobileTapCandidate = null;
-              suppressMobileClickUntil = performance.now() + 700;
             }
+            if (Math.hypot(deltaX, deltaY) > 12) suppressMobileClickUntil = performance.now() + 700;
           });
           bookStage.addEventListener('pointerup', event => {
             if (event.pointerType !== 'touch') return;
@@ -5849,11 +5861,14 @@
             const start = mobileTapCandidate;
             mobileTapCandidate = null;
             suppressMobileClickUntil = performance.now() + 700;
-            if (
-              activeTouchPointers.size ||
-              Math.hypot(event.clientX - start.startX, event.clientY - start.startY) > 12
-            ) return;
-            requestMobilePageTurn(event.clientX);
+            if (activeTouchPointers.size) return;
+            const deltaX = event.clientX - start.startX;
+            const deltaY = event.clientY - start.startY;
+            if (Math.abs(deltaX) > 24 && Math.abs(deltaX) > Math.abs(deltaY)) {
+              requestPageTurn(deltaX < 0 ? 1 : -1);
+            } else if (Math.hypot(deltaX, deltaY) <= 12) {
+              requestMobilePageTurn(event.clientX);
+            }
           });
           bookStage.addEventListener('pointercancel', event => {
             activeTouchPointers.delete(event.pointerId);
