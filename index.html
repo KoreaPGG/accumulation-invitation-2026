@@ -938,12 +938,16 @@
     .page-photo { width: 100%; height: 100%; object-fit: contain; }
     .book-controls { display: flex; justify-content: center; gap: 15px; align-items: center; flex: 0 0 auto; margin-top: 10px; }
     .catalogue-book-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px 15px; width: min(100%, 720px); }
+    .catalogue-zoom-toggle { display: grid; width: 40px; height: 36px; place-items: center; border: 1px solid var(--ink); background: var(--white); color: var(--ink); cursor: zoom-in; transition: background .2s, color .2s; }
+    .catalogue-zoom-toggle:hover { background: var(--ink); color: var(--red); }
+    .catalogue-zoom-toggle:disabled { opacity: .45; cursor: wait; }
+    .catalogue-zoom-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
     .catalogue-page-navigation { grid-column: 2; display: flex; align-items: center; justify-content: center; gap: 15px; }
-    .catalogue-contents { position: relative; grid-column: 3; justify-self: end; width: clamp(150px, 20vw, 220px); }
+    .catalogue-contents { position: relative; display: grid; grid-column: 3; grid-template-columns: minmax(0, 1fr) 40px; align-items: start; gap: 8px; justify-self: end; width: clamp(150px, 20vw, 220px); }
     .catalogue-contents-toggle { display: flex; width: 100%; min-height: 36px; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--ink); padding: 8px 10px; background: var(--white); text-align: left; cursor: pointer; font-size: 13px; letter-spacing: normal; }
     .catalogue-contents-toggle span:last-child { transition: transform .18s ease; }
     .catalogue-contents-toggle[aria-expanded="true"] span:last-child { transform: rotate(180deg); }
-    .catalogue-contents-list { position: absolute; z-index: 20; right: 0; bottom: calc(100% + 8px); left: 0; max-height: min(40svh, 320px); overflow-y: auto; border: 1px solid var(--ink); background: var(--white); box-shadow: 0 4px 16px rgba(0, 0, 0, .18); }
+    .catalogue-contents-list { position: absolute; z-index: 20; right: 48px; bottom: calc(100% + 8px); left: 0; max-height: min(40svh, 320px); overflow-y: auto; border: 1px solid var(--ink); background: var(--white); box-shadow: 0 4px 16px rgba(0, 0, 0, .18); }
     .catalogue-contents-list[hidden] { display: none; }
     .catalogue-contents-option { display: grid; width: 100%; min-height: 40px; grid-template-columns: auto auto minmax(0, 1fr); align-items: center; gap: 8px; border: 0; padding: 8px 10px; background: var(--white); text-align: left; cursor: pointer; font-size: 13px; letter-spacing: normal; }
     .catalogue-contents-option:hover, .catalogue-contents-option:focus-visible { background: var(--ink); color: var(--red); }
@@ -961,10 +965,12 @@
       #catalogue-book { touch-action: pan-y pinch-zoom !important; }
       .catalogue-book-controls { width: min(100%, 420px); }
       .catalogue-book-controls { grid-template-columns: minmax(0, 1fr); }
+      .catalogue-zoom-toggle { display: none; }
       #catalogue-book .page, #catalogue-book .page-cover { padding: 0; }
       .catalogue-page-navigation, .catalogue-contents { grid-column: 1; justify-self: center; }
       .catalogue-page-navigation { display: none; }
-      .catalogue-contents { width: min(100%, 300px); }
+      .catalogue-contents { grid-template-columns: minmax(0, 1fr); width: min(100%, 300px); }
+      .catalogue-contents-list { right: 0; }
       .catalogue-overlay-navigation { position: absolute; z-index: 6; right: 8px; bottom: 8px; left: 8px; display: flex; align-items: center; justify-content: center; pointer-events: none; }
       .catalogue-overlay-page-count { min-width: 34px; padding: 8px 10px; background: rgba(0,0,0,.5); color: rgba(255,255,255,.88); font-size: 14px; line-height: 1; text-align: center; font-variant-numeric: tabular-nums; pointer-events: none; }
       .student-dialog { box-sizing: border-box; width: min(940px, calc(100vw - 24px)); padding: 12px; }
@@ -1419,7 +1425,7 @@
     <div class="portal-content"></div>
   </section>
 
-  <div class="zoom" role="dialog" aria-modal="true" aria-label="포스터 확대" tabindex="-1">
+  <div class="zoom" role="dialog" aria-modal="true" aria-label="확대 보기" tabindex="-1">
     <button id="close-zoom">닫기 ×</button>
     <button id="zoom-face-toggle" type="button" aria-pressed="false" hidden>뒷면 보기</button>
     <img id="zoom-image" alt="확대한 전시 포스터">
@@ -4622,6 +4628,9 @@
                  </div>
                  <div class="catalogue-contents">
                    <button class="catalogue-contents-toggle" id="catalogue-contents-toggle" type="button" aria-label="목차 열기" aria-expanded="false" aria-controls="catalogue-contents-list"><span>목차</span><span aria-hidden="true">⌄</span></button>
+                   <button class="catalogue-zoom-toggle" id="catalogue-zoom-toggle" type="button" aria-label="현재 도록 펼침 크게 보기" title="현재 도록 펼침 크게 보기">
+                     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m15.5 15.5 5 5"></path></svg>
+                   </button>
                    <div class="catalogue-contents-list" id="catalogue-contents-list" role="listbox" aria-label="온라인 도록 목차" hidden></div>
                  </div>
                </div>
@@ -4664,6 +4673,7 @@
 
     let filmCleanup = null;
     let colorRippleElement = null, colorRippleAnimation = null;
+    let zoomReturnFocus = null;
     let posterTimer = null, layerObserver = null, layerRevealTimer = null, layerRevealListener = null, bookTimer = null, filmTimer = null, catalogueFlip = null, studentFlip = null, venueFlip = null, archiveResizeObserver = null;
 
     function clearColorRipple(resetBackground = false) {
@@ -5121,7 +5131,11 @@
       resetZoomMedia();
       $('.zoom').classList.remove('open');
       portal.inert = false;
-      document.querySelector('[data-poster]')?.focus();
+      $('.zoom').setAttribute('aria-label', '확대 보기');
+      const returnFocus = zoomReturnFocus;
+      zoomReturnFocus = null;
+      if (returnFocus?.isConnected) returnFocus.focus();
+      else document.querySelector('[data-poster]')?.focus();
     }
 
     addEventListener('keydown', e => {
@@ -5546,6 +5560,8 @@
         const isMobileCatalogue = matchMedia('(max-width: 700px)').matches;
         const bookStage = bookElement.closest('.book-stage');
         const catalogueLoading = $('#catalogue-loading');
+        const catalogueZoomToggle = $('#catalogue-zoom-toggle');
+        catalogueZoomToggle.disabled = true;
         bookElement.innerHTML = cataloguePages.map(({ src, alt }, index) => {
           const isCover = index === 0 || index === totalPageCount - 1;
           return `<article class="page"${isCover ? ' data-density="hard"' : ''}><img class="catalogue-page-image" data-page-src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" decoding="async"></article>`;
@@ -5650,6 +5666,7 @@
           $('#book-status').textContent = '온라인 도록 넘김 기능을 불러오지 못했습니다.';
           $('#prev-page').disabled = true;
           $('#next-page').disabled = true;
+          catalogueZoomToggle.disabled = true;
           return;
         }
 
@@ -5875,6 +5892,7 @@
         };
 
         catalogueFlip.on('init', event => {
+          catalogueZoomToggle.disabled = false;
           updatePageControls(event.data.page);
           updateCatalogueContentsToggle(event.data.page);
         });
@@ -5908,6 +5926,43 @@
           if (event.data === 'read') scheduleQueuedPageTurn();
         });
         catalogueFlip.loadFromHTML(bookElement.querySelectorAll('.page'));
+        catalogueZoomToggle.onclick = () => {
+          const currentPage = catalogueFlip?.getCurrentPageIndex();
+          if (!Number.isInteger(currentPage)) return;
+          const { first, last } = catalogueVisiblePageRange(currentPage);
+          const visiblePages = cataloguePageImages.slice(first, last + 1);
+          const pageSources = visiblePages.map(image => image.dataset.pageSrc);
+          if (!visiblePages.length || pageSources.some(source => !source)) {
+            $('#book-status').textContent = '현재 도록 페이지를 크게 볼 수 없습니다.';
+            return;
+          }
+
+          resetZoomMedia();
+          const zoomDialog = $('.zoom');
+          const zoomImage = $('#zoom-image');
+          const zoomPair = $('#zoom-pair');
+          const zoomPairImages = [...zoomPair.querySelectorAll('img')];
+          const pageLabel = first === last
+            ? `온라인 도록 ${first + 1}페이지 크게 보기`
+            : `온라인 도록 ${first + 1}–${last + 1}페이지 크게 보기`;
+          zoomDialog.setAttribute('aria-label', pageLabel);
+          zoomReturnFocus = catalogueZoomToggle;
+          if (visiblePages.length === 1) {
+            zoomImage.src = pageSources[0];
+            zoomImage.alt = visiblePages[0].alt;
+          } else {
+            visiblePages.forEach((image, index) => {
+              zoomPairImages[index].src = pageSources[index];
+              zoomPairImages[index].alt = image.alt;
+            });
+            zoomPair.setAttribute('aria-label', pageLabel);
+            zoomImage.hidden = true;
+            zoomPair.hidden = false;
+          }
+          zoomDialog.classList.add('open');
+          portal.inert = true;
+          $('#close-zoom').focus();
+        };
         updatePageControls(0);
         updateCatalogueContentsToggle(0);
         loadCatalogueWindow(0).then(
