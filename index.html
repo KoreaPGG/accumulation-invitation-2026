@@ -6044,16 +6044,20 @@
           ...(frontSpread ? catalogueSpreadPages(frontSpread, frontSpread) : []),
           ...Array.from({ length: 4 }, (_, index) => ({
             alt: `${title} 도록 ${index + 1}쪽`,
-            studentName: title
+            studentName: title,
+            studentPage: index + 1
           }))
         ];
       }),
       ...catalogueSpreadPages(124, 132),
       { alt: '온라인 도록 뒷표지' }
-    ].map((page, index) => ({
-      ...page,
-      src: assetPath('assets', 'catalogue-pages', `page-${String(index + 1).padStart(3, '0')}.webp`)
-    }));
+    ];
+    let catalogueOtherPageNumber = 0;
+    cataloguePages.forEach(page => {
+      page.src = page.studentName
+        ? assetPath('assets', 'optimized', 'graduates', page.studentName, `${page.studentPage}.webp`)
+        : assetPath('assets', 'catalogue-pages', `page-${String(++catalogueOtherPageNumber).padStart(3, '0')}.webp`);
+    });
     const catalogueStudentPages = new Map();
     cataloguePages.forEach(page => {
       if (!page.studentName) return;
