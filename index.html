@@ -4509,10 +4509,12 @@
         ? landscapeDropOrder
         : mobile ? mobileDropOrder : desktopDropOrder;
       $('.entry').style.opacity = String(Math.max(0, 1 - p * 12));
+      let allGlyphsSettled = true;
 
       glyphs.forEach((glyph, index) => {
         const rank = dropOrder.indexOf(index);
         const progress = Math.max(0, Math.min(1, (p - start - rank * stagger) / duration));
+        if (progress < 1) allGlyphsSettled = false;
         glyph.style.opacity = String(progress);
 
         if (progress >= 1) {
@@ -4531,7 +4533,7 @@
         glyph.disabled = progress < 0.72;
       });
 
-      $('.journey').classList.toggle('is-accumulated', p >= 1);
+      $('.journey').classList.toggle('is-accumulated', allGlyphsSettled);
       raf = false;
     }
 
