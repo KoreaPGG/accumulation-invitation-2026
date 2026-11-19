@@ -347,7 +347,7 @@
     }
 
     @media (max-width: 700px) {
-      .journey.is-accumulated:not(.has-interacted) .glyph {
+      .journey.is-accumulated .glyph {
         animation: glyph-idle-bounce 2.8s ease-in-out infinite;
         animation-delay: var(--idle-bounce-delay, 0ms);
       }
@@ -1394,7 +1394,7 @@
 
     /* Allow only this mobile cue when reduced motion is enabled. */
     @media (max-width: 700px) and (prefers-reduced-motion: reduce) {
-      .journey.is-accumulated:not(.has-interacted) .glyph {
+      .journey.is-accumulated .glyph {
         animation: glyph-idle-bounce 2.8s ease-in-out infinite !important;
         animation-delay: var(--idle-bounce-delay, 0ms) !important;
       }
@@ -4432,12 +4432,6 @@
         touchGlyphDismissTimer = null;
       }, 5000);
     };
-    const markJourneyInteracted = () => {
-      const journey = $('.journey');
-      if (journey.classList.contains('is-accumulated')) {
-        journey.classList.add('has-interacted');
-      }
-    };
     glyphs.forEach(glyph => {
       const activate = () => {
         glyph.classList.add('is-active');
@@ -4464,7 +4458,6 @@
       glyph.addEventListener('pointerleave', event => deactivate(event.pointerType === 'touch'));
       glyph.addEventListener('focus', () => {
         if (glyph.matches(':focus-visible')) {
-          markJourneyInteracted();
           activate();
         }
       });
@@ -5016,7 +5009,6 @@
     $$('[data-section]').forEach(b => b.onclick = event => {
       if (b.classList.contains('glyph') && touchGlyphTap === b) {
         touchGlyphTap = null;
-        markJourneyInteracted();
         if (selectedTouchGlyph === b) {
           clearTimeout(touchGlyphDismissTimer);
           touchGlyphDismissTimer = null;
