@@ -4424,6 +4424,12 @@
         touchGlyphDismissTimer = null;
       }, 5000);
     };
+    const markJourneyInteracted = () => {
+      const journey = $('.journey');
+      if (journey.classList.contains('is-accumulated')) {
+        journey.classList.add('has-interacted');
+      }
+    };
     glyphs.forEach(glyph => {
       const activate = () => {
         glyph.classList.add('is-active');
@@ -4443,15 +4449,16 @@
       });
       glyph.addEventListener('pointerdown', event => {
         if (event.pointerType !== 'touch') return;
-        $('.journey').classList.add('has-interacted');
         activate();
         touchGlyphTap = glyph;
         touchGlyphDeactivate = clearTouchActivation;
       });
       glyph.addEventListener('pointerleave', event => deactivate(event.pointerType === 'touch'));
       glyph.addEventListener('focus', () => {
-        $('.journey').classList.add('has-interacted');
-        if (glyph.matches(':focus-visible')) activate();
+        if (glyph.matches(':focus-visible')) {
+          markJourneyInteracted();
+          activate();
+        }
       });
       glyph.addEventListener('blur', deactivate);
     });
@@ -5001,6 +5008,7 @@
     $$('[data-section]').forEach(b => b.onclick = event => {
       if (b.classList.contains('glyph') && touchGlyphTap === b) {
         touchGlyphTap = null;
+        markJourneyInteracted();
         if (selectedTouchGlyph === b) {
           clearTimeout(touchGlyphDismissTimer);
           touchGlyphDismissTimer = null;
