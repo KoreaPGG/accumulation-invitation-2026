@@ -341,6 +341,18 @@
     .glyph.is-lifted { z-index: 9; overflow: visible; }
     .glyph.is-lifted .glyph-letter { transform: translateY(-100%); }
 
+    @keyframes glyph-idle-bounce {
+      0%, 6%, 16%, 100% { transform: translateY(0); }
+      10% { transform: translateY(-5px); }
+    }
+
+    @media (max-width: 700px) {
+      .journey.is-accumulated:not(.has-interacted) .glyph {
+        animation: glyph-idle-bounce 3.2s ease-in-out infinite;
+        animation-delay: var(--idle-bounce-delay, 0ms);
+      }
+    }
+
     .glyph.is-active .glyph-caption,
     .glyph:focus-visible .glyph-caption {
       opacity: 1;
@@ -4393,6 +4405,9 @@
       glyph.querySelector('.glyph-letter').innerHTML =
         `<svg viewBox="50 -440 658 440" preserveAspectRatio="none" aria-hidden="true"><path transform="scale(1 -1)" d="${outlines[glyph.dataset.letter]}"/></svg>`;
     });
+    glyphs.forEach((glyph, index) => {
+      glyph.style.setProperty('--idle-bounce-delay', `${index * 70}ms`);
+    });
     let touchGlyphDeactivate = null;
     let selectedTouchGlyph = null;
     let touchGlyphTap = null;
@@ -4428,12 +4443,14 @@
       });
       glyph.addEventListener('pointerdown', event => {
         if (event.pointerType !== 'touch') return;
+        $('.journey').classList.add('has-interacted');
         activate();
         touchGlyphTap = glyph;
         touchGlyphDeactivate = clearTouchActivation;
       });
       glyph.addEventListener('pointerleave', event => deactivate(event.pointerType === 'touch'));
       glyph.addEventListener('focus', () => {
+        $('.journey').classList.add('has-interacted');
         if (glyph.matches(':focus-visible')) activate();
       });
       glyph.addEventListener('blur', deactivate);
@@ -4506,6 +4523,7 @@
         glyph.disabled = progress < 0.72;
       });
 
+      $('.journey').classList.toggle('is-accumulated', p >= 1);
       raf = false;
     }
 
