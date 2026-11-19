@@ -346,6 +346,11 @@
       10% { transform: translateY(-5px); }
     }
 
+    @keyframes glyph-reduced-bounce {
+      0%, 100% { transform: translateY(0); }
+      45% { transform: translateY(-4px); }
+    }
+
     @media (max-width: 700px) {
       .journey.is-accumulated:not(.has-interacted) .glyph {
         animation: glyph-idle-bounce 3.2s ease-in-out infinite;
@@ -1390,6 +1395,14 @@
       .stack-row, .color-stripe, .type-layer { animation: none; }
       .logo-lab.is-floating .lab-letter { transition: none !important; }
       .logo-lab:not(.is-floating) .lab-letter { transition: transform .9s cubic-bezier(.2,.8,.2,1) !important; }
+    }
+
+    /* Keep this completion cue brief without re-enabling other reduced motion. */
+    @media (max-width: 700px) and (prefers-reduced-motion: reduce) {
+      .journey.is-accumulated:not(.has-interacted) .glyph {
+        animation: glyph-reduced-bounce .9s ease-in-out 1 both !important;
+        animation-delay: var(--idle-bounce-delay, 0ms) !important;
+      }
     }
 
     .portal, .portal *, .zoom, .zoom * { font-family: 'SohneBreitBuch', 'SM3태고딕', sans-serif; }
