@@ -56,8 +56,8 @@
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const cancelMotion = () => { animations.forEach(animation => animation.cancel()); animations.clear(); };
     controller.signal.addEventListener('abort', cancelMotion, {once:true});
-    const animate = async (element, frames, duration, delay = 0) => {
-      if (!element || reducedMotion.matches || controller.signal.aborted) return;
+    const animate = async (element, frames, duration, delay = 0, forceMotion = false) => {
+      if (!element || (reducedMotion.matches && !forceMotion) || controller.signal.aborted) return;
       const animation = element.animate(frames, {duration, delay, easing:'ease-in-out', fill:'backwards'});
       animations.add(animation);
       try { await animation.finished; } catch {} finally { animations.delete(animation); }
@@ -125,12 +125,12 @@
         const flipIn = mobile ? [{transform:'perspective(240px) rotateX(-90deg)'},{transform:'perspective(240px) rotateX(0deg)'}] : [{transform:'rotateX(-90deg)'},{transform:'rotateX(0deg)'}];
         await Promise.all(cells.map(async (cell, i) => {
           cell.getAnimations().forEach(animation => animation.cancel());
-          await animate(cell, flipOut, mobile ? 220 : 160, i * 180);
+          await animate(cell, flipOut, mobile ? 220 : 160, i * 180, true);
           if (!alive()) return;
           cell.classList.remove('filled');
           cell.classList.add(states[i]);
           cell.setAttribute('aria-label', `${round.input[i]}, ${{exact:'위치 일치',present:'다른 위치',absent:'없음'}[states[i]]}`);
-          await animate(cell, flipIn, mobile ? 220 : 160);
+          await animate(cell, flipIn, mobile ? 220 : 160, 0, true);
         }));
         if (!alive()) return;
         const won = game.input === game.answer;
