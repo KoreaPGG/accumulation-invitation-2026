@@ -121,8 +121,8 @@
         $('#word-submit').disabled = true;
         const alive = () => game === round && !controller.signal.aborted;
         const mobile = window.matchMedia('(max-width: 700px)').matches;
-        const flipOut = mobile ? [{transform:'scaleY(1)'},{transform:'scaleY(0.08)'}] : [{transform:'rotateX(0deg)'},{transform:'rotateX(90deg)'}];
-        const flipIn = mobile ? [{transform:'scaleY(0.08)'},{transform:'scaleY(1)'}] : [{transform:'rotateX(-90deg)'},{transform:'rotateX(0deg)'}];
+        const flipOut = mobile ? [{transform:'perspective(240px) rotateX(0deg)'},{transform:'perspective(240px) rotateX(90deg)'}] : [{transform:'rotateX(0deg)'},{transform:'rotateX(90deg)'}];
+        const flipIn = mobile ? [{transform:'perspective(240px) rotateX(-90deg)'},{transform:'perspective(240px) rotateX(0deg)'}] : [{transform:'rotateX(-90deg)'},{transform:'rotateX(0deg)'}];
         await Promise.all(cells.map(async (cell, i) => {
           cell.getAnimations().forEach(animation => animation.cancel());
           await animate(cell, flipOut, mobile ? 220 : 160, i * 180);
