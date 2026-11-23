@@ -808,7 +808,7 @@
     .archive-indicator-segment.is-current { height: 4px; background: var(--ink); }
     .archive-stage { position: relative; display: grid; flex: 1 1 auto; min-height: 0; place-items: center; overflow: hidden; touch-action: pan-y; user-select: none; }
     .archive-card { --archive-card-width: min(42vw, 460px, 44vh); position: absolute; top: calc(50% - 40px); left: 50%; display: block; width: var(--archive-card-width); height: auto; aspect-ratio: 11584 / 16384; padding: 0; overflow: hidden; border: 1px solid var(--ink); background: transparent; box-shadow: none; transform: translate(calc(-50% + var(--drag-offset, 0px)), -50%); transition: transform .72s cubic-bezier(.22, 1, .36, 1); cursor: grab; }
-    .archive-card img { display: block; width: 100%; height: 100%; background: var(--paper); object-fit: contain; pointer-events: none; -webkit-user-drag: none; }
+    .archive-card img { display: block; width: 100%; height: 100%; background: var(--paper); object-fit: cover; pointer-events: none; -webkit-user-drag: none; }
     .archive-card-video { display: block; width: 100%; height: 100%; background: var(--ink); object-fit: contain; pointer-events: none; }
     .archive-card-pair { width: min(84vw, 920px, 88vh); aspect-ratio: 1.414 / 1; }
     .archive-poster-pair { display: grid; width: 100%; height: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
