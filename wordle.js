@@ -159,6 +159,7 @@
       $('#word-hint').textContent = game.hintLevel === 1
         ? `힌트: ${game.meaning}`
         : `글자 힌트: 정답은 ${game.answer[0]}로 시작합니다.`;
+      $('#word-hint').classList.add('hint-revealed');
       if (game.hintLevel === 1) $('#word-hint-button').textContent = '글자 힌트 보기';
       else {
         $('#word-hint-button').textContent = '힌트 모두 사용';
@@ -177,6 +178,7 @@
       newGame();
       render();
       $('#word-hint').textContent = '화면 키보드 또는 영문 키보드로 입력하세요. Enter로 제출하고, Backspace로 지울 수 있어요.';
+      $('#word-hint').classList.remove('hint-revealed');
       $('#word-hint-button').textContent = '힌트 보기';
       $('#word-hint-button').disabled = false;
       message('새로운 단어입니다. 영어 다섯 글자를 입력하세요.');
