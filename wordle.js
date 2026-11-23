@@ -103,6 +103,7 @@
         if (state) key.classList.add(state);
         key.disabled = game.done || game.busy;
       });
+      $('#word-submit').disabled = game.done || game.busy;
     };
     const input = async key => {
       if (game.done || game.busy) return;
@@ -117,15 +118,19 @@
         const cells = currentCells();
         const states = score(game.input, game.answer);
         game.busy = true;
+        $('#word-submit').disabled = true;
         const alive = () => game === round && !controller.signal.aborted;
+        const mobile = window.matchMedia('(max-width: 700px)').matches;
+        const flipOut = mobile ? [{transform:'scaleY(1)'},{transform:'scaleY(0.08)'}] : [{transform:'rotateX(0deg)'},{transform:'rotateX(90deg)'}];
+        const flipIn = mobile ? [{transform:'scaleY(0.08)'},{transform:'scaleY(1)'}] : [{transform:'rotateX(-90deg)'},{transform:'rotateX(0deg)'}];
         await Promise.all(cells.map(async (cell, i) => {
           cell.getAnimations().forEach(animation => animation.cancel());
-          await animate(cell, [{transform:'rotateX(0deg)'},{transform:'rotateX(90deg)'}], 160, i * 180);
+          await animate(cell, flipOut, mobile ? 220 : 160, i * 180);
           if (!alive()) return;
           cell.classList.remove('filled');
           cell.classList.add(states[i]);
           cell.setAttribute('aria-label', `${round.input[i]}, ${{exact:'위치 일치',present:'다른 위치',absent:'없음'}[states[i]]}`);
-          await animate(cell, [{transform:'rotateX(-90deg)'},{transform:'rotateX(0deg)'}], 160);
+          await animate(cell, flipIn, mobile ? 220 : 160);
         }));
         if (!alive()) return;
         const won = game.input === game.answer;
@@ -146,12 +151,13 @@
         if (alive()) {
           game.busy = false;
           $('#word-keyboard').querySelectorAll('[data-key]').forEach(key => { key.disabled = game.done; });
+          $('#word-submit').disabled = game.done;
         }
         return;
       } else if (/^[a-z]$/i.test(key) && game.input.length < 5) { game.input += key.toUpperCase(); typed = true; }
       else return;
       render();
-      if (typed) void animate(currentCells()[game.input.length-1], [{transform:'scale(1)'},{transform:'scale(1.09)',offset:.45},{transform:'scale(1)'}], 120);
+      if (typed) void animate(currentCells()[game.input.length-1], [{transform:'scale(1)'},{transform:'scale(1.12)',offset:.45},{transform:'scale(1)'}], 180);
     };
     $('#word-hint-button').addEventListener('click', () => {
       if (game.done || game.hintLevel >= 2) return;
@@ -170,19 +176,11 @@
       const key = event.target.closest('button[data-key]');
       if (key) void input(key.dataset.key);
     },{signal:controller.signal});
+    $('#word-submit').addEventListener('click', () => { void input('Enter'); },{signal:controller.signal});
     document.addEventListener('keydown', e => {
       if (!$('#word-board').isConnected||!$('.portal').classList.contains('open')||e.ctrlKey||e.metaKey||e.altKey||e.isComposing||e.target.matches('input,textarea,[contenteditable=true]')||document.querySelector('dialog[open]')) return;
       if (/^[a-z]$/i.test(e.key)||['Enter','Backspace'].includes(e.key)) { e.preventDefault(); input(e.key); }
     },{signal:controller.signal});
-    $('#word-new').onclick = () => {
-      newGame();
-      render();
-      $('#word-hint').textContent = '화면 키보드 또는 영문 키보드로 입력하세요. Enter로 제출하고, Backspace로 지울 수 있어요.';
-      $('#word-hint').classList.remove('hint-revealed');
-      $('#word-hint-button').textContent = '힌트 보기';
-      $('#word-hint-button').disabled = false;
-      message('새로운 단어입니다. 영어 다섯 글자를 입력하세요.');
-    };
     render();
     if(game.done) message(`${game.answer} · ${game.meaning}`);
     if (!dictionary) loadDictionary().catch(() => {

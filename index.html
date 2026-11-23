@@ -1087,7 +1087,7 @@
     .word-key-row { display: flex; justify-content: center; gap: var(--quiz-gap); }
     .word-key { display: grid; flex: 1 1 0; min-width: 0; height: clamp(34px, 5.2vh, 48px); place-items: center; padding: 0 4px; border: 1px solid rgba(0, 0, 0, .26); background: rgba(255, 255, 255, .56); font-family: 'SohneBreitBuch', sans-serif; font-size: clamp(11px, 1.2vw, 14px); transition: background .16s, color .16s, transform .12s; }
     .word-key:hover:not(:disabled), .word-key:active:not(:disabled) { transform: translateY(-2px); background: var(--ink); color: var(--paper); }
-    .word-key.wide { flex: 1.5 1 0; font-family: inherit; font-size: 10px; }
+    .word-key[data-key="Backspace"] { font-family: inherit; }
     .word-key.exact { border-color: #FF5349; background: #FF5349; }
     .word-key.present { border-color: #a47b13; background: #a47b13; color: #fff; }
     .word-key.absent { border-color: #343434; background: #343434; color: #fff; }
@@ -1263,9 +1263,8 @@
       .portal.quiz-open .wordle-field-note .word-hint:not(.hint-revealed) { display: none; }
       .portal.quiz-open .wordle-side > .word-legend { grid-column: 1 / -1; grid-row: 4; height: auto; min-height: 26px; padding: 6px 10px; }
       .portal.quiz-open .wordle-side > .word-hint-button { grid-column: 1; grid-row: 5; height: auto; min-height: var(--action-height); }
-      .portal.quiz-open .wordle-side > .word-new { grid-column: 2; grid-row: 5; height: auto; min-height: var(--action-height); }
+      .portal.quiz-open .wordle-side > .word-submit { grid-column: 2; grid-row: 5; height: auto; min-height: var(--action-height); }
       .portal.quiz-open .word-key { height: var(--key-height); font-size: clamp(12px, 1.7svh, 14px); }
-      .portal.quiz-open .word-key[data-key="Enter"] { flex-grow: 2.2; padding-inline: 1px; font-size: clamp(7px, 2vw, 8px); letter-spacing: -.04em; white-space: nowrap; }
       .portal.quiz-open .wordle-side { padding: 0; }
       .portal.quiz-open .word-message { font-size: 13px; }
       .portal.quiz-open .word-legend { flex-wrap: wrap; justify-content: flex-start; gap: 5px 10px; font-size: 9px; }
@@ -1488,7 +1487,7 @@
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
-  <script src="wordle.js?v=20261123"></script>
+  <script src="wordle.js?v=20261123c"></script>
   <script>
     const $ = s => document.querySelector(s);
     const $$ = s => [...document.querySelectorAll(s)];
@@ -6481,7 +6480,7 @@
           <div class="wordle-play">
             <div class="word-board-wrap"><div class="word-board" id="word-board" role="grid" aria-label="단어 추측 보드"></div></div>
             <div class="word-keyboard" id="word-keyboard" aria-label="화면 키보드">
-              ${[['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['ENTER','Z','X','C','V','B','N','M','⌫']].map(row => `<div class="word-key-row">${row.map(key => `<button class="word-key${key === 'ENTER' || key === '⌫' ? ' wide' : ''}" type="button" data-key="${key === 'ENTER' ? 'Enter' : key === '⌫' ? 'Backspace' : key}" aria-label="${key === 'ENTER' ? '입력한 단어 제출' : key === '⌫' ? '글자 지우기' : `${key} 입력`}">${key}</button>`).join('')}</div>`).join('')}
+              ${[['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L'],['Z','X','C','V','B','N','M','⌫']].map(row => `<div class="word-key-row">${row.map(key => `<button class="word-key" type="button" data-key="${key === '⌫' ? 'Backspace' : key}" aria-label="${key === '⌫' ? '글자 지우기' : `${key} 입력`}">${key}</button>`).join('')}</div>`).join('')}
             </div>
           </div>
           <aside class="wordle-side" aria-label="퀴즈 안내와 조작">
@@ -6510,7 +6509,7 @@
               <span class="word-legend-item"><i class="word-legend-swatch absent"></i><span>정답에 없는 글자</span></span>
             </div>
             <button class="control word-hint-button" id="word-hint-button" type="button">힌트 보기</button>
-            <button class="control word-new" id="word-new" type="button">새 단어 ↗</button>
+            <button class="control word-submit" id="word-submit" type="button" aria-label="입력한 단어 제출">확인</button>
           </aside>
         </div>
       </section>`
